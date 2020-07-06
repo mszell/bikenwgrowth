@@ -1,0 +1,3 @@
+﻿u,v,key,osmid,oneway,name,highway,maxspeed,length,geometry,lanes,ref,bridge,junction,width,access,tunnel,service,area
+1,2,0,10,False,Baneg√•rdspladsen,tertiary,50,84.486,"LINESTRING (0 0, 1 0)",,,,,,,,
+4,5,0,13,True,Vesterbrogade,tertiary,50,30.958,"LINESTRING (0 1, 1 1)",2,,,,,,,

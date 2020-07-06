@@ -1,0 +1,6 @@
+y,x,osmid,highway,ref,geometry
+0,0,1,,,POINT (0 0)
+0,1,2,,,POINT (1 0)
+0,2,3,traffic_signals,,POINT (2 0)
+2,0,6,,,POINT (0 2)
+2,1,7,,,POINT (1 2)
