@@ -1,0 +1,11 @@
+analysis in placeid loop
+move plots into 06
+fix and test grid generation
+cluster cutoff relative->absolute
+analyze cluster data
+make test run of everything for London
+
+X bundle all code together in a for loop over placeids
+X delete unnecessary imports
+X save cluster data
+X create biketrackcarall networks in advance, and test
