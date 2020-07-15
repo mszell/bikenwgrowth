@@ -1,10 +1,12 @@
 analysis in placeid loop
-move plots into 06
 fix and test grid generation
-cluster cutoff relative->absolute
+implement additional absolute cluster cutoff
 analyze cluster data
 make test run of everything for London
+make 01 more elegant (dict of Gs, involve all osmnxparameters)
+add comments to all functions
 
+X move plots into 06
 X bundle all code together in a for loop over placeids
 X delete unnecessary imports
 X save cluster data

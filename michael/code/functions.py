@@ -3,7 +3,7 @@
 def my_plot_reset(G, nids = False):
     reset_plot_attributes(G)
     color_nodes(G, "red", nids)
-    size_nodes(G, 8, nids)
+    size_nodes(G, 6, nids)
 
 def reset_plot_attributes(G):
     """Resets node attributes for plotting.
@@ -24,7 +24,7 @@ def color_nodes(G, color = "blue", nids = False, use_id = True):
     else:
         G.vs[nids]["color"] = color
 
-def size_nodes(G, size = 5, nids = False, use_id = True):
+def size_nodes(G, size = 6, nids = False, use_id = True):
     """Sets the size attribute of a set of nodes nids.
     """
     if nids is False:
@@ -471,8 +471,24 @@ def geodesic_point_buffer(lat, lon, km):
     return ops.transform(project, buf).exterior.coords[:]
 
 
+# Two functions from: https://github.com/gboeing/osmnx-examples/blob/v0.11/notebooks/17-street-network-orientations.ipynb
+def reverse_bearing(x):
+    return x + 180 if x < 180 else x - 180
+
+def count_and_merge(n, bearings):
+    # make twice as many bins as desired, then merge them in pairs
+    # prevents bin-edge effects around common values like 0° and 90°
+    n = n * 2
+    bins = np.arange(n + 1) * 360 / n
+    count, _ = np.histogram(bearings, bins=bins)
+    
+    # move the last bin to the front, so eg 0.01° and 359.99° will be binned together
+    count = np.roll(count, 1)
+    return count[::2] + count[1::2]
+
+
 def calculate_directness(G, indices):
-    """Calculate directness on G over all connected pairs in indices.
+    """Calculate directness on G over all connected node pairs in indices.
     """
     
     poi_edges = []
