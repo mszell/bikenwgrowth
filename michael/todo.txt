@@ -1,10 +1,11 @@
-analysis in placeid loop
 fix and test grid generation
 implement additional absolute cluster cutoff
 analyze cluster data
 make test run of everything for London
 add comments to all functions
+calculate coverage along edges, not nodes
 
+X analysis in placeid loop
 X make 01 more elegant (dict of Gs, involve all osmnxparameters)
 X move plots into 06
 X bundle all code together in a for loop over placeids

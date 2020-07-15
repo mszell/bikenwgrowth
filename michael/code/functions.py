@@ -131,7 +131,7 @@ def highest_closeness_node(G):
 def clusterindices_by_length(clusterinfo, rev = True):
     return [k for k, v in sorted(clusterinfo.items(), key=lambda item: item[1]["length"], reverse = rev)]
 
-class Point:
+class MyPoint:
     def __init__(self,x,y):
         self.x = x
         self.y = y
@@ -151,11 +151,11 @@ def new_edge_intersects(G, enew):
     """Given a graph G and a potential new edge enew,
     check if enew will intersect any old edge.
     """
-    E1 = Point(enew[0], enew[1])
-    E2 = Point(enew[2], enew[3])
+    E1 = MyPoint(enew[0], enew[1])
+    E2 = MyPoint(enew[2], enew[3])
     for e in G.es():
-        O1 = Point(e.source_vertex["x"], e.source_vertex["y"])
-        O2 = Point(e.target_vertex["x"], e.target_vertex["y"])
+        O1 = MyPoint(e.source_vertex["x"], e.source_vertex["y"])
+        O2 = MyPoint(e.target_vertex["x"], e.target_vertex["y"])
         if segments_intersect(E1, E2, O1, O2):
             return True
     return False
@@ -470,6 +470,22 @@ def geodesic_point_buffer(lat, lon, km):
     buf = Point(0, 0).buffer(km * 1000)  # distance in metres
     return ops.transform(project, buf).exterior.coords[:]
 
+def geodesic_multiline_buffer(tuples, km):
+    """This function takes all given tuples of points ((xs,ys), (xe,ye)), creates a multlinestring, projects it to an equal area coordinate system, applies a buffer, to calculate the area covered by a network's edges.
+    """
+    # https://gis.stackexchange.com/questions/127607/area-in-km-from-polygon-of-coordinates
+    geom = MultiLineString(tuples)
+    geom_area = ops.transform(
+    partial(
+        pyproj.transform,
+        pyproj.Proj('EPSG:4326'),
+        pyproj.Proj(
+            proj='aea',
+            lat_1=geom.bounds[1],
+            lat_2=geom.bounds[3])),
+    geom)
+    return geom_area.buffer(km * 1000)
+
 
 # Two functions from: https://github.com/gboeing/osmnx-examples/blob/v0.11/notebooks/17-street-network-orientations.ipynb
 def reverse_bearing(x):
@@ -527,6 +543,7 @@ def calculate_coverage(G, buffer_km = 0.5, return_cov = False):
         buf = geodesic_point_buffer(v["x"], v["y"], buffer_km)
         cov = ops.unary_union([cov, Polygon(buf)])
     # If we wanted to consider edges, here we would have to select all edges and add rectangular buffers.
+    # cov_area = geodesic_multiline_buffer([((e.source_vertex["x"], e.source_vertex["y"]), (e.target_vertex["x"], e.target_vertex["y"])) for e in G.es], buffer_km)
     
     # https://gis.stackexchange.com/questions/127607/area-in-km-from-polygon-of-coordinates
     cov_area = ops.transform(
@@ -539,6 +556,7 @@ def calculate_coverage(G, buffer_km = 0.5, return_cov = False):
                 lat_2=cov.bounds[3])),
         cov)
     covered_area = cov_area.area / 1000000
+
     if return_cov:
         return (covered_area, cov)
     else:
@@ -551,11 +569,11 @@ def calculate_poiscovered(G, cov, nnids):
     
     pois_indices = set()
     for poi in nnids:
-        pois_indices.add(G_carall.vs.find(id = poi).index)
+        pois_indices.add(G.vs.find(id = poi).index)
 
     poiscovered = 0
     for poi in pois_indices:
-        v = G_carall.vs[poi]
+        v = G.vs[poi]
         if Point(-v["y"], v["x"]).within(cov):
             poiscovered += 1
     
@@ -577,7 +595,7 @@ def calculate_metrics(G, G_big, nnids, buffer_walk = 500, numnodepairs = 500):
     output["length"] = sum([e['weight'] for e in G.es])
     
     # COVERAGE
-    covered_area, cov = calculate_coverage(G, buffer_walk/1000)
+    covered_area, cov = calculate_coverage(G, buffer_walk/1000, True)
     output["coverage"] = covered_area
     
     # POI COVERAGE

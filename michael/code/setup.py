@@ -32,7 +32,7 @@ import gdal
 import osr
 from haversine import haversine, haversine_vector
 import pyproj
-from shapely.geometry import Point,MultiPoint,LineString,Polygon
+from shapely.geometry import Point, MultiPoint, LineString, Polygon, MultiLineString
 import shapely.ops as ops
 import geopandas as gpd
 from functools import partial

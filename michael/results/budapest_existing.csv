@@ -1,0 +1,5 @@
+type,components,coverage,directness,length,poi_coverage
+bikeable,0,0,0,0,0
+biketrack,192,191.2705988349215,0.7365692410977304,267.304870764813,0
+biketrackcarall,0,0,0,0,0
+carall,0,0,0,0,0
