@@ -1,10 +1,11 @@
-fix and test grid generation
 implement additional absolute cluster cutoff
 analyze cluster data
 make test run of everything for London
-add comments to all functions
+measure local/global efficiency
+add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 calculate coverage along edges, not nodes
 
+X fix and test grid generation with numpy
 X analysis in placeid loop
 X make 01 more elegant (dict of Gs, involve all osmnxparameters)
 X move plots into 06

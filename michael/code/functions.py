@@ -486,6 +486,25 @@ def geodesic_multiline_buffer(tuples, km):
     geom)
     return geom_area.buffer(km * 1000)
 
+def rotate_grid(p, origin = (0, 0), degrees = 0):
+        """Rotate a list of points around an origin (in 2D). 
+        
+        Parameters:
+            p (tuple or list of tuples): (x,y) coordinates of points to rotate
+            origin (tuple): (x,y) coordinates of rotation origin
+            degrees (int or float): degree (clockwise)
+
+        Returns:
+            ndarray: the rotated points, as an ndarray of 1x2 ndarrays
+        """
+        # https://stackoverflow.com/questions/34372480/rotate-point-about-another-point-in-degrees-python
+        angle = np.deg2rad(-degrees)
+        R = np.array([[np.cos(angle), -np.sin(angle)],
+                      [np.sin(angle),  np.cos(angle)]])
+        o = np.atleast_2d(origin)
+        p = np.atleast_2d(p)
+        return np.squeeze((R @ (p.T-o.T) + o.T).T)
+
 
 # Two functions from: https://github.com/gboeing/osmnx-examples/blob/v0.11/notebooks/17-street-network-orientations.ipynb
 def reverse_bearing(x):
