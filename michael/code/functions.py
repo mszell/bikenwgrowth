@@ -599,7 +599,30 @@ def calculate_poiscovered(G, cov, nnids):
     return poiscovered
 
 
-def calculate_metrics(G, G_big, nnids, buffer_walk = 500, numnodepairs = 500):
+def calculate_efficiency_global(G, normalized = True):
+    """Calculates global network efficiency.
+    """
+    d_ij = G.shortest_paths_dijkstra(weights = "weight")
+    d_ij = [item for sublist in d_ij for item in sublist] # flatten
+    EG = sum([1/d for d in d_ij if d != 0])
+    if not normalized: return EG
+    comb = list(itertools.permutations(list(G.vs.indices), 2))
+    l_ij = haversine_vector([(G.vs[t[0]]["x"], G.vs[t[0]]["y"]) for t in comb],
+                            [(G.vs[t[1]]["x"], G.vs[t[1]]["y"]) for t in comb])
+    EG_id = sum([1/l for l in l_ij if l != 0])
+    return EG / EG_id
+
+def calculate_efficiency_local(G, normalized = True):
+    """Calculates local network efficiency.
+    """
+    EGi = []
+    for i in list(G.vs.indices):
+        if len(G.neighbors(i)) > 1: # If we have a nontrivial neighborhood
+            EGi.append(calculate_efficiency_global(G.induced_subgraph(G.neighbors(i)), normalized))
+    return sum(EGi) / len(EGi)
+
+
+def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepairs = 500):
     """Calculates all metrics.
     """
     
@@ -607,8 +630,15 @@ def calculate_metrics(G, G_big, nnids, buffer_walk = 500, numnodepairs = 500):
           "coverage": 0,
           "directness": 0,
           "poi_coverage": 0,
-          "components": 0
+          "components": 0,
+          "efficiency_global": 0,
+          "efficiency_local": 0
          }
+    
+    # EFFICIENCY
+    if GT_abstract is not None:
+        output["efficiency_global"] = calculate_efficiency_global(GT_abstract)
+        output["efficiency_local"] = calculate_efficiency_local(GT_abstract) 
     
     # LENGTH
     output["length"] = sum([e['weight'] for e in G.es])
@@ -628,7 +658,7 @@ def calculate_metrics(G, G_big, nnids, buffer_walk = 500, numnodepairs = 500):
     nodes_sample = random.sample(list(G.vs), min(numnodepairs, len(G.vs)))
     nodes_sample = list(G.vs)
     output["directness"] = calculate_directness(G, [n.index for n in nodes_sample])
-    
+
     return output
 
 
