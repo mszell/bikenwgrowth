@@ -41,7 +41,7 @@ from functools import partial
 prune_quantiles = [x/20 for x in list(range(1, 21))] # The quantiles where the GT should be pruned using the prune_measure
 prune_measures = {"betweenness": "Bq", "closeness": "Cq"}
 
-osmnxparameters = {'car30': {'network_type':'drive', 'custom_filter':'["maxspeed"~"30"]', 'export': True},
+osmnxparameters = {'car30': {'network_type':'drive', 'custom_filter':'["maxspeed"~"30|20|15|10|5|20 mph|15 mph|10 mph|5 mph"]', 'export': True},
                    'carall': {'network_type':'drive', 'custom_filter':'', 'export': True},
                    'bike_cyclewaytrack': {'network_type':'bike', 'custom_filter':'["cycleway"~"track"]', 'export': False},
                    'bike_highwaycycleway': {'network_type':'bike', 'custom_filter':'["highway"~"cycleway"]', 'export': False},
