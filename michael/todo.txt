@@ -1,9 +1,9 @@
-analyze cluster data
 make test run of everything for London
-measure local/global efficiency
+measure local/global efficiency of abstract GT
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 calculate coverage along edges, not nodes
 
+X analyze cluster data
 X implement additional absolute cluster cutoff
 X fix and test grid generation with numpy
 X analysis in placeid loop
