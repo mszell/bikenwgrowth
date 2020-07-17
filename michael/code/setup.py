@@ -38,21 +38,6 @@ import geopandas as gpd
 from functools import partial
 
 
-prune_quantiles = [x/20 for x in list(range(1, 21))] # The quantiles where the GT should be pruned using the prune_measure
-prune_measures = {"betweenness": "Bq", "closeness": "Cq"}
-
-osmnxparameters = {'car30': {'network_type':'drive', 'custom_filter':'["maxspeed"~"^30$|^20$|^15$|^10$|^5$|^20 mph|^15 mph|^10 mph|^5 mph"]', 'export': True},
-                   'carall': {'network_type':'drive', 'custom_filter':'', 'export': True},
-                   'bike_cyclewaytrack': {'network_type':'bike', 'custom_filter':'["cycleway"~"track"]', 'export': False},
-                   'bike_highwaycycleway': {'network_type':'bike', 'custom_filter':'["highway"~"cycleway"]', 'export': False},
-                   'bike_bicycledesignated': {'network_type':'bike', 'custom_filter':'["bicycle"~"designated"]', 'export': False},
-                   'bike_cyclewayrighttrack': {'network_type':'bike', 'custom_filter':'["cycleway:right"~"track"]', 'export': False},
-                   'bike_cyclewaylefttrack': {'network_type':'bike', 'custom_filter':'["cycleway:left"~"track"]', 'export': False}
-                  }  
-# Special case 'biketrack': "cycleway"~"track" OR "highway"~"cycleway" OR "bicycle"~"designated" OR "cycleway:right=track" OR "cycleway:left=track"
-# Special case 'bikeable': biketrack OR car30
-# See: https://wiki.openstreetmap.org/wiki/Key:cycleway#Cycle_tracks
-
 
 # dict of placeid:placeinfo
 # If a city has a proper shapefile through nominatim
@@ -70,12 +55,12 @@ if debug:
     pp.pprint(cities)
     print("==============\n\n")
 
-# Create folders
+# Create city subfolders
 for placeid, placeinfo in cities.items():
-    placepath = PATH["data"] + placeid + "/"
-    if not os.path.exists(placepath):
-        os.makedirs(placepath)
-        print("Successfully created folder " + placepath)
+    for subfolder in ["data", "plots", "results"]:
+        placepath = PATH[subfolder] + placeid + "/"
+        if not os.path.exists(placepath):
+            os.makedirs(placepath)
+            print("Successfully created folder " + placepath)
 
-
-print("Setup finished\n")
+print("Setup finished.\n")
