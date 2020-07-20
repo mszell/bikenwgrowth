@@ -103,11 +103,11 @@ def osm_to_ig(node, edge):
     
     return G
 
-def ox_to_csv(G, p, placeid, parameterid, verbose = True):
+def ox_to_csv(G, p, placeid, parameterid, postfix = "", verbose = True):
     node,edge = ox.graph_to_gdfs(G)
-    node.to_csv(p + placeid + '_' + parameterid + '_nodes.csv', index=False)
-    edge.to_csv(p + placeid + '_' + parameterid + '_edges.csv', index=False)
-    if verbose: print(placeid + ": Successfully wrote graph " + parameterid)
+    node.to_csv(p + placeid + '_' + parameterid + postfix + '_nodes.csv', index=False)
+    edge.to_csv(p + placeid + '_' + parameterid + postfix + '_edges.csv', index=False)
+    if verbose: print(placeid + ": Successfully wrote graph " + parameterid + postfix)
 
 def csv_to_ig(p, placeid, parameterid):
     n = pd.read_csv(p + placeid + '_' + parameterid + '_nodes.csv')
@@ -238,6 +238,8 @@ def greedy_triangulation_routing_clusters(G, G_total, clusters, clusterinfo, pru
     level.
     """
     
+    if len(clusters) < 2: return ([], []) # We can't do anything with less than 2 clusters
+
     centroid_indices = [v["centroid_index"] for k, v in sorted(clusterinfo.items(), key=lambda item: item[1]["size"], reverse = True)]
     G_temp = copy.deepcopy(G_total)
     for e in G_temp.es: # delete all edges
@@ -377,6 +379,8 @@ def greedy_triangulation_routing(G, pois, prune_quantiles = [1], prune_measure =
     level.
     """
     
+    if len(pois) < 2: return ([], []) # We can't do anything with less than 2 POIs
+
     # GT_abstract is the GT with same nodes but euclidian links to keep track of edge crossings
     pois_indices = set()
     for poi in pois:
@@ -493,10 +497,12 @@ def count_and_merge(n, bearings):
     return count[::2] + count[1::2]
 
 
-def calculate_directness(G, indices):
+def calculate_directness(G, numnodepairs = 500):
     """Calculate directness on G over all connected node pairs in indices.
     """
     
+    indices = random.sample(list(G.vs), min(numnodepairs, len(G.vs)))
+
     poi_edges = []
     v1 = []
     v2 = []
@@ -512,15 +518,8 @@ def calculate_directness(G, indices):
             # Sum up distances of path segments from first to last node
             total_distance_network += sum([G.es[e]['weight'] for e in path_e])
     
-#     comb = combinations(indices, 2)
-#     v1 = []
-#     v2 = []
-#     for tup in comb:
-#         v1.append((G.vs[tup[0]]["x"], G.vs[tup[0]]["y"]))
-#         v2.append((G.vs[tup[1]]["x"], G.vs[tup[1]]["y"]))
-#     total_distance_haversine = sum(haversine_vector(v1, v2))
-    
     return total_distance_haversine / total_distance_network
+
 
 def listmean(lst): 
     return sum(lst) / len(lst)
@@ -533,20 +532,20 @@ def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False):
     latcenter = listmean([v["x"] for v in G.vs])
     loncenter = listmean([v["y"] for v in G.vs])
     local_azimuthal_projection = "+proj=aeqd +R=6371000 +units=m +lat_0={} +lon_0={}".format(latcenter, loncenter)
-    wgs84_to_aeqd = partial(
-    pyproj.transform,
-    pyproj.Proj("+proj=longlat +datum=WGS84 +no_defs"),
-    pyproj.Proj(local_azimuthal_projection),
-    )
-    aeqd_to_wgs84 = partial(
-        pyproj.transform,
-        pyproj.Proj(local_azimuthal_projection),
+    # Use transformer: https://gis.stackexchange.com/questions/127427/transforming-shapely-polygon-and-multipolygon-objects
+    wgs84_to_aeqd = pyproj.Transformer.from_proj(
         pyproj.Proj("+proj=longlat +datum=WGS84 +no_defs"),
-    )
+        pyproj.Proj(local_azimuthal_projection))
+    aeqd_to_wgs84 = pyproj.Transformer.from_proj(
+        pyproj.Proj(local_azimuthal_projection),
+        pyproj.Proj("+proj=longlat +datum=WGS84 +no_defs"))
     edgetuples = [((e.source_vertex["x"], e.source_vertex["y"]), (e.target_vertex["x"], e.target_vertex["y"])) for e in G.es]
-    multilinestring_transformed = ops.transform(wgs84_to_aeqd, MultiLineString(edgetuples))
+    multilinestring_transformed = ops.transform(wgs84_to_aeqd.transform, MultiLineString(edgetuples))
+    # print("Buffering..")
+    # Shapely buffer is super slow: https://stackoverflow.com/questions/57753813/speed-up-shapely-buffer
+    # To do: Piecewise, and simplify? https://shapely.readthedocs.io/en/latest/manual.html#object.simplify
     buf = multilinestring_transformed.buffer(buffer_km * 1000)
-    cov = ops.transform(aeqd_to_wgs84, buf)
+    cov = ops.transform(aeqd_to_wgs84.transform, buf)
     covered_area = buf.area / 1000000
 
     if return_cov:
@@ -572,30 +571,38 @@ def calculate_poiscovered(G, cov, nnids):
     return poiscovered
 
 
-def calculate_efficiency_global(G, normalized = True):
+def calculate_efficiency_global(G, numnodepairs = 500, normalized = True):
     """Calculates global network efficiency.
     """
-    d_ij = G.shortest_paths_dijkstra(weights = "weight")
+    if len(list(G.vs)) <= numnodepairs:
+        nodeindices = random.sample(list(G.vs.indices))
+    else:
+        nodeindices = list(G.vs.indices)
+    d_ij = G.shortest_paths(source = nodeindices, target = nodeindices, weights = "weight")
     d_ij = [item for sublist in d_ij for item in sublist] # flatten
     EG = sum([1/d for d in d_ij if d != 0])
     if not normalized: return EG
-    pairs = list(itertools.permutations(list(G.vs.indices), 2))
+    pairs = list(itertools.permutations(nodeindices, 2))
     l_ij = haversine_vector([(G.vs[p[0]]["x"], G.vs[p[0]]["y"]) for p in pairs],
                             [(G.vs[p[1]]["x"], G.vs[p[1]]["y"]) for p in pairs])
     EG_id = sum([1/l for l in l_ij if l != 0])
     return EG / EG_id
 
-def calculate_efficiency_local(G, normalized = True):
+def calculate_efficiency_local(G, numnodepairs = 500, normalized = True):
     """Calculates local network efficiency.
     """
+    if len(list(G.vs)) <= numnodepairs*numnodepairs:
+        nodeindices = random.sample(list(G.vs.indices))
+    else:
+        nodeindices = list(G.vs.indices)
     EGi = []
-    for i in list(G.vs.indices):
+    for i in nodeindices:
         if len(G.neighbors(i)) > 1: # If we have a nontrivial neighborhood
             EGi.append(calculate_efficiency_global(G.induced_subgraph(G.neighbors(i)), normalized))
     return listmean(EGi)
 
 
-def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepairs = 500):
+def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False):
     """Calculates all metrics.
     """
     
@@ -609,28 +616,31 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
          }
     
     # EFFICIENCY
+    if verbose: print("Calculating efficiency...")
     if GT_abstract is not None:
-        output["efficiency_global"] = calculate_efficiency_global(GT_abstract)
-        output["efficiency_local"] = calculate_efficiency_local(GT_abstract) 
+        output["efficiency_global"] = calculate_efficiency_global(GT_abstract, numnodepairs)
+        output["efficiency_local"] = calculate_efficiency_local(GT_abstract, numnodepairs) 
     
     # LENGTH
+    if verbose: print("Calculating length...")
     output["length"] = sum([e['weight'] for e in G.es])
     
     # COVERAGE
+    if verbose: print("Calculating coverage...")
     covered_area, cov = calculate_coverage_edges(G, buffer_walk/1000, True)
     output["coverage"] = covered_area
 
     # POI COVERAGE
+    if verbose: print("Calculating POI coverage...")
     output["poi_coverage"] = calculate_poiscovered(G_big, cov, nnids)
 
     # COMPONENTS
+    if verbose: print("Calculating components...")
     output["components"] = len(list(G.components()))
     
     # DIRECTNESS
-    # Do this on a random subsample for speed reasons
-    nodes_sample = random.sample(list(G.vs), min(numnodepairs, len(G.vs)))
-    nodes_sample = list(G.vs)
-    output["directness"] = calculate_directness(G, [n.index for n in nodes_sample])
+    if verbose: print("Calculating directness...")
+    output["directness"] = calculate_directness(G, numnodepairs)
 
     return output
 

@@ -5,10 +5,10 @@
 1. Populate `parameters/cities.csv` 
 2. Run 01 and 02 to download and prepare all networks and POIs  
 3. Choose a parameter set in `parameters/parameters.py`  
-4. Run 03, 04, 05
+4. Run 03, 04, 05, 06  
 5. Go to 3. until you have finished with all parameter sets
 
-###All suggested parameter sets 
+### All suggested parameter sets 
 #### For `03_poi_based_generation`
 `prune_measure = "betweenness"`, `poi_source =  "railwaystation"`
 `prune_measure = "betweenness"`, `poi_source =  "grid"` 

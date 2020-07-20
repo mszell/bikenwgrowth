@@ -31,7 +31,7 @@ poiparameters = {"railwaystation":{'railway':['station','halt']}#,
 
 # 05
 buffer_walk = 500 # Buffer in m for coverage calculations. (How far people are willing to walk)
-numnodepairs = 500 # Number of node pairs to consider for random sample to calculate directness (O(numnodepairs^2), so better not go over 1000)
+numnodepairs = 10 # Number of node pairs to consider for random sample to calculate directness (O(numnodepairs^2), so better not go over 1000)
 networktypes = ["biketrack", "carall", "bikeable", "biketrackcarall"] # Existing infrastructures to analyze
 
 # 03, 04, 05, 06
@@ -59,5 +59,6 @@ osmnxparameters = {'car30': {'network_type':'drive', 'custom_filter':'["maxspeed
 
 # 02
 snapthreshold = 500 # in m, tolerance for snapping POIs to network
+consolidatethreshold = 15  # in m, tolerance for consolidating intersections
 
 print("Loaded parameters.\n")
