@@ -31,7 +31,7 @@ poiparameters = {"railwaystation":{'railway':['station','halt']}#,
 
 # 05
 buffer_walk = 500 # Buffer in m for coverage calculations. (How far people are willing to walk)
-numnodepairs = 10 # Number of node pairs to consider for random sample to calculate directness (O(numnodepairs^2), so better not go over 1000)
+numnodepairs = 100 # Number of node pairs to consider for random sample to calculate directness (O(numnodepairs^2), so better not go over 1000)
 networktypes = ["biketrack", "carall", "bikeable", "biketrackcarall"] # Existing infrastructures to analyze
 
 # 03, 04, 05, 06

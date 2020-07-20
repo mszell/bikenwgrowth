@@ -1,3 +1,4 @@
+fix efficiency calculations for edge cases
 consider edge cases: <2 POIs, <2 clusters, etc
 make test run of everything for London
 measure relative cost and efficiency (to MST)
@@ -5,6 +6,7 @@ measure relative cost and efficiency (to MST)
 compress data?
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X fix speed issue with buffer
 X measure efficiency of existing infrastructure (simplified graphs, subsample)
 X calculate coverage along edges, not nodes
 X pull constants and parameters

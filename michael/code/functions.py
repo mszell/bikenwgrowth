@@ -522,7 +522,8 @@ def calculate_directness(G, numnodepairs = 500):
 
 
 def listmean(lst): 
-    return sum(lst) / len(lst)
+    try: return sum(lst) / len(lst)
+    except: return 0
 
 def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False):
     """Calculates the area and shape covered by the graph's edges.
@@ -540,13 +541,16 @@ def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False):
         pyproj.Proj(local_azimuthal_projection),
         pyproj.Proj("+proj=longlat +datum=WGS84 +no_defs"))
     edgetuples = [((e.source_vertex["x"], e.source_vertex["y"]), (e.target_vertex["x"], e.target_vertex["y"])) for e in G.es]
-    multilinestring_transformed = ops.transform(wgs84_to_aeqd.transform, MultiLineString(edgetuples))
-    # print("Buffering..")
-    # Shapely buffer is super slow: https://stackoverflow.com/questions/57753813/speed-up-shapely-buffer
-    # To do: Piecewise, and simplify? https://shapely.readthedocs.io/en/latest/manual.html#object.simplify
-    buf = multilinestring_transformed.buffer(buffer_km * 1000)
-    cov = ops.transform(aeqd_to_wgs84.transform, buf)
-    covered_area = buf.area / 1000000
+    # Shapely buffer seems slow for complex objects: https://stackoverflow.com/questions/57753813/speed-up-shapely-buffer
+    # Therefore we buffer piecewise.
+    cov = Polygon()
+    for c, t in enumerate(edgetuples):
+        # if cov.geom_type == 'MultiPolygon' and c % 1000 == 0: print(str(c)+"/"+str(len(edgetuples)), sum([len(pol.exterior.coords) for pol in cov]))
+        # elif cov.geom_type == 'Polygon' and c % 1000 == 0: print(str(c)+"/"+str(len(edgetuples)), len(pol.exterior.coords))
+        buf = ops.transform(aeqd_to_wgs84.transform, ops.transform(wgs84_to_aeqd.transform, LineString(t)).buffer(buffer_km * 1000))
+        cov = ops.unary_union([cov, Polygon(buf)])
+    cov_transformed = ops.transform(wgs84_to_aeqd.transform, cov)
+    covered_area = cov_transformed.area / 1000000
 
     if return_cov:
         return (covered_area, cov)
@@ -574,8 +578,9 @@ def calculate_poiscovered(G, cov, nnids):
 def calculate_efficiency_global(G, numnodepairs = 500, normalized = True):
     """Calculates global network efficiency.
     """
-    if len(list(G.vs)) <= numnodepairs:
-        nodeindices = random.sample(list(G.vs.indices))
+
+    if len(list(G.vs)) > numnodepairs:
+        nodeindices = random.sample(list(G.vs.indices), numnodepairs)
     else:
         nodeindices = list(G.vs.indices)
     d_ij = G.shortest_paths(source = nodeindices, target = nodeindices, weights = "weight")
@@ -583,6 +588,7 @@ def calculate_efficiency_global(G, numnodepairs = 500, normalized = True):
     EG = sum([1/d for d in d_ij if d != 0])
     if not normalized: return EG
     pairs = list(itertools.permutations(nodeindices, 2))
+    if len(pairs) < 1: return 0
     l_ij = haversine_vector([(G.vs[p[0]]["x"], G.vs[p[0]]["y"]) for p in pairs],
                             [(G.vs[p[1]]["x"], G.vs[p[1]]["y"]) for p in pairs])
     EG_id = sum([1/l for l in l_ij if l != 0])
@@ -591,8 +597,8 @@ def calculate_efficiency_global(G, numnodepairs = 500, normalized = True):
 def calculate_efficiency_local(G, numnodepairs = 500, normalized = True):
     """Calculates local network efficiency.
     """
-    if len(list(G.vs)) <= numnodepairs*numnodepairs:
-        nodeindices = random.sample(list(G.vs.indices))
+    if len(list(G.vs)) > numnodepairs*numnodepairs:
+        nodeindices = random.sample(list(G.vs.indices), numnodepairs*numnodepairs)
     else:
         nodeindices = list(G.vs.indices)
     EGi = []
