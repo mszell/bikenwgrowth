@@ -1,9 +1,10 @@
-measure efficiency of existing infrastructure
-measure relative cost and efficiency (to MST)
+consider edge cases: <2 POIs, <2 clusters, etc
 make test run of everything for London
+measure relative cost and efficiency (to MST)
+measure efficiency of existing infrastructure (simplified graphs)
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
-calculate coverage along edges, not nodes
 
+X calculate coverage along edges, not nodes
 X pull constants and parameters
 X measure local/global efficiency of abstract GT
 X analyze cluster data

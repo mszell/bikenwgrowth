@@ -457,35 +457,6 @@ def poipairs_by_distance(G, pois, return_distances = False):
 
 # ANALYSIS
 
-proj_wgs84 = pyproj.Proj('+proj=longlat +datum=WGS84')
-def geodesic_point_buffer(lat, lon, km):
-    # https://gis.stackexchange.com/questions/289044/creating-buffer-circle-x-kilometers-from-point-using-python
-    
-    # Azimuthal equidistant projection
-    aeqd_proj = '+proj=aeqd +lat_0={lat} +lon_0={lon} +x_0=0 +y_0=0'
-    project = partial(
-        pyproj.transform,
-        pyproj.Proj(aeqd_proj.format(lat=lat, lon=lon)),
-        proj_wgs84)
-    buf = Point(0, 0).buffer(km * 1000)  # distance in metres
-    return ops.transform(project, buf).exterior.coords[:]
-
-def geodesic_multiline_buffer(tuples, km):
-    """This function takes all given tuples of points ((xs,ys), (xe,ye)), creates a multlinestring, projects it to an equal area coordinate system, applies a buffer, to calculate the area covered by a network's edges.
-    """
-    # https://gis.stackexchange.com/questions/127607/area-in-km-from-polygon-of-coordinates
-    geom = MultiLineString(tuples)
-    geom_area = ops.transform(
-    partial(
-        pyproj.transform,
-        pyproj.Proj('EPSG:4326'),
-        pyproj.Proj(
-            proj='aea',
-            lat_1=geom.bounds[1],
-            lat_2=geom.bounds[3])),
-    geom)
-    return geom_area.buffer(km * 1000)
-
 def rotate_grid(p, origin = (0, 0), degrees = 0):
         """Rotate a list of points around an origin (in 2D). 
         
@@ -551,30 +522,32 @@ def calculate_directness(G, indices):
     
     return total_distance_haversine / total_distance_network
 
+def listmean(lst): 
+    return sum(lst) / len(lst)
 
-def calculate_coverage(G, buffer_km = 0.5, return_cov = False):
-    """Calculates the area covered by the graph's nodes (ignores edges)
+def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False):
+    """Calculates the area and shape covered by the graph's edges.
     """
 
-    # https://macwright.org/2012/10/31/gis-with-python-shapely-fiona.html
-    cov = Polygon()
-    for v in G.vs:
-        buf = geodesic_point_buffer(v["x"], v["y"], buffer_km)
-        cov = ops.unary_union([cov, Polygon(buf)])
-    # If we wanted to consider edges, here we would have to select all edges and add rectangular buffers.
-    # cov_area = geodesic_multiline_buffer([((e.source_vertex["x"], e.source_vertex["y"]), (e.target_vertex["x"], e.target_vertex["y"])) for e in G.es], buffer_km)
-    
-    # https://gis.stackexchange.com/questions/127607/area-in-km-from-polygon-of-coordinates
-    cov_area = ops.transform(
-        partial(
-            pyproj.transform,
-            pyproj.Proj('EPSG:4326'),
-            pyproj.Proj(
-                proj='aea',
-                lat_1=cov.bounds[1],
-                lat_2=cov.bounds[3])),
-        cov)
-    covered_area = cov_area.area / 1000000
+    # https://gis.stackexchange.com/questions/121256/creating-a-circle-with-radius-in-metres
+    latcenter = listmean([v["x"] for v in G.vs])
+    loncenter = listmean([v["y"] for v in G.vs])
+    local_azimuthal_projection = "+proj=aeqd +R=6371000 +units=m +lat_0={} +lon_0={}".format(latcenter, loncenter)
+    wgs84_to_aeqd = partial(
+    pyproj.transform,
+    pyproj.Proj("+proj=longlat +datum=WGS84 +no_defs"),
+    pyproj.Proj(local_azimuthal_projection),
+    )
+    aeqd_to_wgs84 = partial(
+        pyproj.transform,
+        pyproj.Proj(local_azimuthal_projection),
+        pyproj.Proj("+proj=longlat +datum=WGS84 +no_defs"),
+    )
+    edgetuples = [((e.source_vertex["x"], e.source_vertex["y"]), (e.target_vertex["x"], e.target_vertex["y"])) for e in G.es]
+    multilinestring_transformed = ops.transform(wgs84_to_aeqd, MultiLineString(edgetuples))
+    buf = multilinestring_transformed.buffer(buffer_km * 1000)
+    cov = ops.transform(aeqd_to_wgs84, buf)
+    covered_area = buf.area / 1000000
 
     if return_cov:
         return (covered_area, cov)
@@ -606,9 +579,9 @@ def calculate_efficiency_global(G, normalized = True):
     d_ij = [item for sublist in d_ij for item in sublist] # flatten
     EG = sum([1/d for d in d_ij if d != 0])
     if not normalized: return EG
-    comb = list(itertools.permutations(list(G.vs.indices), 2))
-    l_ij = haversine_vector([(G.vs[t[0]]["x"], G.vs[t[0]]["y"]) for t in comb],
-                            [(G.vs[t[1]]["x"], G.vs[t[1]]["y"]) for t in comb])
+    pairs = list(itertools.permutations(list(G.vs.indices), 2))
+    l_ij = haversine_vector([(G.vs[p[0]]["x"], G.vs[p[0]]["y"]) for p in pairs],
+                            [(G.vs[p[1]]["x"], G.vs[p[1]]["y"]) for p in pairs])
     EG_id = sum([1/l for l in l_ij if l != 0])
     return EG / EG_id
 
@@ -619,7 +592,7 @@ def calculate_efficiency_local(G, normalized = True):
     for i in list(G.vs.indices):
         if len(G.neighbors(i)) > 1: # If we have a nontrivial neighborhood
             EGi.append(calculate_efficiency_global(G.induced_subgraph(G.neighbors(i)), normalized))
-    return sum(EGi) / len(EGi)
+    return listmean(EGi)
 
 
 def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepairs = 500):
@@ -644,9 +617,9 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
     output["length"] = sum([e['weight'] for e in G.es])
     
     # COVERAGE
-    covered_area, cov = calculate_coverage(G, buffer_walk/1000, True)
+    covered_area, cov = calculate_coverage_edges(G, buffer_walk/1000, True)
     output["coverage"] = covered_area
-    
+
     # POI COVERAGE
     output["poi_coverage"] = calculate_poiscovered(G_big, cov, nnids)
 

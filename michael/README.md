@@ -1,10 +1,10 @@
-#Algorithmic bicycle network design
+# Algorithmic bicycle network design
 #### Michael Szell, Tyler Perlman, Sayat Mimar, Gourab Ghoshal, Roberta Sinatra
 
 ## Running the code
-1. Populate parameters/cities.csv  
+1. Populate `parameters/cities.csv` 
 2. Run 01 and 02 to download and prepare all networks and POIs  
-3. Choose a parameter set in parameters/parameters.py  
+3. Choose a parameter set in `parameters/parameters.py`  
 4. Run 03, 04, 05
 5. Go to 3. until you have finished with all parameter sets
 
@@ -16,11 +16,11 @@
 `prune_measure = "closeness"`, `poi_source =  "grid"` 
 
 #### For `04_connect_clusters`
-`prune_measure = "betweenness"`, `cutofftype = "abs"`, `cutoff = 1000`
-`prune_measure = "betweenness"`, `cutofftype = "abs"`, `cutoff = 2000`
-`prune_measure = "betweenness"`, `cutofftype = "rel"`, `cutoff = 0.5`
-`prune_measure = "betweenness"`, `cutofftype = "rel"`, `cutoff = 0.8`
-`prune_measure = "closeness"`, `cutofftype = "abs"`, `cutoff = 1000`
-`prune_measure = "closeness"`, `cutofftype = "abs"`, `cutoff = 2000`
-`prune_measure = "closeness"`, `cutofftype = "rel"`, `cutoff = 0.5`
-`prune_measure = "closeness"`, `cutofftype = "rel"`, `cutoff = 0.8`
+`prune_measure = "betweenness"`, `cutofftype = "abs"`, `cutoff = 1000`  
+`prune_measure = "betweenness"`, `cutofftype = "abs"`, `cutoff = 2000`  
+`prune_measure = "betweenness"`, `cutofftype = "rel"`, `cutoff = 0.5`  
+`prune_measure = "betweenness"`, `cutofftype = "rel"`, `cutoff = 0.8`  
+`prune_measure = "closeness"`, `cutofftype = "abs"`, `cutoff = 1000`  
+`prune_measure = "closeness"`, `cutofftype = "abs"`, `cutoff = 2000`  
+`prune_measure = "closeness"`, `cutofftype = "rel"`, `cutoff = 0.5`  
+`prune_measure = "closeness"`, `cutofftype = "rel"`, `cutoff = 0.8`  
