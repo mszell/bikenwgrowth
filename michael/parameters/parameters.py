@@ -8,10 +8,10 @@ poi_source = "grid" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness
 
 # 04, 05, 06
-cutofftype = "abs" # abs, rel
+cutofftype = "rel" # abs, rel
 # Case rel: cutoff (0-1) is fraction threshold of total length
 # Case abs: cutoff (in meters) is minimal length of cluster to be considered
-cutoff = 2000 # 0.5, 0.8, 1000, 2000
+cutoff = 0.8 # 0.5, 0.8, 1000, 2000
 
 
 
