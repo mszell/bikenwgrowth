@@ -619,7 +619,7 @@ def calculate_efficiency_local(G, numnodepairs = 500, normalized = True):
     return listmean(EGi)
 
 
-def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False):
+def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True):
     """Calculates all metrics.
     """
     
@@ -658,8 +658,10 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
     if verbose: print("Calculating directness...")
     output["directness"] = calculate_directness(G, numnodepairs)
 
-    return output
-
+    if return_cov: 
+        return (output, cov)
+    else:
+        return output
 
 
 print("Loaded functions")
