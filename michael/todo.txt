@@ -1,8 +1,10 @@
 fix efficiency calculations for edge cases
 consider edge cases: <2 POIs, <2 clusters, etc
 make test run of everything for London
+measure overlap somehow
 measure relative cost and efficiency (to MST)
 
+loop 06 through cities
 compress data?
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 

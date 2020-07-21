@@ -10,10 +10,10 @@
 
 ### All suggested parameter sets 
 #### For `03_poi_based_generation`
-`prune_measure = "betweenness"`, `poi_source =  "railwaystation"`
-`prune_measure = "betweenness"`, `poi_source =  "grid"` 
-`prune_measure = "closeness"`, `poi_source =  "railwaystation"`
-`prune_measure = "closeness"`, `poi_source =  "grid"` 
+`prune_measure = "betweenness"`, `poi_source =  "railwaystation"`  
+`prune_measure = "betweenness"`, `poi_source =  "grid"`  
+`prune_measure = "closeness"`, `poi_source =  "railwaystation"`  
+`prune_measure = "closeness"`, `poi_source =  "grid"`  
 
 #### For `04_connect_clusters`
 `prune_measure = "betweenness"`, `cutofftype = "abs"`, `cutoff = 1000`  
