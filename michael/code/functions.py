@@ -19,8 +19,7 @@ def color_nodes(G, color = "blue", nids = False, use_id = True):
         nids = [v.index for v in G.vs]
         use_id = False
     if use_id:
-        for nid in set(nids):
-            G.vs.find(id = nid)["color"] = color
+        G.vs.select(id_in = nids)["color"] = color
     else:
         G.vs[nids]["color"] = color
 
@@ -31,8 +30,7 @@ def size_nodes(G, size = 6, nids = False, use_id = True):
         nids = [v.index for v in G.vs]
         use_id = False
     if use_id:
-        for nid in set(nids):
-            G.vs.find(id = nid)["size"] = size
+        G.vs.select(id_in = nids)["size"] = size
     else:
         G.vs[nids]["size"] = size
 
@@ -579,6 +577,7 @@ def calculate_efficiency_global(G, numnodepairs = 500, normalized = True):
     """Calculates global network efficiency.
     """
 
+    if G is None: return 0
     if len(list(G.vs)) > numnodepairs:
         nodeindices = random.sample(list(G.vs.indices), numnodepairs)
     else:
@@ -592,11 +591,23 @@ def calculate_efficiency_global(G, numnodepairs = 500, normalized = True):
     l_ij = haversine_vector([(G.vs[p[0]]["x"], G.vs[p[0]]["y"]) for p in pairs],
                             [(G.vs[p[1]]["x"], G.vs[p[1]]["y"]) for p in pairs])
     EG_id = sum([1/l for l in l_ij if l != 0])
+    # if (EG / EG_id) > 1: # This should not be allowed to happen!
+    #     pp.pprint(d_ij)
+    #     pp.pprint(l_ij)
+    #     pp.pprint([e for e in G.es])
+    #     print(pairs)
+    #     print([(G.vs[p[0]]["x"], G.vs[p[0]]["y"]) for p in pairs],
+    #                         [(G.vs[p[1]]["x"], G.vs[p[1]]["y"]) for p in pairs])
+    #     print(EG, EG_id)
+    #     sys.exit()
+    # assert EG / EG_id <= 1, "Normalized EG > 1. This should not be possible."
     return EG / EG_id
 
 def calculate_efficiency_local(G, numnodepairs = 500, normalized = True):
     """Calculates local network efficiency.
     """
+
+    if G is None: return 0
     if len(list(G.vs)) > numnodepairs*numnodepairs:
         nodeindices = random.sample(list(G.vs.indices), numnodepairs*numnodepairs)
     else:
@@ -623,9 +634,8 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
     
     # EFFICIENCY
     if verbose: print("Calculating efficiency...")
-    if GT_abstract is not None:
-        output["efficiency_global"] = calculate_efficiency_global(GT_abstract, numnodepairs)
-        output["efficiency_local"] = calculate_efficiency_local(GT_abstract, numnodepairs) 
+    output["efficiency_global"] = calculate_efficiency_global(GT_abstract, numnodepairs)
+    output["efficiency_local"] = calculate_efficiency_local(GT_abstract, numnodepairs) 
     
     # LENGTH
     if verbose: print("Calculating length...")

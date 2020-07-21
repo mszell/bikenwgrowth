@@ -3,10 +3,11 @@ make test run of everything for London
 measure overlap somehow
 measure relative cost and efficiency (to MST)
 
-loop 06 through cities
+polish plots
 compress data?
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X loop 06 through cities
 X consider edge cases: <2 POIs, <2 clusters, etc
 X fix speed issue with buffer
 X measure efficiency of existing infrastructure (simplified graphs, subsample)

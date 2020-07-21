@@ -62,4 +62,7 @@ for placeid, placeinfo in cities.items():
             os.makedirs(placepath)
             print("Successfully created folder " + placepath)
 
+from IPython.display import Audio
+sound_file = '../dingding.mp3'
+
 print("Setup finished.\n")
