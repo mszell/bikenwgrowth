@@ -1,0 +1,17 @@
+placeid;nominatimstring;countryid
+london;greater london;gbr
+manhattan;Manhattan, NYC, NY, USA;usa
+bogota;bogota, colombia;col
+budapest;Budapest, Hungary;hun
+paris;Paris, France;fra
+vienna;vienna, austria;aut
+detroit;Detroit, Wayne County, Michigan, United States of America;usa
+portland;Portland, Multnomah County, Oregon, United States of America;usa
+berlin;Berlin, Germany;deu
+boston;Boston, Suffolk County, Massachusetts, United States of America;usa
+chicago;Chicago, Cook County, Illinois, United States of America;usa
+helsinki;Helsinki, Helsinki sub-region, Uusimaa, Mainland Finland, Finland;fin
+rome;Rome, Roma Capitale, Italy;ita
+milan;Milan, Lombardy, Italy;ita
+santiago;Santiago, Provincia de Santiago, Santiago Metropolitan Region, Chile;chl
+buenos aires;Autonomous City of Buenos Aires, Argentina;arg
