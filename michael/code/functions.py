@@ -528,8 +528,8 @@ def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False):
     """
 
     # https://gis.stackexchange.com/questions/121256/creating-a-circle-with-radius-in-metres
-    latcenter = listmean([v["x"] for v in G.vs])
-    loncenter = listmean([v["y"] for v in G.vs])
+    loncenter = listmean([v["x"] for v in G.vs])
+    latcenter = listmean([v["y"] for v in G.vs])
     local_azimuthal_projection = "+proj=aeqd +R=6371000 +units=m +lat_0={} +lon_0={}".format(latcenter, loncenter)
     # Use transformer: https://gis.stackexchange.com/questions/127427/transforming-shapely-polygon-and-multipolygon-objects
     wgs84_to_aeqd = pyproj.Transformer.from_proj(
