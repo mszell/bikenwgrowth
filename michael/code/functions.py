@@ -664,4 +664,25 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
         return output
 
 
+def generate_video(placeid, imgname, verbose = True):
+    """Generate a video from a set of images using OpenCV
+    """
+    # Code adapted from: https://stackoverflow.com/questions/44947505/how-to-make-a-movie-out-of-images-in-python#44948030
+    
+    images = [img for img in os.listdir(PATH["plots"] + placeid + "/") if img.startswith(placeid + imgname)]
+    images.sort()
+    frame = cv2.imread(os.path.join(PATH["plots"] + placeid + "/", images[0]))
+    height, width, layers = frame.shape
+
+    video = cv2.VideoWriter("../videos/" + placeid + imgname + '.avi', 0, 10, (width,height))
+
+    for image in images:
+        video.write(cv2.imread(os.path.join(PATH["plots"] + placeid + "/", image)))
+
+    cv2.destroyAllWindows()
+    video.release()
+    if verbose:
+        print("Video " + placeid + imgname + '.avi generated from ' + str(len(images)) + " frames.")
+
+
 print("Loaded functions")
