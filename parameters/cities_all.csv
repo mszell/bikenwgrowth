@@ -11,7 +11,7 @@ barcelona;Barcelona, Barcelonès, Barcelona, Catalonia, 08001, Spain;esp
 beihai;Beihai, Guangxi, China;chn
 detroit;Detroit, Wayne County, Michigan, United States of America;usa
 jakarta;Jakarta Special Capital Region, Indonesia;idn
-la;Los Angeles, Los Angeles County, California, United States of America;usa
+losangeles;Los Angeles, Los Angeles County, California, United States of America;usa
 mexico;;mex
 phoenix;Phoenix, Maricopa County, Arizona, United States of America;usa
 portland;Portland, Multnomah County, Oregon, United States of America;usa
@@ -21,24 +21,24 @@ berlin;Berlin, Germany;deu
 boston;Boston, Suffolk County, Massachusetts, United States of America;usa
 chicago;Chicago, Cook County, Illinois, United States of America;usa
 helsinki;Helsinki, Helsinki sub-region, Uusimaa, Mainland Finland, Finland;fin
-hong kong;;hkg
+hongkong;;hkg
 johannesburg;;zaf
 moscow;Moscow, Central Administrative Okrug, Moscow, Central Federal District, Russia;rus
 rome;Rome, Roma Capitale, Italy;ita
-san francisco;;usa
+sanfrancisco;;usa
 stuttgart;Stuttgart, Baden-Württemberg, Germany;deu
 tokyo;;jpn
 milan;Milan, Lombardy, Italy;ita
-tel aviv;Tel Aviv-Yafo, Tel Aviv District, Israel;isr
+telaviv;Tel Aviv-Yafo, Tel Aviv District, Israel;isr
 marrakesh;Marrakesh, Pachalik de Marrakech, Préfecture de Marrakech عمالة مراكش, Marrakech-Safi, Morocco;mar
 rabat;Rabat, pachalik de Rabat, Prefecture of Rabat, Rabat-Salé-Kenitra, Morocco;mar
 kathmandu;Kathmandu, Bagmati Pradesh, Nepal;npl
-shah alam;Shah Alam, Selangor, Malaysia;mys
-sao paulo;São Paulo, Região Imediata de São Paulo, Região Metropolitana de São Paulo, Região Geográfica Intermediária de São Paulo, São Paulo, Southeast Region, Brazil;bra
+shahalam;Shah Alam, Selangor, Malaysia;mys
+saopaulo;São Paulo, Região Imediata de São Paulo, Região Metropolitana de São Paulo, Região Geográfica Intermediária de São Paulo, São Paulo, Southeast Region, Brazil;bra
 santiago;Santiago, Provincia de Santiago, Santiago Metropolitan Region, Chile;chl
-buenos aires;Autonomous City of Buenos Aires, Argentina;arg
+buenosaires;Autonomous City of Buenos Aires, Argentina;arg
 luanda;Luanda, Angola;ago
-erdenet;Erdenet, Bayan-Ondor, Orkhon, Mongolia;mng
+ulaanbaatar;ulaanbaatar;mng
 tashkent;Tashkent, 100000, Uzbekistan;uzb
 kassala;Kassala, Sudan;sdn
 tahoua;Tahoua, BP86, Niger;ner

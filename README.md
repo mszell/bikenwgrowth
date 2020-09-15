@@ -5,9 +5,12 @@
 1. Populate `parameters/cities.csv` 
 2. Run 01 and 02 to download and prepare all networks and POIs  
 3. Choose a parameter set in `parameters/parameters.py`  
-4. Run 03, 04, 05  
-5. Go to 3. until you have finished with all parameter sets  
-6. Run 06 for the different 03 parameter sets  
+4. Run 03
+5. Go to 3. until you have finished with all parameter sets
+6. Choose a parameter set in `parameters/parameters.py`  
+7. Run 04
+8. Go to 6. until you have finished with all parameter sets  
+6. Run 05, 06 for the different 04 parameter sets  
 
 ### All suggested parameter sets 
 #### For `03_poi_based_generation`

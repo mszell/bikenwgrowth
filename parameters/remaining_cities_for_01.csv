@@ -1,20 +1,13 @@
 placeid;nominatimstring;countryid
-barcelona;Barcelona, Barcelonès, Barcelona, Catalonia, 08001, Spain;esp
 beihai;Beihai, Guangxi, China;chn
-stuttgart;Stuttgart, Baden-Württemberg, Germany;deu
-marrakesh;Marrakesh, Pachalik de Marrakech, Préfecture de Marrakech عمالة مراكش, Marrakech-Safi, Morocco;mar
-rabat;Rabat, pachalik de Rabat, Prefecture of Rabat, Rabat-Salé-Kenitra, Morocco;mar
-kathmandu;Kathmandu, Bagmati Pradesh, Nepal;npl
-sao paulo;São Paulo, Região Imediata de São Paulo, Região Metropolitana de São Paulo, Região Geográfica Intermediária de São Paulo, São Paulo, Southeast Region, Brazil;bra
+chicago;Chicago, Cook County, Illinois, United States of America;usa
 luanda;Luanda, Angola;ago
-erdenet;Erdenet, Bayan-Ondor, Orkhon, Mongolia;mng
 kassala;Kassala, Sudan;sdn
 tahoua;Tahoua, BP86, Niger;ner
-copenhagen;;dnk
 mexico;;mex
 singapore;;sgp
 beijing;;chn
-hong kong;;hkg
+hongkong;;hkg
 johannesburg;;zaf
-san francisco;;usa
+sanfrancisco;;usa
 tokyo;;jpn

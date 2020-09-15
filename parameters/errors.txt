@@ -1,0 +1,24 @@
+03, shahalam, prune_measure = "betweenness", poi_source = "railwaystation"
+
+~/Github/bikenwgrowth/code/functions.py in greedy_triangulation(GT, poipairs, prune_quantile, prune_measure)
+    200     # Get the measure for pruning
+    201     if prune_measure == "betweenness":
+--> 202         BW = GT.edge_betweenness(directed = False, weights = "weight")
+    203         qt = np.quantile(BW, 1-prune_quantile)
+    204         sub_edges = []
+
+InternalError: Error at /Users/runner/miniforge3/conda-bld/python-igraph_1588168241529/work/vendor/source/igraph/src/centrality.c:2109: Weight vector must be positive, Invalid value
+
+
+
+04, rabat, ulaanbaatar, prune_measure = "betweenness", cutofftype = "abs", cutoff = 1000
+
+~/Github/bikenwgrowth/code/functions.py in greedy_triangulation(GT, poipairs, prune_quantile, prune_measure)
+    200     # Get the measure for pruning
+    201     if prune_measure == "betweenness":
+--> 202         BW = GT.edge_betweenness(directed = False, weights = "weight")
+    203         qt = np.quantile(BW, 1-prune_quantile)
+    204         sub_edges = []
+
+InternalError: Error at /Users/runner/miniforge3/conda-bld/python-igraph_1588168241529/work/vendor/source/igraph/src/centrality.c:2109: Weight vector must be positive, Invalid value
+
