@@ -1,6 +1,18 @@
 # Algorithmic bicycle network design
 #### Michael Szell, Tyler Perlman, Sayat Mimar, Gourab Ghoshal, Roberta Sinatra
 
+## Setting up code environment
+```
+conda create --override-channels -c   
+conda-forge -n OSMNX python=3 osmnx python-igraph watermark haversine rasterio
+conda activate OSMNX
+pip install opencv-python
+conda install -c anaconda gdal
+pip install --user ipykernel
+python -m ipykernel install --user --name=OSMNX
+```
+Run Jupyter Notebook with kernel OSMNX (Kernel > Change Kernel > OSMNX)
+
 ## Running the code
 1. Populate `parameters/cities.csv` 
 2. Run 01 and 02 to download and prepare all networks and POIs  

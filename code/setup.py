@@ -7,6 +7,7 @@ import watermark
 import pickle
 import itertools
 import random
+import zipfile
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 

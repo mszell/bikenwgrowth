@@ -101,15 +101,40 @@ def osm_to_ig(node, edge):
     
     return G
 
-def ox_to_csv(G, p, placeid, parameterid, postfix = "", verbose = True):
+def compress_file(p, f, filetype = ".csv", delete_uncompressed = True):
+    with zipfile.ZipFile(p + f + ".zip", 'w', zipfile.ZIP_DEFLATED) as zfile:
+        zfile.write(p + f + filetype, f + filetype)
+    if delete_uncompressed: os.remove(p + f + filetype)
+
+def ox_to_csv(G, p, placeid, parameterid, postfix = "", compress = True, verbose = True):
     node,edge = ox.graph_to_gdfs(G)
-    node.to_csv(p + placeid + '_' + parameterid + postfix + '_nodes.csv', index=False)
-    edge.to_csv(p + placeid + '_' + parameterid + postfix + '_edges.csv', index=False)
+    prefix = placeid + '_' + parameterid + postfix
+
+    node.to_csv(p + prefix + '_nodes.csv', index = False)
+    if compress: compress_file(p, prefix + '_nodes')
+ 
+    edge.to_csv(p + prefix + '_edges.csv', index = False)
+    if compress: compress_file(p, prefix + '_edges')
+
     if verbose: print(placeid + ": Successfully wrote graph " + parameterid + postfix)
 
 def csv_to_ig(p, placeid, parameterid):
-    n = pd.read_csv(p + placeid + '_' + parameterid + '_nodes.csv')
-    e = pd.read_csv(p + placeid + '_' + parameterid + '_edges.csv')
+    prefix = placeid + '_' + parameterid
+
+    try: # Use zip files if available
+        with zipfile.ZipFile(p + prefix + '_nodes.zip', 'w') as zfile:
+            zfile.extract(prefix + '_nodes.csv', p)
+        with zipfile.ZipFile(p + prefix + '_edges.zip', 'w') as zfile:
+            zfile.extract(prefix + '_edges.csv', p)
+        compress = True
+    except:
+        compress = False
+
+    n = pd.read_csv(p + prefix + '_nodes.csv')
+    e = pd.read_csv(p + prefix + '_edges.csv')
+    if compress:
+        os.remove(p + prefix + '_nodes.csv')
+        os.remove(p + prefix + '_edges.csv')
     G = osm_to_ig(n, e)
     round_coordinates(G)
     mirror_y(G)
