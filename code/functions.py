@@ -122,9 +122,9 @@ def csv_to_ig(p, placeid, parameterid):
     prefix = placeid + '_' + parameterid
 
     try: # Use zip files if available
-        with zipfile.ZipFile(p + prefix + '_nodes.zip', 'w') as zfile:
+        with zipfile.ZipFile(p + prefix + '_nodes.zip', 'r') as zfile:
             zfile.extract(prefix + '_nodes.csv', p)
-        with zipfile.ZipFile(p + prefix + '_edges.zip', 'w') as zfile:
+        with zipfile.ZipFile(p + prefix + '_edges.zip', 'r') as zfile:
             zfile.extract(prefix + '_edges.csv', p)
         compress = True
     except:

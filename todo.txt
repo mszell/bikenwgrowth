@@ -1,14 +1,15 @@
-fix all *_poi_grid_nnidscarall.csv being empty! -> then re-run 03 for poi_source grid
+re-run 03 for poi_source grid
 run 04-07 for all parameter sets
 fix non-positive weight errors that happen in 03,04 for some cities
-add largest US/UK cities
 fix efficiency calculations for edge cases
 make test run of everything for London
 measure overlap somehow
 measure relative cost and efficiency (to MST)
 polish plots
+add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X fix all *_poi_grid_nnidscarall.csv being empty!
 X compress data to be commitable (below 100MB)
 X loop 06 through cities
 X consider edge cases: <2 POIs, <2 clusters, etc
