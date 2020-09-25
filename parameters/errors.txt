@@ -22,3 +22,33 @@ InternalError: Error at /Users/runner/miniforge3/conda-bld/python-igraph_1588168
 
 InternalError: Error at /Users/runner/miniforge3/conda-bld/python-igraph_1588168241529/work/vendor/source/igraph/src/centrality.c:2109: Weight vector must be positive, Invalid value
 
+
+
+
+05, paris, Analyze POI based results
+paris: Analyzing results
+---------------------------------------------------------------------------
+ZeroDivisionError                         Traceback (most recent call last)
+~/Github/bikenwgrowth/code/functions.py in <module>
+     30     for GT, GT_abstract, prune_quantile in zip(res["GTs"], res["GT_abstracts"], res["prune_quantiles"]):
+     31         if debug: print(prune_quantile, len(GT.vs))
+---> 32         metrics, cov = calculate_metrics(GT, GT_abstract, G_carall, nnids, buffer_walk, numnodepairs)
+     33         for key in output.keys():
+     34             output[key].append(metrics[key])
+
+~/Github/bikenwgrowth/code/functions.py in calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk, numnodepairs, verbose, return_cov)
+    682     # DIRECTNESS
+    683     if verbose: print("Calculating directness...")
+--> 684     output["directness"] = calculate_directness(G, numnodepairs)
+    685 
+    686     if return_cov:
+
+~/Github/bikenwgrowth/code/functions.py in calculate_directness(G, numnodepairs)
+    542             total_distance_network += sum([G.es[e]['weight'] for e in path_e])
+    543 
+--> 544     return total_distance_haversine / total_distance_network
+    545 
+    546 
+
+ZeroDivisionError: division by zero
+

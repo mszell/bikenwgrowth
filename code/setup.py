@@ -36,6 +36,7 @@ import pyproj
 from shapely.geometry import Point, MultiPoint, LineString, Polygon, MultiLineString
 import shapely.ops as ops
 import geopandas as gpd
+import geojson
 
 
 
@@ -57,7 +58,7 @@ if debug:
 
 # Create city subfolders
 for placeid, placeinfo in cities.items():
-    for subfolder in ["data", "plots", "results"]:
+    for subfolder in ["data", "plots", "results", "exports"]:
         placepath = PATH[subfolder] + placeid + "/"
         if not os.path.exists(placepath):
             os.makedirs(placepath)

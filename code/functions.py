@@ -140,6 +140,12 @@ def csv_to_ig(p, placeid, parameterid):
     mirror_y(G)
     return(G)
 
+def ig_to_geojson(G):
+    linestring_list = []
+    for e in G.es():
+        linestring_list.append(geojson.LineString([(e.source_vertex["x"], -e.source_vertex["y"]), (e.target_vertex["x"], -e.target_vertex["y"])]))
+    G_geojson = geojson.GeometryCollection(linestring_list)
+    return G_geojson
 
 
 

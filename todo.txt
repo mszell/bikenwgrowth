@@ -1,6 +1,7 @@
 pois should be created from data file, not from online OSMNX. otherwise online changes will make data inconsistent if 01 and 02 are run at different times.
 run 04-07 for all parameter sets
 fix non-positive weight errors that happen in 03,04 for some cities
+fix division by zero in 05, in calculate_directness: return total_distance_haversine / total_distance_network
 fix efficiency calculations for edge cases
 make test run of everything for London
 measure overlap somehow
