@@ -1,4 +1,4 @@
-re-run 03 for poi_source grid
+pois should be created from data file, not from online OSMNX. otherwise online changes will make data inconsistent if 01 and 02 are run at different times.
 run 04-07 for all parameter sets
 fix non-positive weight errors that happen in 03,04 for some cities
 fix efficiency calculations for edge cases
@@ -9,6 +9,7 @@ polish plots
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X re-run 03 for poi_source grid
 X fix all *_poi_grid_nnidscarall.csv being empty!
 X compress data to be commitable (below 100MB)
 X loop 06 through cities
