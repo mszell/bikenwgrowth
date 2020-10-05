@@ -118,17 +118,108 @@ def ox_to_csv(G, p, placeid, parameterid, postfix = "", compress = True, verbose
 
     if verbose: print(placeid + ": Successfully wrote graph " + parameterid + postfix)
 
-def csv_to_ig(p, placeid, parameterid):
-    prefix = placeid + '_' + parameterid
+def check_extract_zip(p, prefix):
+    """ Check if a zip file prefix+'_nodes.zip' and + prefix+'_edges.zip'
+    is available at path p. If so extract it and return True, otherwise False.
+    If you call this function, remember to clean up (i.e. delete the unzipped files)
+    after you are done like this:
+
+    if compress:
+        os.remove(p + prefix + '_nodes.csv')
+        os.remove(p + prefix + '_edges.csv')
+    """
 
     try: # Use zip files if available
         with zipfile.ZipFile(p + prefix + '_nodes.zip', 'r') as zfile:
             zfile.extract(prefix + '_nodes.csv', p)
         with zipfile.ZipFile(p + prefix + '_edges.zip', 'r') as zfile:
             zfile.extract(prefix + '_edges.csv', p)
-        compress = True
+        return True
     except:
-        compress = False
+        return False
+
+
+def csv_to_ox(p, placeid, parameterid):
+    """ Load a networkx graph from _edges.csv and _nodes.csv
+    The edge file has attributes u,v,~,nodeid,...
+    The node file has attributes y,x,nodeid,...
+    Only these attributes are loaded.
+    """
+    prefix = placeid + '_' + parameterid
+    compress = check_extract_zip(p, prefix)
+    
+    with open(p + prefix + '_edges.csv', 'r') as f:
+        header = f.readline().strip().split(",")
+
+        # # 1A) attempt at dynamic data structure
+        # # header = f.readline().strip().split(",")
+        # # data_structure = [(h, type(h)) for h in header]
+        # next(f, '')   # skip a line
+
+        # # 1B) hardcoded data structure
+        # data_structure = [("u", int),
+        #                 ("v", int),
+        #                 ("key", int),
+        #                 ("osmid", int),
+        #                 ("oneway", bool),
+        #                 ("lanes", int),
+        #                 ("ref", str),
+        #                 ("name", str),
+        #                 ("highway", str),
+        #                 ("maxspeed", str),
+        #                 ("length", str),
+        #                 ("geometry", str),
+        #                 ("bridge", str),
+        #                 ("junction", str),
+        #                 ("access", str),
+        #                 ("tunnel", str),
+        #                 ("est_width", str),
+        #                 ("width", str),
+        #                 ("service", str)
+        #                 ]
+
+        lines = []
+        for line in csv.reader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
+            line_list = [c for c in line]
+            
+            # for i, listelem in enumerate(line_list):
+            #     if i == 0:
+            #         line_string = str(listelem) + " "
+            #     elif i == 1:
+            #         line_string = line_string + str(listelem) + " {"
+            #     else:
+            #         line_string = line_string + "'" + header[i] + "': '" + str(listelem) + "', "
+            # line_string = line_string[:-2] + "}"
+
+            line_string = "" + line_list[0] + " "+ line_list[1] + " " + line_list[3]
+            lines.append(line_string)
+        G = nx.parse_edgelist(lines, nodetype=int, data=(("osmid", int),), create_using=nx.MultiDiGraph) # MultiDiGrpah is necessary for OSMNX, for example for get_undirected(G) in utils_graph.py
+    with open(p + prefix + '_nodes.csv', 'r') as f:
+        header = f.readline().strip().split(",")
+        values_x = {}
+        values_y = {}
+        for line in csv.reader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
+            line_list = [c for c in line]
+            osmid = int(line_list[2])
+            values_x[osmid] = float(line_list[1])
+            values_y[osmid] = float(line_list[0])
+
+        nx.set_node_attributes(G, values_x, "x")
+        nx.set_node_attributes(G, values_y, "y")
+
+    edge_lengths = {}
+    for e in G.edges(keys=True):
+        edge_lengths[e] = haversine((values_x[e[0]], values_y[e[0]]), (values_x[e[1]], values_y[e[1]]))
+    nx.set_edge_attributes(G, edge_lengths, "length")
+
+    if compress:
+        os.remove(p + prefix + '_nodes.csv')
+        os.remove(p + prefix + '_edges.csv')
+    return G
+
+def csv_to_ig(p, placeid, parameterid):
+    prefix = placeid + '_' + parameterid
+    compress = check_extract_zip(p, prefix)
 
     n = pd.read_csv(p + prefix + '_nodes.csv')
     e = pd.read_csv(p + prefix + '_edges.csv')
