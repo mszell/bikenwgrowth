@@ -143,7 +143,7 @@ def csv_to_ox(p, placeid, parameterid):
     """ Load a networkx graph from _edges.csv and _nodes.csv
     The edge file has attributes u,v,~,nodeid,...
     The node file has attributes y,x,nodeid,...
-    Only these attributes are loaded.
+    Only these attributes are loaded, and edge lengths are calculated.
     """
     prefix = placeid + '_' + parameterid
     compress = check_extract_zip(p, prefix)
@@ -151,49 +151,12 @@ def csv_to_ox(p, placeid, parameterid):
     with open(p + prefix + '_edges.csv', 'r') as f:
         header = f.readline().strip().split(",")
 
-        # # 1A) attempt at dynamic data structure
-        # # header = f.readline().strip().split(",")
-        # # data_structure = [(h, type(h)) for h in header]
-        # next(f, '')   # skip a line
-
-        # # 1B) hardcoded data structure
-        # data_structure = [("u", int),
-        #                 ("v", int),
-        #                 ("key", int),
-        #                 ("osmid", int),
-        #                 ("oneway", bool),
-        #                 ("lanes", int),
-        #                 ("ref", str),
-        #                 ("name", str),
-        #                 ("highway", str),
-        #                 ("maxspeed", str),
-        #                 ("length", str),
-        #                 ("geometry", str),
-        #                 ("bridge", str),
-        #                 ("junction", str),
-        #                 ("access", str),
-        #                 ("tunnel", str),
-        #                 ("est_width", str),
-        #                 ("width", str),
-        #                 ("service", str)
-        #                 ]
-
         lines = []
         for line in csv.reader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
             line_list = [c for c in line]
-            
-            # for i, listelem in enumerate(line_list):
-            #     if i == 0:
-            #         line_string = str(listelem) + " "
-            #     elif i == 1:
-            #         line_string = line_string + str(listelem) + " {"
-            #     else:
-            #         line_string = line_string + "'" + header[i] + "': '" + str(listelem) + "', "
-            # line_string = line_string[:-2] + "}"
-
             line_string = "" + line_list[0] + " "+ line_list[1] + " " + line_list[3]
             lines.append(line_string)
-        G = nx.parse_edgelist(lines, nodetype=int, data=(("osmid", int),), create_using=nx.MultiDiGraph) # MultiDiGrpah is necessary for OSMNX, for example for get_undirected(G) in utils_graph.py
+        G = nx.parse_edgelist(lines, nodetype=int, data=(("osmid", int),), create_using=nx.MultiDiGraph) # MultiDiGraph is necessary for OSMNX, for example for get_undirected(G) in utils_graph.py
     with open(p + prefix + '_nodes.csv', 'r') as f:
         header = f.readline().strip().split(",")
         values_x = {}
@@ -753,32 +716,36 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
           "efficiency_global": 0,
           "efficiency_local": 0
          }
+    cov = Polygon()
     
-    # EFFICIENCY
-    if verbose: print("Calculating efficiency...")
-    output["efficiency_global"] = calculate_efficiency_global(GT_abstract, numnodepairs)
-    output["efficiency_local"] = calculate_efficiency_local(GT_abstract, numnodepairs) 
-    
-    # LENGTH
-    if verbose: print("Calculating length...")
-    output["length"] = sum([e['weight'] for e in G.es])
-    
-    # COVERAGE
-    if verbose: print("Calculating coverage...")
-    covered_area, cov = calculate_coverage_edges(G, buffer_walk/1000, True)
-    output["coverage"] = covered_area
+    # Check that the graph has links (sometimes we have an isolated node)
+    if G.ecount() > 0 and GT_abstract.ecount() > 0: 
 
-    # POI COVERAGE
-    if verbose: print("Calculating POI coverage...")
-    output["poi_coverage"] = calculate_poiscovered(G_big, cov, nnids)
+        # EFFICIENCY
+        if verbose: print("Calculating efficiency...")
+        output["efficiency_global"] = calculate_efficiency_global(GT_abstract, numnodepairs)
+        output["efficiency_local"] = calculate_efficiency_local(GT_abstract, numnodepairs) 
+        
+        # LENGTH
+        if verbose: print("Calculating length...")
+        output["length"] = sum([e['weight'] for e in G.es])
+        
+        # COVERAGE
+        if verbose: print("Calculating coverage...")
+        covered_area, cov = calculate_coverage_edges(G, buffer_walk/1000, return_cov)
+        output["coverage"] = covered_area
 
-    # COMPONENTS
-    if verbose: print("Calculating components...")
-    output["components"] = len(list(G.components()))
-    
-    # DIRECTNESS
-    if verbose: print("Calculating directness...")
-    output["directness"] = calculate_directness(G, numnodepairs)
+        # POI COVERAGE
+        if verbose: print("Calculating POI coverage...")
+        output["poi_coverage"] = calculate_poiscovered(G_big, cov, nnids)
+
+        # COMPONENTS
+        if verbose: print("Calculating components...")
+        output["components"] = len(list(G.components()))
+        
+        # DIRECTNESS
+        if verbose: print("Calculating directness...")
+        output["directness"] = calculate_directness(G, numnodepairs)
 
     if return_cov: 
         return (output, cov)

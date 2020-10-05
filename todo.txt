@@ -1,6 +1,5 @@
 run 04-07 for all parameter sets
 fix non-positive weight errors that happen in 03,04 for some cities
-fix division by zero in 05, in calculate_directness: return total_distance_haversine / total_distance_network
 fix efficiency calculations for edge cases
 make test run of everything for London
 measure overlap somehow
@@ -9,6 +8,7 @@ polish plots
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X fix division by zero in 05, in calculate_directness: return total_distance_haversine / total_distance_network
 X pois should be created from data network file, not from online OSMNX. otherwise online changes will make data inconsistent if 01 and 02 are run at different times.
 X re-run 03 for poi_source grid
 X fix all *_poi_grid_nnidscarall.csv being empty!
