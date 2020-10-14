@@ -1,13 +1,17 @@
-run 04-07 for all parameter sets
-fix non-positive weight errors that happen in 03,04 for some cities
+fix efficiency_local 0
 fix efficiency calculations for edge cases
-make test run of everything for London
+calculate metrics in a smart, additive way, especially coverage
+analyze and plot metrics also for car setminus created bike networks
+run 04-07 for all parameter sets
+make test run of everything on a testcity
 measure overlap somehow
 measure relative cost and efficiency (to MST)
 polish plots
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X fix poi_coverage 0
+X fix non-positive weight errors that happen in 03,04 for some cities
 X fix division by zero in 05, in calculate_directness: return total_distance_haversine / total_distance_network
 X pois should be created from data network file, not from online OSMNX. otherwise online changes will make data inconsistent if 01 and 02 are run at different times.
 X re-run 03 for poi_source grid

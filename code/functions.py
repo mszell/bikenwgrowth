@@ -329,6 +329,7 @@ def greedy_triangulation_routing_clusters(G, G_total, clusters, clusterinfo, pru
         G_temp.es.delete(e)
     
     clusterpairs = clusterpairs_by_distance(G, G_total, clusters, clusterinfo, True, verbose, full_run)
+    if len(clusterpairs) == 0: return ([], [])
     
     centroidpairs = [((clusterinfo[c[0][0]]['centroid_id'], clusterinfo[c[0][1]]['centroid_id']), c[2]) for c in clusterpairs]
     
@@ -473,6 +474,7 @@ def greedy_triangulation_routing(G, pois, prune_quantiles = [1], prune_measure =
         G_temp.es.delete(e)
         
     poipairs = poipairs_by_distance(G, pois, True)
+    if len(poipairs) == 0: return ([], [])
     
     GT_abstracts = []
     GTs = []
@@ -652,7 +654,7 @@ def calculate_poiscovered(G, cov, nnids):
     poiscovered = 0
     for poi in pois_indices:
         v = G.vs[poi]
-        if Point(-v["y"], v["x"]).within(cov):
+        if Point(v["x"], v["y"]).within(cov):
             poiscovered += 1
     
     return poiscovered
@@ -690,6 +692,8 @@ def calculate_efficiency_global(G, numnodepairs = 500, normalized = True):
 
 def calculate_efficiency_local(G, numnodepairs = 500, normalized = True):
     """Calculates local network efficiency.
+    If there are more than numnodepairs^2 pairs of nodes, measure over a 
+    random sample of numnodepairs^2 node pairs.
     """
 
     if G is None: return 0
@@ -753,7 +757,7 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
         return output
 
 
-def generate_video(placeid, imgname, verbose = True):
+def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
     """Generate a video from a set of images using OpenCV
     """
     # Code adapted from: https://stackoverflow.com/questions/44947505/how-to-make-a-movie-out-of-images-in-python#44948030
@@ -767,6 +771,9 @@ def generate_video(placeid, imgname, verbose = True):
 
     for image in images:
         video.write(cv2.imread(os.path.join(PATH["plots"] + placeid + "/", image)))
+    # Add the last frame duplicatelastframe more times:
+    for i in range(0, duplicatelastframe):
+        video.write(cv2.imread(os.path.join(PATH["plots"] + placeid + "/", images[-1])))
 
     cv2.destroyAllWindows()
     video.release()
