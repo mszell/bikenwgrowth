@@ -1,6 +1,6 @@
-fix efficiency calculations for edge cases
 calculate metrics in a smart, additive way, especially coverage
 analyze and plot metrics also for car setminus created bike networks
+fix efficiency calculations for edge cases
 run 04-07 for all parameter sets
 make test run of everything on a testcity
 measure overlap somehow

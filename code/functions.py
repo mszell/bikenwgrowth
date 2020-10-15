@@ -763,6 +763,30 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
         return output
 
 
+def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True):
+    """Calculates all metrics, additively.
+    """
+
+    output = {"length":[],
+              "coverage": [],
+              "directness": [],
+              "poi_coverage": [],
+              "components": [],
+              "efficiency_global": [],
+              "efficiency_local": []
+             }
+    covs = {}
+    covs_negative = {} # carall minus GT (To do)
+    for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, prune_quantiles):
+        if debug: print(prune_quantile, len(GT.vs))
+        metrics, cov = calculate_metrics(GT, GT_abstract, G_carall, nnids, buffer_walk, numnodepairs)
+        
+        for key in output.keys():
+            output[key].append(metrics[key])
+        covs[prune_quantile] = cov
+    return (output, covs)
+
+
 def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
     """Generate a video from a set of images using OpenCV
     """
