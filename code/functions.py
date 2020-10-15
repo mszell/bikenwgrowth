@@ -246,9 +246,9 @@ def new_edge_intersects(G, enew):
 
 def delete_overlaps(G_res, G_orig, verbose = False):
     """Deletes all overlaps of G_res with G_orig (from G_res)
-    based on node ids.
+    based on node ids. In other words: G_res -= G_orig
     """
-    cnt_e = 0
+    del_edges = []
     for e in list(G_res.es):
         try:
             n1_id = e.source_vertex["id"]
@@ -257,14 +257,14 @@ def delete_overlaps(G_res, G_orig, verbose = False):
             n1_index = G_orig.vs.find(id = n1_id).index
             n2_index = G_orig.vs.find(id = n2_id).index
             if G_orig.are_connected(n1_index, n2_index):
-                G_res.delete_edges(e)
-                cnt_e += 1
+                del_edges.append(e.index)
         except:
             pass
+    G_res.delete_edges(del_edges)
     # Remove isolated nodes
     isolated_nodes = G_res.vs.select(_degree_eq=0)
     G_res.delete_vertices(isolated_nodes)
-    if verbose: print("Removed " + str(cnt_e) + " overlapping edges and " + str(len(isolated_nodes)) + " nodes.")
+    if verbose: print("Removed " + str(len(del_edges)) + " overlapping edges and " + str(len(isolated_nodes)) + " nodes.")
 
 
 def greedy_triangulation(GT, poipairs, prune_quantile = 1, prune_measure = "betweenness"):
@@ -610,9 +610,14 @@ def listmean(lst):
     try: return sum(lst) / len(lst)
     except: return 0
 
-def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False):
+def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False, G_prev = ig.Graph(), cov_prev = Polygon()):
     """Calculates the area and shape covered by the graph's edges.
+    If G_prev and cov_prev are given, only the difference between G and G_prev are calculated, 
+    then added to cov_prev.
     """
+
+    G_added = copy.deepcopy(G)
+    delete_overlaps(G_added, G_prev)
 
     # https://gis.stackexchange.com/questions/121256/creating-a-circle-with-radius-in-metres
     loncenter = listmean([v["x"] for v in G.vs])
@@ -625,15 +630,22 @@ def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False):
     aeqd_to_wgs84 = pyproj.Transformer.from_proj(
         pyproj.Proj(local_azimuthal_projection),
         pyproj.Proj("+proj=longlat +datum=WGS84 +no_defs"))
-    edgetuples = [((e.source_vertex["x"], e.source_vertex["y"]), (e.target_vertex["x"], e.target_vertex["y"])) for e in G.es]
+    edgetuples = [((e.source_vertex["x"], e.source_vertex["y"]), (e.target_vertex["x"], e.target_vertex["y"])) for e in G_added.es]
     # Shapely buffer seems slow for complex objects: https://stackoverflow.com/questions/57753813/speed-up-shapely-buffer
     # Therefore we buffer piecewise.
-    cov = Polygon()
+    cov_added = Polygon()
     for c, t in enumerate(edgetuples):
         # if cov.geom_type == 'MultiPolygon' and c % 1000 == 0: print(str(c)+"/"+str(len(edgetuples)), sum([len(pol.exterior.coords) for pol in cov]))
         # elif cov.geom_type == 'Polygon' and c % 1000 == 0: print(str(c)+"/"+str(len(edgetuples)), len(pol.exterior.coords))
         buf = ops.transform(aeqd_to_wgs84.transform, ops.transform(wgs84_to_aeqd.transform, LineString(t)).buffer(buffer_km * 1000))
-        cov = ops.unary_union([cov, Polygon(buf)])
+        cov_added = ops.unary_union([cov_added, Polygon(buf)])
+
+    # Merge with cov_prev
+    if not cov_added.is_empty: # We need this check because apparently an empty Polygon adds an area.
+        cov = ops.unary_union([cov_added, cov_prev])
+    else:
+        cov = cov_prev
+
     cov_transformed = ops.transform(wgs84_to_aeqd.transform, cov)
     covered_area = cov_transformed.area / 1000000
 
@@ -714,7 +726,7 @@ def calculate_efficiency_local(G, numnodepairs = 500, normalized = True):
     return listmean(EGi)
 
 
-def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True):
+def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True, G_prev = ig.Graph(), cov_prev = Polygon()):
     """Calculates all metrics.
     """
     
@@ -727,7 +739,7 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
           "efficiency_local": 0
          }
     cov = Polygon()
-    
+
     # Check that the graph has links (sometimes we have an isolated node)
     if G.ecount() > 0 and GT_abstract.ecount() > 0: 
 
@@ -742,7 +754,8 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
         
         # COVERAGE
         if verbose: print("Calculating coverage...")
-        covered_area, cov = calculate_coverage_edges(G, buffer_walk/1000, return_cov)
+        # G_added = G.difference(G_prev) # This doesnt work
+        covered_area, cov = calculate_coverage_edges(G, buffer_walk/1000, return_cov, G_prev, cov_prev)
         output["coverage"] = covered_area
 
         # POI COVERAGE
@@ -764,7 +777,8 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
 
 
 def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True):
-    """Calculates all metrics, additively.
+    """Calculates all metrics, additively. 
+    Coverage differences are calculated in every step instead of the whole coverage.
     """
 
     output = {"length":[],
@@ -777,13 +791,16 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
              }
     covs = {}
     covs_negative = {} # carall minus GT (To do)
+    cov_prev = Polygon()
+    GT_prev = ig.Graph()
     for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, prune_quantiles):
-        if debug: print(prune_quantile, len(GT.vs))
-        metrics, cov = calculate_metrics(GT, GT_abstract, G_carall, nnids, buffer_walk, numnodepairs)
+        metrics, cov = calculate_metrics(GT, GT_abstract, G_carall, nnids, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev)
         
         for key in output.keys():
             output[key].append(metrics[key])
         covs[prune_quantile] = cov
+        cov_prev = copy.deepcopy(cov)
+        GT_prev = copy.deepcopy(GT)
     return (output, covs)
 
 

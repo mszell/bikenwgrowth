@@ -1,4 +1,3 @@
-calculate metrics in a smart, additive way, especially coverage
 analyze and plot metrics also for car setminus created bike networks
 fix efficiency calculations for edge cases
 run 04-07 for all parameter sets
@@ -9,6 +8,8 @@ polish plots
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X fix delete_overlaps
+X calculate metrics in a smart, additive way, especially coverage
 X fix efficiency_local 0
 X fix poi_coverage 0
 X fix non-positive weight errors that happen in 03,04 for some cities

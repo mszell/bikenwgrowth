@@ -23,6 +23,7 @@ import networkx as nx
 # Plotting
 import matplotlib.pyplot as plt
 from matplotlib import cm
+import matplotlib
 
 # Geo
 import osmnx as ox
