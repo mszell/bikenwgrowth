@@ -662,10 +662,12 @@ def calculate_poiscovered(G, cov, nnids):
 
 def calculate_efficiency_global(G, numnodepairs = 500, normalized = True):
     """Calculates global network efficiency.
+    If there are more than numnodepairs nodes, measure over pairings of a 
+    random sample of numnodepairs nodes.
     """
 
     if G is None: return 0
-    if len(list(G.vs)) > numnodepairs:
+    if G.vcount() > numnodepairs:
         nodeindices = random.sample(list(G.vs.indices), numnodepairs)
     else:
         nodeindices = list(G.vs.indices)
@@ -690,21 +692,25 @@ def calculate_efficiency_global(G, numnodepairs = 500, normalized = True):
     # assert EG / EG_id <= 1, "Normalized EG > 1. This should not be possible."
     return EG / EG_id
 
+
 def calculate_efficiency_local(G, numnodepairs = 500, normalized = True):
     """Calculates local network efficiency.
-    If there are more than numnodepairs^2 pairs of nodes, measure over a 
-    random sample of numnodepairs^2 node pairs.
+    If there are more than numnodepairs nodes, measure over pairings of a 
+    random sample of numnodepairs nodes.
     """
 
     if G is None: return 0
-    if len(list(G.vs)) > numnodepairs*numnodepairs:
-        nodeindices = random.sample(list(G.vs.indices), numnodepairs*numnodepairs)
+    if G.vcount() > numnodepairs:
+        nodeindices = random.sample(list(G.vs.indices), numnodepairs)
     else:
         nodeindices = list(G.vs.indices)
     EGi = []
+    vcounts = []
+    ecounts = []
     for i in nodeindices:
         if len(G.neighbors(i)) > 1: # If we have a nontrivial neighborhood
-            EGi.append(calculate_efficiency_global(G.induced_subgraph(G.neighbors(i)), normalized))
+            G_induced = G.induced_subgraph(G.neighbors(i))
+            EGi.append(calculate_efficiency_global(G_induced, numnodepairs, normalized))
     return listmean(EGi)
 
 
