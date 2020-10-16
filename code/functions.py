@@ -448,6 +448,55 @@ def clusterpairs_by_distance(G, G_total, clusters, clusterinfo, return_distances
         return [[o[0], o[1]] for o in clusterpairs]
 
 
+def mst_routing(G, pois):
+    """Minimum Spanning Tree (MST) of a graph G's node subset pois,
+    then routing to connect the MST.
+    G is an ipgraph graph, pois is a list of node ids.
+    
+    The MST is the planar graph with the minimum number of (weighted) 
+    links in order to assure connectedness.
+
+    Distance here is routing distance, while edge crossing is checked on an abstract 
+    level.
+    """
+
+    if len(pois) < 2: return ([], []) # We can't do anything with less than 2 POIs
+
+    # MST_abstract is the MST with same nodes but euclidian links
+    pois_indices = set()
+    for poi in pois:
+        pois_indices.add(G.vs.find(id = poi).index)
+    G_temp = copy.deepcopy(G)
+    for e in G_temp.es: # delete all edges
+        G_temp.es.delete(e)
+        
+    poipairs = poipairs_by_distance(G, pois, True)
+    if len(poipairs) == 0: return ([], [])
+
+    MST_abstract = copy.deepcopy(G_temp.subgraph(pois_indices))
+    for poipair, poipair_distance in poipairs:
+        poipair_ind = (MST_abstract.vs.find(id = poipair[0]).index, MST_abstract.vs.find(id = poipair[1]).index)
+        MST_abstract.add_edge(poipair_ind[0], poipair_ind[1] , weight = poipair_distance)
+    MST_abstract = MST_abstract.spanning_tree(weights = "weight")
+
+    # Get node pairs we need to route, sorted by distance
+    routenodepairs = {}
+    for e in MST_abstract.es:
+        routenodepairs[(e.source_vertex["id"], e.target_vertex["id"])] = e["weight"]
+    routenodepairs = sorted(routenodepairs.items(), key = lambda x: x[1])
+
+    # Do the routing
+    MST_indices = set()
+    for poipair, poipair_distance in routenodepairs:
+        poipair_ind = (G.vs.find(id = poipair[0]).index, G.vs.find(id = poipair[1]).index)
+        sp = set(G.get_shortest_paths(poipair_ind[0], poipair_ind[1], weights = "weight", output = "vpath")[0])
+        MST_indices = MST_indices.union(sp)
+
+    MST = G.induced_subgraph(MST_indices)
+    
+    return (MST, MST_abstract)
+
+
 def greedy_triangulation_routing(G, pois, prune_quantiles = [1], prune_measure = "betweenness"):
     """Greedy Triangulation (GT) of a graph G's node subset pois,
     then routing to connect the GT (up to a quantile of betweenness

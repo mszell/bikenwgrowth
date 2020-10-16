@@ -1,4 +1,3 @@
-measure relative cost and efficiency (to MST)
 fix efficiency calculations for edge cases
 run 04-07 for all parameter sets
 make test run of everything on a testcity
@@ -7,6 +6,7 @@ polish plots
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X measure relative cost and efficiency (to MST)
 X analyze and plot metrics also for car setminus created bike networks
 X fix delete_overlaps
 X calculate metrics in a smart, additive way, especially coverage
