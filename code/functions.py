@@ -794,7 +794,7 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
     cov_prev = Polygon()
     GT_prev = ig.Graph()
     for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, prune_quantiles):
-        metrics, cov = calculate_metrics(GT, GT_abstract, G_carall, nnids, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev)
+        metrics, cov = calculate_metrics(GT, GT_abstract, G_big, nnids, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev)
         
         for key in output.keys():
             output[key].append(metrics[key])
