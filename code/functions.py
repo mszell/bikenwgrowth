@@ -726,7 +726,7 @@ def calculate_efficiency_local(G, numnodepairs = 500, normalized = True):
     return listmean(EGi)
 
 
-def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True, G_prev = ig.Graph(), cov_prev = Polygon()):
+def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True, G_prev = ig.Graph(), cov_prev = Polygon(), ignore_GT_abstract = False):
     """Calculates all metrics.
     """
     
@@ -744,9 +744,10 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, numnodepa
     if G.ecount() > 0 and GT_abstract.ecount() > 0: 
 
         # EFFICIENCY
-        if verbose: print("Calculating efficiency...")
-        output["efficiency_global"] = calculate_efficiency_global(GT_abstract, numnodepairs)
-        output["efficiency_local"] = calculate_efficiency_local(GT_abstract, numnodepairs) 
+        if not ignore_GT_abstract:
+            if verbose: print("Calculating efficiency...")
+            output["efficiency_global"] = calculate_efficiency_global(GT_abstract, numnodepairs)
+            output["efficiency_local"] = calculate_efficiency_local(GT_abstract, numnodepairs) 
         
         # LENGTH
         if verbose: print("Calculating length...")
@@ -781,6 +782,7 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
     Coverage differences are calculated in every step instead of the whole coverage.
     """
 
+    # BICYCLE NETWORKS
     output = {"length":[],
               "coverage": [],
               "directness": [],
@@ -790,10 +792,10 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
               "efficiency_local": []
              }
     covs = {}
-    covs_negative = {} # carall minus GT (To do)
     cov_prev = Polygon()
     GT_prev = ig.Graph()
     for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, prune_quantiles):
+        if verbose: print("Calculating bike network metrics for quantile " + str(prune_quantile))
         metrics, cov = calculate_metrics(GT, GT_abstract, G_big, nnids, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev)
         
         for key in output.keys():
@@ -801,7 +803,39 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
         covs[prune_quantile] = cov
         cov_prev = copy.deepcopy(cov)
         GT_prev = copy.deepcopy(GT)
-    return (output, covs)
+
+
+    # CAR MINUS BICYCLE NETWORKS
+    # First construct the negative networks
+    GT_carminusbikes = []
+    for GT, prune_quantile in zip(reversed(Gs), reversed(prune_quantiles)):
+        GT_carminusbike = copy.deepcopy(G_big)
+        delete_overlaps(GT_carminusbike, GT)
+        GT_carminusbikes.append(GT_carminusbike)
+        # print((GT_carminusbike.ecount() + GT.ecount()), GT_carminusbike.ecount(), GT.ecount()) # sanity check
+
+    output_carminusbike = {"length":[],
+              "coverage": [],
+              "directness": [],
+              "poi_coverage": [],
+              "components": [],
+              "efficiency_global": [],
+              "efficiency_local": []
+             }
+    covs_carminusbike = {}
+    cov_prev = Polygon()
+    GT_prev = ig.Graph()
+    for GT, prune_quantile in zip(GT_carminusbikes, reversed(prune_quantiles)):
+        if verbose: print("Calculating carminusbike network metrics for quantile " + str(prune_quantile))
+        metrics, cov = calculate_metrics(GT, GT, G_big, nnids, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev, True)
+        
+        for key in output_carminusbike.keys():
+            output_carminusbike[key].insert(0, metrics[key]) # append to beginning due to reversed order
+        covs_carminusbike[prune_quantile] = cov
+        cov_prev = copy.deepcopy(cov)
+        GT_prev = copy.deepcopy(GT)
+
+    return (output, covs, output_carminusbike, covs_carminusbike)
 
 
 def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
