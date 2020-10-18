@@ -8,6 +8,7 @@ import pickle
 import itertools
 import random
 import zipfile
+from collections import defaultdict
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 

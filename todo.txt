@@ -3,6 +3,7 @@ run 04-07 for all parameter sets
 make test run of everything on a testcity
 measure overlap somehow
 polish plots
+calculate efficiencies for carminusbike simplified graphs
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
