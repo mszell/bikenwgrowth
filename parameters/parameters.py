@@ -5,7 +5,7 @@
 poi_source = "grid" # railwaystation, grid
 
 # 03, 04, 05, 06
-prune_measure = "betweenness" # betweenness, closeness
+prune_measure = "closeness" # betweenness, closeness
 
 # 04, 05, 06
 cutofftype = "abs" # abs, rel
