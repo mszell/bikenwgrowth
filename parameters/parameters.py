@@ -2,10 +2,10 @@
 # These are values to loop through for different runs
 
 # 03, 05, 06
-poi_source = "grid" # railwaystation, grid
+poi_source = "railwaystation" # railwaystation, grid
 
 # 03, 04, 05, 06
-prune_measure = "closeness" # betweenness, closeness
+prune_measure = "betweenness" # betweenness, closeness
 
 # 04, 05, 06
 cutofftype = "abs" # abs, rel

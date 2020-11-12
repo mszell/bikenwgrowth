@@ -911,4 +911,24 @@ def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
         print("Video " + placeid + imgname + '.avi generated from ' + str(len(images)) + " frames.")
 
 
+
+def gdf_to_geojson(gdf, properties):
+    """Turn a gdf file into a GeoJSON.
+    The gdf must consist only of geometries of type Point.
+    Adapted from: https://geoffboeing.com/2015/10/exporting-python-data-geojson/
+    """
+    geojson = {'type':'FeatureCollection', 'features':[]}
+    for _, row in gdf.iterrows():
+        feature = {'type':'Feature',
+                   'properties':{},
+                   'geometry':{'type':'Point',
+                               'coordinates':[]}}
+        feature['geometry']['coordinates'] = [row.geometry.x, row.geometry.y]
+        for prop in properties:
+            feature['properties'][prop] = row[prop]
+        geojson['features'].append(feature)
+    return geojson
+
+
+
 print("Loaded functions")
