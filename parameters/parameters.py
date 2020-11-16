@@ -2,7 +2,7 @@
 # These are values to loop through for different runs
 
 # 03, 05, 06
-poi_source = "railwaystation" # railwaystation, grid
+poi_source = "grid" # railwaystation, grid
 
 # 03, 04, 05, 06
 prune_measure = "betweenness" # betweenness, closeness
@@ -31,6 +31,7 @@ poiparameters = {"railwaystation":{'railway':['station','halt']}#,
 
 # 05
 buffer_walk = 500 # Buffer in m for coverage calculations. (How far people are willing to walk)
+buffer_overlap = 10 # Buffer in m for overlap calculations. (How far to consider existing structure overlapping with generated)
 numnodepairs = 500 # Number of node pairs to consider for random sample to calculate directness (O(numnodepairs^2), so better not go over 1000)
 networktypes = ["biketrack", "carall", "bikeable", "biketrackcarall"] # Existing infrastructures to analyze
 
