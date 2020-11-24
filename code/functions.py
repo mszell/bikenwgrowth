@@ -266,6 +266,21 @@ def delete_overlaps(G_res, G_orig, verbose = False):
     G_res.delete_vertices(isolated_nodes)
     if verbose: print("Removed " + str(len(del_edges)) + " overlapping edges and " + str(len(isolated_nodes)) + " nodes.")
 
+def constrict_overlaps(G_res, G_orig, verbose = False, factor = 10):
+    """Increases length by factor of all overlaps of G_res with G_orig (in G_res) based on edge ids.
+    """
+    for e in list(G_res.es):
+        try:
+            n1_id = e.source_vertex["id"]
+            n2_id = e.target_vertex["id"]
+            # If there is already an edge in the original network, delete it
+            n1_index = G_orig.vs.find(id = n1_id).index
+            n2_index = G_orig.vs.find(id = n2_id).index
+            if G_orig.are_connected(n1_index, n2_index):
+                G_orig[n1_index, n2_index] = factor * G_orig[n1_index, n2_index]
+        except:
+            pass
+
 
 def greedy_triangulation(GT, poipairs, prune_quantile = 1, prune_measure = "betweenness"):
     """Greedy Triangulation (GT) of a graph GT with an empty edge set.
@@ -795,18 +810,9 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, calcmetrics = {"length":0,
     """Calculates all metrics (using the keys from calcmetrics).
     """
     
-    output = {"length":0,
-          "length_lcc":0,
-          "coverage": 0,
-          "directness": 0,
-          "directness_lcc": 0,
-          "poi_coverage": 0,
-          "components": 0,
-          "overlap_biketrack": 0,
-          "overlap_bikeable": 0,
-          "efficiency_global": 0,
-          "efficiency_local": 0
-         }
+    output = {}
+    for key in calcmetrics:
+        output[key] = 0
     cov = Polygon()
     covsmall = Polygon()
 
@@ -886,18 +892,19 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
     """
 
     # BICYCLE NETWORKS
-    output = {"length":[],
-              "length_lcc":[],
-              "coverage": [],
-              "directness": [],
-              "directness_lcc": [],
-              "poi_coverage": [],
-              "components": [],
-              "overlap_biketrack": [],
-              "overlap_bikeable": [],
-              "efficiency_global": [],
-              "efficiency_local": []
-             }
+    output = {
+            "length":[],
+            "length_lcc":[],
+            "coverage": [],
+            "directness": [],
+            "directness_lcc": [],
+            "poi_coverage": [],
+            "components": [],
+            "overlap_biketrack": [],
+            "overlap_bikeable": [],
+            "efficiency_global": [],
+            "efficiency_local": []
+            }
     covs = {} # covers using buffer_walk
     cov_prev = Polygon()
     covsmall_prev = Polygon() # covers using buffer_overlap
@@ -914,7 +921,24 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
         GT_prev = copy.deepcopy(GT)
 
 
+    # CAR CONSTRICTED BICYCLE NETWORKS
+    # These are the car networks where the length of the bike subnetwork is increased 10 times, effectively implementing a speed reduction from 50 km/h to 5 km/h. We are only interested in directness, as all other metrics do not change or are already calculated elsewhere.
+    output_carconstrictedbike = {
+              "directness": [],
+              "directness_lcc": []
+             }
+    for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, prune_quantiles):
+        GT_carconstrictedbike = copy.deepcopy(G_big)
+        constrict_overlaps(GT_carconstrictedbike, GT)
+        if verbose: print("Calculating carconstrictedbike network metrics for quantile " + str(prune_quantile))
+        metrics = calculate_metrics(GT_carconstrictedbike, GT_abstract, G_big, nnids, output_carconstrictedbike, buffer_walk, buffer_overlap, numnodepairs, verbose, False)
+        
+        for key in output_carconstrictedbike.keys():
+            output_carconstrictedbike[key].append(metrics[key])
+
+
     # CAR MINUS BICYCLE NETWORKS
+    # These are the car networks where the links from the bike subnetworks are completely removed. Here we follow a reverse order to build up the costly cover calculations additively.
     # First construct the negative networks
     GT_carminusbikes = []
     for GT, prune_quantile in zip(reversed(Gs), reversed(prune_quantiles)):
@@ -923,32 +947,22 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
         GT_carminusbikes.append(GT_carminusbike)
         # print((GT_carminusbike.ecount() + GT.ecount()), GT_carminusbike.ecount(), GT.ecount()) # sanity check
 
-    output_carminusbike = {"length":[],
-              "length_lcc":[],
-              "coverage": [],
-              "directness": [],
-              "directness_lcc": [],
-              "poi_coverage": [],
-              "components": [],
-              "overlap_biketrack": [], # ignored
-              "overlap_bikeable": [], # ignored
-              "efficiency_global": [], # ignored
-              "efficiency_local": [] # ignored
-             }
+    output_carminusbike = {
+            "length":[],
+            "length_lcc":[],
+            "coverage": [],
+            "directness": [],
+            "directness_lcc": [],
+            "poi_coverage": [],
+            "components": []
+            }
     covs_carminusbike = {}
     cov_prev = Polygon()
     covsmall_prev = Polygon()
     GT_prev = ig.Graph()
     for GT, prune_quantile in zip(GT_carminusbikes, reversed(prune_quantiles)):
         if verbose: print("Calculating carminusbike network metrics for quantile " + str(prune_quantile))
-        metrics, cov, _ = calculate_metrics(GT, GT, G_big, nnids, {"length":0,
-          "length_lcc":0,
-          "coverage": 0,
-          "directness": 0,
-          "directness_lcc": 0,
-          "poi_coverage": 0,
-          "components": 0
-         }, buffer_walk, buffer_overlap, numnodepairs, verbose, return_cov, GT_prev, cov_prev, covsmall_prev, True)
+        metrics, cov, _ = calculate_metrics(GT, GT, G_big, nnids, output_carminusbike, buffer_walk, buffer_overlap, numnodepairs, verbose, return_cov, GT_prev, cov_prev, covsmall_prev, True)
         
         for key in output_carminusbike.keys():
             output_carminusbike[key].insert(0, metrics[key]) # append to beginning due to reversed order
@@ -956,7 +970,7 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
         cov_prev = copy.deepcopy(cov)
         GT_prev = copy.deepcopy(GT)
 
-    return (output, covs, output_carminusbike, covs_carminusbike)
+    return (output, covs, output_carminusbike, covs_carminusbike, output_carconstrictedbike)
 
 
 def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
@@ -982,6 +996,34 @@ def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
     if verbose:
         print("Video " + placeid + imgname + '.avi generated from ' + str(len(images)) + " frames.")
 
+
+
+def write_result(res, mode, placeid, poi_source, prune_measure, suffix, dictnested = {}):
+    """Write results (pickle or dict to csv)
+    """
+    if poi_source:
+        filename = placeid + '_poi_' + poi_source + "_" + prune_measure + suffix
+    else:
+        filename = placeid + "_" + prune_measure + suffix
+    with open(PATH["results"] + placeid + "/" + filename, 'w') as f:
+        if mode == "pickle":
+            pickle.dump(res, f)
+        elif mode == "dict":
+            w = csv.writer(f)
+            w.writerow(res.keys())
+            try: # dict with list values
+                w.writerows(zip(*res.values()))
+            except: # dict with single values
+                w.writerow(res.values())
+        elif mode == "dictnested":
+            # https://stackoverflow.com/questions/29400631/python-writing-nested-dictionary-to-csv
+            fields = ['network'] + list(dictnested.keys())
+            w = csv.DictWriter(f, fields)
+            w.writeheader()
+            for key, val in sorted(res.items()):
+                row = {'network': key}
+                row.update(val)
+                w.writerow(row)
 
 
 def gdf_to_geojson(gdf, properties):
