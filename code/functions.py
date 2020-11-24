@@ -780,8 +780,19 @@ def calculate_efficiency_local(G, numnodepairs = 500, normalized = True):
     return listmean(EGi)
 
 
-def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, buffer_overlap = 10, numnodepairs = 500, verbose = False, return_cov = True, G_prev = ig.Graph(), cov_prev = Polygon(), covsmall_prev = Polygon(), ignore_GT_abstract = False, Gexisting = {}):
-    """Calculates all metrics.
+def calculate_metrics(G, GT_abstract, G_big, nnids, calcmetrics = {"length":0,
+          "length_lcc":0,
+          "coverage": 0,
+          "directness": 0,
+          "directness_lcc": 0,
+          "poi_coverage": 0,
+          "components": 0,
+          "overlap_biketrack": 0,
+          "overlap_bikeable": 0,
+          "efficiency_global": 0,
+          "efficiency_local": 0
+         }, buffer_walk = 500, buffer_overlap = 10, numnodepairs = 500, verbose = False, return_cov = True, G_prev = ig.Graph(), cov_prev = Polygon(), covsmall_prev = Polygon(), ignore_GT_abstract = False, Gexisting = {}):
+    """Calculates all metrics (using the keys from calcmetrics).
     """
     
     output = {"length":0,
@@ -808,43 +819,54 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, buffer_ov
 
         # EFFICIENCY
         if not ignore_GT_abstract:
-            if verbose: print("Calculating efficiency...")
-            output["efficiency_global"] = calculate_efficiency_global(GT_abstract, numnodepairs)
-            output["efficiency_local"] = calculate_efficiency_local(GT_abstract, numnodepairs) 
+            if verbose and ("efficiency_global" in calcmetrics or "efficiency_local" in calcmetrics): print("Calculating efficiency...")
+            if "efficiency_global" in calcmetrics:
+                output["efficiency_global"] = calculate_efficiency_global(GT_abstract, numnodepairs)
+            if "efficiency_local" in calcmetrics:
+                output["efficiency_local"] = calculate_efficiency_local(GT_abstract, numnodepairs) 
         
         # LENGTH
-        if verbose: print("Calculating length...")
-        output["length"] = sum([e['weight'] for e in G.es])
-        if len(cl) > 1:
-            output["length_lcc"] = sum([e['weight'] for e in LCC.es])
-        else:
-            output["length_lcc"] = output["length"]
+        if verbose and ("length" in calcmetrics or "length_lcc" in calcmetrics): print("Calculating length...")
+        if "length" in calcmetrics:
+            output["length"] = sum([e['weight'] for e in G.es])
+        if "length_lcc" in calcmetrics:
+            if len(cl) > 1:
+                output["length_lcc"] = sum([e['weight'] for e in LCC.es])
+            else:
+                output["length_lcc"] = output["length"]
         
         # COVERAGE
-        if verbose: print("Calculating coverage...")
-        # G_added = G.difference(G_prev) # This doesnt work
-        covered_area, cov, covsmall = calculate_coverage_edges(G, buffer_walk/1000, buffer_overlap/1000, return_cov, G_prev, cov_prev, covsmall_prev)
-        output["coverage"] = covered_area
-        # OVERLAP WITH EXISTING NETS
-        if Gexisting:
-            output["overlap_biketrack"] = overlap_linepoly(Gexisting["biketrack"], covsmall)
-            output["overlap_bikeable"] = overlap_linepoly(Gexisting["bikeable"], covsmall)
+        if "coverage" in calcmetrics:
+            if verbose: print("Calculating coverage...")
+            # G_added = G.difference(G_prev) # This doesnt work
+            covered_area, cov, covsmall = calculate_coverage_edges(G, buffer_walk/1000, buffer_overlap/1000, return_cov, G_prev, cov_prev, covsmall_prev)
+            output["coverage"] = covered_area
+            # OVERLAP WITH EXISTING NETS
+            if Gexisting:
+                if "overlap_biketrack" in calcmetrics:
+                    output["overlap_biketrack"] = overlap_linepoly(Gexisting["biketrack"], covsmall)
+                if "overlap_bikeable" in calcmetrics:
+                    output["overlap_bikeable"] = overlap_linepoly(Gexisting["bikeable"], covsmall)
 
         # POI COVERAGE
-        if verbose: print("Calculating POI coverage...")
-        output["poi_coverage"] = calculate_poiscovered(G_big, cov, nnids)
+        if "poi_coverage" in calcmetrics:
+            if verbose: print("Calculating POI coverage...")
+            output["poi_coverage"] = calculate_poiscovered(G_big, cov, nnids)
 
         # COMPONENTS
-        if verbose: print("Calculating components...")
-        output["components"] = len(list(G.components()))
+        if "components" in calcmetrics:
+            if verbose: print("Calculating components...")
+            output["components"] = len(list(G.components()))
         
         # DIRECTNESS
-        if verbose: print("Calculating directness...")
-        output["directness"] = calculate_directness(G, numnodepairs)
-        if len(cl) > 1:
-            output["directness_lcc"] = calculate_directness(LCC, numnodepairs)
-        else:
-            output["directness_lcc"] = output["directness"]
+        if verbose and ("directness" in calcmetrics or "directness_lcc" in calcmetrics): print("Calculating directness...")
+        if "directness" in calcmetrics:
+            output["directness"] = calculate_directness(G, numnodepairs)
+        if "directness_lcc" in calcmetrics:
+            if len(cl) > 1:
+                output["directness_lcc"] = calculate_directness(LCC, numnodepairs)
+            else:
+                output["directness_lcc"] = output["directness"]
 
     if return_cov: 
         return (output, cov, covsmall)
@@ -882,7 +904,7 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
     GT_prev = ig.Graph()
     for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, prune_quantiles):
         if verbose: print("Calculating bike network metrics for quantile " + str(prune_quantile))
-        metrics, cov, covsmall = calculate_metrics(GT, GT_abstract, G_big, nnids, buffer_walk, buffer_overlap, numnodepairs, verbose, return_cov, GT_prev, cov_prev, covsmall_prev, False, Gexisting)
+        metrics, cov, covsmall = calculate_metrics(GT, GT_abstract, G_big, nnids, output, buffer_walk, buffer_overlap, numnodepairs, verbose, return_cov, GT_prev, cov_prev, covsmall_prev, False, Gexisting)
         
         for key in output.keys():
             output[key].append(metrics[key])
@@ -919,7 +941,14 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
     GT_prev = ig.Graph()
     for GT, prune_quantile in zip(GT_carminusbikes, reversed(prune_quantiles)):
         if verbose: print("Calculating carminusbike network metrics for quantile " + str(prune_quantile))
-        metrics, cov, _ = calculate_metrics(GT, GT, G_big, nnids, buffer_walk, buffer_overlap, numnodepairs, verbose, return_cov, GT_prev, cov_prev, covsmall_prev, True)
+        metrics, cov, _ = calculate_metrics(GT, GT, G_big, nnids, {"length":0,
+          "length_lcc":0,
+          "coverage": 0,
+          "directness": 0,
+          "directness_lcc": 0,
+          "poi_coverage": 0,
+          "components": 0
+         }, buffer_walk, buffer_overlap, numnodepairs, verbose, return_cov, GT_prev, cov_prev, covsmall_prev, True)
         
         for key in output_carminusbike.keys():
             output_carminusbike[key].insert(0, metrics[key]) # append to beginning due to reversed order
