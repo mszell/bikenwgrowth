@@ -1,5 +1,6 @@
 run 04-07 for all parameter sets
 instead of turning streets completely into bike lanes, decrease speed (=effective distance) from 50km/h to 5km/h. Then do betweenness calculations.
+remove cluster algorithms
 make test run of everything on a testcity
 polish plots
 fix efficiency calculations for edge cases
@@ -7,6 +8,7 @@ calculate efficiencies for carminusbike simplified graphs
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X implement directness_lcc, length_lcc
 X analysis-plot: add levels for: existing net (biketrack, and bikeable)
 X analysis-plot: add overlap with existing net
 X measure overlap

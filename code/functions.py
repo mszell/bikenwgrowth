@@ -785,8 +785,10 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, buffer_ov
     """
     
     output = {"length":0,
+          "length_lcc":0,
           "coverage": 0,
           "directness": 0,
+          "directness_lcc": 0,
           "poi_coverage": 0,
           "components": 0,
           "overlap_biketrack": 0,
@@ -800,6 +802,10 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, buffer_ov
     # Check that the graph has links (sometimes we have an isolated node)
     if G.ecount() > 0 and GT_abstract.ecount() > 0:
 
+        # Get LCC
+        cl = G.clusters()
+        LCC = cl.giant()
+
         # EFFICIENCY
         if not ignore_GT_abstract:
             if verbose: print("Calculating efficiency...")
@@ -809,6 +815,10 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, buffer_ov
         # LENGTH
         if verbose: print("Calculating length...")
         output["length"] = sum([e['weight'] for e in G.es])
+        if len(cl) > 1:
+            output["length_lcc"] = sum([e['weight'] for e in LCC.es])
+        else:
+            output["length_lcc"] = output["length"]
         
         # COVERAGE
         if verbose: print("Calculating coverage...")
@@ -831,6 +841,10 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, buffer_walk = 500, buffer_ov
         # DIRECTNESS
         if verbose: print("Calculating directness...")
         output["directness"] = calculate_directness(G, numnodepairs)
+        if len(cl) > 1:
+            output["directness_lcc"] = calculate_directness(LCC, numnodepairs)
+        else:
+            output["directness_lcc"] = output["directness"]
 
     if return_cov: 
         return (output, cov, covsmall)
@@ -851,8 +865,10 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
 
     # BICYCLE NETWORKS
     output = {"length":[],
+              "length_lcc":[],
               "coverage": [],
               "directness": [],
+              "directness_lcc": [],
               "poi_coverage": [],
               "components": [],
               "overlap_biketrack": [],
@@ -886,8 +902,10 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
         # print((GT_carminusbike.ecount() + GT.ecount()), GT_carminusbike.ecount(), GT.ecount()) # sanity check
 
     output_carminusbike = {"length":[],
+              "length_lcc":[],
               "coverage": [],
               "directness": [],
+              "directness_lcc": [],
               "poi_coverage": [],
               "components": [],
               "overlap_biketrack": [], # ignored
