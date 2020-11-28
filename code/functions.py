@@ -1001,11 +1001,17 @@ def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
 def write_result(res, mode, placeid, poi_source, prune_measure, suffix, dictnested = {}):
     """Write results (pickle or dict to csv)
     """
+    if mode == "pickle":
+        openmode = "wb"
+    else:
+        openmode = "w"
+
     if poi_source:
         filename = placeid + '_poi_' + poi_source + "_" + prune_measure + suffix
     else:
         filename = placeid + "_" + prune_measure + suffix
-    with open(PATH["results"] + placeid + "/" + filename, 'w') as f:
+
+    with open(PATH["results"] + placeid + "/" + filename, openmode) as f:
         if mode == "pickle":
             pickle.dump(res, f)
         elif mode == "dict":
