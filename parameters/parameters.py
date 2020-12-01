@@ -39,6 +39,17 @@ networktypes = ["biketrack", "carall", "bikeable", "biketrackcarall"] # Existing
 prune_measures = {"betweenness": "Bq", "closeness": "Cq"}
 prune_quantiles = [x/40 for x in list(range(1, 41))] # The quantiles where the GT should be pruned using the prune_measure
 
+plotparam = {"bbox": (1280,1280),
+			"dpi": 96,
+			"carall": {"node_size": 0, "width": 0.5, "edge_color": '#888888'},
+			"biketrack": {"node_size": 0, "width": 0.75, "edge_color": '#2222ff'},
+			"bikeable": {"node_size": 0, "width": 0.5, "edge_color": '#444444'},
+			"bikegrown": {"node_size": 10.5, "width": 4.25, "edge_color": '#008ecc', "node_color": '#008ecc'},
+			"bikegrown_nonodes": {"node_size": 0, "width": 4.25, "edge_color": '#008ecc'},
+			"poi_unreached": {"node_size": 130, "node_color": '#ff7338', "edgecolors": '#ffefe9'},
+			"poi_reached": {"node_size": 130, "node_color": '#004c6c', "edgecolors": '#f1fbff'},
+			"abstract": {"node_size": 0, "edge_color": '#000000', "alpha": 0.75}
+			}
 
 
 

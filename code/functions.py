@@ -1,5 +1,24 @@
 
 # GRAPH PLOTTING
+
+def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.draw", weighted = False):
+    """Take an igraph graph G and draw it with a networkx drawfunc.
+    """
+    G_nx = G.to_networkx()
+    if nnids: # Restrict to nnids node ids
+        nnids_nx = [k for k,v in dict(G_nx.nodes(data=True)).items() if v['id'] in nnids]
+        G_nx = G_nx.subgraph(nnids_nx)
+    pos_transformed, map_center = project_nxpos(G_nx, map_center)
+    if weighted is True:
+        widths = [i * 2.5 for i in list(nx.get_edge_attributes(G_nx, "width").values())]
+        eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], width = widths)
+    elif type(weighted) is float or type(weighted) is int and weighted > 0:
+        eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], width = weighted)
+    else:
+        eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype])
+    return map_center
+
+
 def my_plot_reset(G, nids = False):
     reset_plot_attributes(G)
     color_nodes(G, "red", nids)
@@ -52,6 +71,37 @@ def width_edges(G, width = 1, eids = False):
     
 
 # OTHER FUNCTIONS
+def common_entries(*dcts):
+    """Like zip() but for dicts.
+    See: https://stackoverflow.com/questions/16458340/python-equivalent-of-zip-for-dictionaries
+    """
+    if not dcts:
+        return
+    for i in set(dcts[0]).intersection(*dcts[1:]):
+        yield (i,) + tuple(d[i] for d in dcts)
+
+def project_nxpos(G, map_center = False):
+    """Take a spatial nx network G and projects its GPS coordinates to local azimuthal.
+    Returns transformed positions, as used by nx.draw()
+    """
+    lats = nx.get_node_attributes(G, 'x')
+    lons = nx.get_node_attributes(G, 'y')
+    pos = {nid:(lat,-lon) for (nid,lat,lon) in common_entries(lats,lons)}
+    if map_center:
+        loncenter = map_center[0]
+        latcenter = map_center[1]
+    else:
+        loncenter = np.mean(list(lats.values()))
+        latcenter = -1* np.mean(list(lons.values()))
+    local_azimuthal_projection = "+proj=aeqd +R=6371000 +units=m +lat_0={} +lon_0={}".format(latcenter, loncenter)
+    # Use transformer: https://gis.stackexchange.com/questions/127427/transforming-shapely-polygon-and-multipolygon-objects
+    wgs84_to_aeqd = pyproj.Transformer.from_proj(
+        pyproj.Proj("+proj=longlat +datum=WGS84 +no_defs"),
+        pyproj.Proj(local_azimuthal_projection))
+    pos_transformed = {nid:list(ops.transform(wgs84_to_aeqd.transform, Point(latlon)).coords)[0] for nid, latlon in pos.items()}
+    return pos_transformed, (loncenter,latcenter)
+
+
 def round_coordinates(G, r = 7):
     for v in G.vs:
         G.vs[v.index]["x"] = round(G.vs[v.index]["x"], r)
