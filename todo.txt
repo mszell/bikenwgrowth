@@ -1,6 +1,5 @@
 profile code
 Export carconstrictedbike networks for betweenness calculations
-remove cluster algorithms
 make test run of everything on a testcity
 run 04-07 for all parameter sets
 fix efficiency calculations for edge cases
@@ -8,6 +7,7 @@ calculate efficiencies for carminusbike simplified graphs
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X remove cluster algorithms
 X polish plots
 X instead of turning streets completely into bike lanes, decrease speed (=increase effective distance) from 50km/h to 5km/h 
 X implement directness_lcc, length_lcc

@@ -1,23 +1,16 @@
 # PARAMETERS
 # These are values to loop through for different runs
-
-# 03, 05, 06
 poi_source = "grid" # railwaystation, grid
-
-# 03, 04, 05, 06
 prune_measure = "betweenness" # betweenness, closeness
-
-# 04, 05, 06
-cutofftype = "abs" # abs, rel
-# Case rel: cutoff (0-1) is fraction threshold of total length
-# Case abs: cutoff (in meters) is minimal length of cluster to be considered
-cutoff = 2000 # 0.5, 0.8, 1000, 2000
-
 
 
 
 # SEMI-CONSTANTS
 # These values should not be changed, unless the analysis shows we need to
+
+prune_measures = {"betweenness": "Bq", "closeness": "Cq"}
+prune_quantiles = [x/40 for x in list(range(1, 41))] # The quantiles where the GT should be pruned using the prune_measure
+networktypes = ["biketrack", "carall", "bikeable", "biketrackcarall"] # Existing infrastructures to analyze
 
 # 02
 gridl = 1707 # in m, for generating the grid
@@ -29,16 +22,12 @@ poiparameters = {"railwaystation":{'railway':['station','halt']}#,
                  #"busstop":{'highway':'bus_stop'}
                 }
 
-# 05
+# 04
 buffer_walk = 500 # Buffer in m for coverage calculations. (How far people are willing to walk)
 buffer_overlap = 10 # Buffer in m for overlap calculations. (How far to consider existing structure overlapping with generated)
 numnodepairs = 500 # Number of node pairs to consider for random sample to calculate directness (O(numnodepairs^2), so better not go over 1000)
-networktypes = ["biketrack", "carall", "bikeable", "biketrackcarall"] # Existing infrastructures to analyze
 
-# 03, 04, 05, 06
-prune_measures = {"betweenness": "Bq", "closeness": "Cq"}
-prune_quantiles = [x/40 for x in list(range(1, 41))] # The quantiles where the GT should be pruned using the prune_measure
-
+#05
 plotparam = {"bbox": (1280,1280),
 			"dpi": 96,
 			"carall": {"node_size": 0, "width": 0.5, "edge_color": '#888888'},
