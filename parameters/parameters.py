@@ -1,6 +1,6 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "grid" # railwaystation, grid
+poi_source = "railwaystation" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness
 
 
@@ -30,8 +30,9 @@ numnodepairs = 500 # Number of node pairs to consider for random sample to calcu
 #05
 plotparam = {"bbox": (1280,1280),
 			"dpi": 96,
-			"carall": {"node_size": 0, "width": 0.5, "edge_color": '#888888'},
-			"biketrack": {"node_size": 0, "width": 0.75, "edge_color": '#2222ff'},
+			"carall": {"node_size": 0, "width": 0.5, "edge_color": '#999999'},
+			"biketrack": {"node_size": 0, "width": 1.5, "edge_color": '#2222ff'},
+			"biketrack_offstreet": {"node_size": 0, "width": 0.75, "edge_color": '#00aa22'},
 			"bikeable": {"node_size": 0, "width": 0.5, "edge_color": '#444444'},
 			"bikegrown": {"node_size": 10.5, "width": 4.25, "edge_color": '#008ecc', "node_color": '#008ecc'},
 			"bikegrown_nonodes": {"node_size": 0, "width": 4.25, "edge_color": '#008ecc'},
