@@ -10,7 +10,7 @@ def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.dra
         G_nx = G_nx.subgraph(nnids_nx)
     pos_transformed, map_center = project_nxpos(G_nx, map_center)
     if weighted is True:
-        widths = [i * 2 for i in list(nx.get_edge_attributes(G_nx, "width").values())]
+        widths = [i * 1.5 for i in list(nx.get_edge_attributes(G_nx, "width").values())]
         eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], width = widths)
     elif type(weighted) is float or type(weighted) is int and weighted > 0:
         eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], width = weighted)
