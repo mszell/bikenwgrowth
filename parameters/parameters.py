@@ -1,7 +1,8 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "railwaystation" # railwaystation, grid
+poi_source = "grid" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness
+
 
 
 
@@ -24,7 +25,6 @@ poiparameters = {"railwaystation":{'railway':['station','halt']}#,
 
 # 04
 buffer_walk = 500 # Buffer in m for coverage calculations. (How far people are willing to walk)
-buffer_overlap = 10 # Buffer in m for overlap calculations. (How far to consider existing structure overlapping with generated)
 numnodepairs = 500 # Number of node pairs to consider for random sample to calculate directness (O(numnodepairs^2), so better not go over 1000)
 
 #05
@@ -33,9 +33,10 @@ plotparam = {"bbox": (1280,1280),
 			"carall": {"node_size": 0, "width": 0.5, "edge_color": '#999999'},
 			"biketrack": {"node_size": 0, "width": 1.5, "edge_color": '#2222ff'},
 			"biketrack_offstreet": {"node_size": 0, "width": 0.75, "edge_color": '#00aa22'},
-			"bikeable": {"node_size": 0, "width": 0.5, "edge_color": '#444444'},
+			"bikeable": {"node_size": 0, "width": 0.75, "edge_color": '#222222'},
 			"bikegrown": {"node_size": 10.5, "width": 4.25, "edge_color": '#008ecc', "node_color": '#008ecc'},
 			"bikegrown_nonodes": {"node_size": 0, "width": 4.25, "edge_color": '#008ecc'},
+			"highlight": {"node_size": 10.5, "width": 4.25, "edge_color": '#ff00aa', "node_color": '#ff00aa'},
 			"poi_unreached": {"node_size": 130, "node_color": '#ff7338', "edgecolors": '#ffefe9'},
 			"poi_reached": {"node_size": 130, "node_color": '#004c6c', "edgecolors": '#f1fbff'},
 			"abstract": {"node_size": 0, "edge_color": '#000000', "alpha": 0.75}

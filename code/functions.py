@@ -724,10 +724,9 @@ def listmean(lst):
     try: return sum(lst) / len(lst)
     except: return 0
 
-def calculate_coverage_edges(G, buffer_km = 0.5, buffersmall_km = 0.01, return_cov = False, G_prev = ig.Graph(), cov_prev = Polygon(), covsmall_prev = Polygon()):
+def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False, G_prev = ig.Graph(), cov_prev = Polygon()):
     """Calculates the area and shape covered by the graph's edges.
-    If G_prev and cov_prev are given, only the difference between G and G_prev are calculated, 
-    then added to cov_prev.
+    If G_prev and cov_prev are given, only the difference between G and G_prev are calculated, then added to cov_prev.
     """
 
     G_added = copy.deepcopy(G)
@@ -748,14 +747,11 @@ def calculate_coverage_edges(G, buffer_km = 0.5, buffersmall_km = 0.01, return_c
     # Shapely buffer seems slow for complex objects: https://stackoverflow.com/questions/57753813/speed-up-shapely-buffer
     # Therefore we buffer piecewise.
     cov_added = Polygon()
-    covsmall_added = Polygon()
     for c, t in enumerate(edgetuples):
         # if cov.geom_type == 'MultiPolygon' and c % 1000 == 0: print(str(c)+"/"+str(len(edgetuples)), sum([len(pol.exterior.coords) for pol in cov]))
         # elif cov.geom_type == 'Polygon' and c % 1000 == 0: print(str(c)+"/"+str(len(edgetuples)), len(pol.exterior.coords))
         buf = ops.transform(aeqd_to_wgs84.transform, ops.transform(wgs84_to_aeqd.transform, LineString(t)).buffer(buffer_km * 1000))
         cov_added = ops.unary_union([cov_added, Polygon(buf)])
-        bufsmall = ops.transform(aeqd_to_wgs84.transform, ops.transform(wgs84_to_aeqd.transform, LineString(t)).buffer(buffersmall_km * 1000))
-        covsmall_added = ops.unary_union([covsmall_added, Polygon(bufsmall)])
 
     # Merge with cov_prev
     if not cov_added.is_empty: # We need this check because apparently an empty Polygon adds an area.
@@ -763,13 +759,11 @@ def calculate_coverage_edges(G, buffer_km = 0.5, buffersmall_km = 0.01, return_c
     else:
         cov = cov_prev
 
-    covsmall = ops.unary_union([covsmall_added, covsmall_prev])
-
     cov_transformed = ops.transform(wgs84_to_aeqd.transform, cov)
     covered_area = cov_transformed.area / 1000000
 
     if return_cov:
-        return (covered_area, cov, covsmall)
+        return (covered_area, cov)
     else:
         return covered_area
 
@@ -856,7 +850,7 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, calcmetrics = {"length":0,
           "overlap_bikeable": 0,
           "efficiency_global": 0,
           "efficiency_local": 0
-         }, buffer_walk = 500, buffer_overlap = 10, numnodepairs = 500, verbose = False, return_cov = True, G_prev = ig.Graph(), cov_prev = Polygon(), covsmall_prev = Polygon(), ignore_GT_abstract = False, Gexisting = {}):
+         }, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True, G_prev = ig.Graph(), cov_prev = Polygon(), ignore_GT_abstract = False, Gexisting = {}):
     """Calculates all metrics (using the keys from calcmetrics).
     """
     
@@ -864,7 +858,6 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, calcmetrics = {"length":0,
     for key in calcmetrics:
         output[key] = 0
     cov = Polygon()
-    covsmall = Polygon()
 
     # Check that the graph has links (sometimes we have an isolated node)
     if G.ecount() > 0 and GT_abstract.ecount() > 0:
@@ -895,14 +888,14 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, calcmetrics = {"length":0,
         if "coverage" in calcmetrics:
             if verbose: print("Calculating coverage...")
             # G_added = G.difference(G_prev) # This doesnt work
-            covered_area, cov, covsmall = calculate_coverage_edges(G, buffer_walk/1000, buffer_overlap/1000, return_cov, G_prev, cov_prev, covsmall_prev)
+            covered_area, cov = calculate_coverage_edges(G, buffer_walk/1000, return_cov, G_prev, cov_prev)
             output["coverage"] = covered_area
             # OVERLAP WITH EXISTING NETS
             if Gexisting:
                 if "overlap_biketrack" in calcmetrics:
-                    output["overlap_biketrack"] = overlap_linepoly(Gexisting["biketrack"], covsmall)
+                    output["overlap_biketrack"] = edge_lengths(intersect_igraphs(Gexisting["biketrack"], G))
                 if "overlap_bikeable" in calcmetrics:
-                    output["overlap_bikeable"] = overlap_linepoly(Gexisting["bikeable"], covsmall)
+                    output["overlap_bikeable"] = edge_lengths(intersect_igraphs(Gexisting["bikeable"], G))
 
         # POI COVERAGE
         if "poi_coverage" in calcmetrics:
@@ -925,18 +918,76 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, calcmetrics = {"length":0,
                 output["directness_lcc"] = output["directness"]
 
     if return_cov: 
-        return (output, cov, covsmall)
+        return (output, cov)
     else:
         return output
 
 
 def overlap_linepoly(l, p):
-    """Calculates the fraction of the length of shapely LineString l falling inside the shapely Polygon p
+    """Calculates the length of shapely LineString l falling inside the shapely Polygon p
     """
     return p.intersection(l).length if l.length else 0
 
 
-def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids, buffer_walk = 500, buffer_overlap = 10, numnodepairs = 500, verbose = False, return_cov = True, Gexisting = {}):
+def edge_lengths(G):
+    """Returns the total length of edges in an igraph graph.
+    """
+    return sum([e['weight'] for e in G.es])
+
+
+def intersect_igraphs(G1, G2):
+    """Generates the graph intersection of igraph graphs G1 and G2, copying also link and node attributes.
+    """
+    # Ginter = G1.__and__(G2) # This does not work with attributes.
+    if G1.ecount() > G2.ecount(): # Iterate through edges of the smaller graph
+        G1, G2 = G2, G1
+    inter_nodes = set()
+    inter_edges = []
+    inter_edge_attributes = {}
+    inter_node_attributes = {}
+    edge_attribute_name_list = G2.edge_attributes()
+    node_attribute_name_list = G2.vertex_attributes()
+    for edge_attribute_name in edge_attribute_name_list:
+        inter_edge_attributes[edge_attribute_name] = []
+    for node_attribute_name in node_attribute_name_list:
+        inter_node_attributes[node_attribute_name] = []
+    for e in list(G1.es):
+        n1_id = e.source_vertex["id"]
+        n2_id = e.target_vertex["id"]
+        try:
+            n1_index = G2.vs.find(id = n1_id).index
+            n2_index = G2.vs.find(id = n2_id).index
+        except ValueError:
+            continue
+        if G2.are_connected(n1_index, n2_index):
+            inter_edges.append((n1_index, n2_index))
+            inter_nodes.add(n1_index)
+            inter_nodes.add(n2_index)
+            edge_attributes = e.attributes()
+            for edge_attribute_name in edge_attribute_name_list:
+                inter_edge_attributes[edge_attribute_name].append(edge_attributes[edge_attribute_name])
+
+    # map nodeids to first len(inter_nodes) integers
+    idmap = {n_index:i for n_index,i in zip(inter_nodes, range(len(inter_nodes)))}
+
+    G_inter = ig.Graph()
+    G_inter.add_vertices(len(inter_nodes))
+    G_inter.add_edges([(idmap[e[0]], idmap[e[1]]) for e in inter_edges])
+    for edge_attribute_name in edge_attribute_name_list:
+        G_inter.es[edge_attribute_name] = inter_edge_attributes[edge_attribute_name]
+
+    for n_index in idmap.keys():
+        v = G2.vs[n_index]
+        node_attributes = v.attributes()
+        for node_attribute_name in node_attribute_name_list:
+            inter_node_attributes[node_attribute_name].append(node_attributes[node_attribute_name])
+    for node_attribute_name in node_attribute_name_list:
+        G_inter.vs[node_attribute_name] = inter_node_attributes[node_attribute_name]
+
+    return G_inter
+
+
+def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True, Gexisting = {}):
     """Calculates all metrics, additively. 
     Coverage differences are calculated in every step instead of the whole coverage.
     """
@@ -957,17 +1008,15 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
             }
     covs = {} # covers using buffer_walk
     cov_prev = Polygon()
-    covsmall_prev = Polygon() # covers using buffer_overlap
     GT_prev = ig.Graph()
     for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, prune_quantiles):
         if verbose: print("Calculating bike network metrics for quantile " + str(prune_quantile))
-        metrics, cov, covsmall = calculate_metrics(GT, GT_abstract, G_big, nnids, output, buffer_walk, buffer_overlap, numnodepairs, verbose, return_cov, GT_prev, cov_prev, covsmall_prev, False, Gexisting)
+        metrics, cov = calculate_metrics(GT, GT_abstract, G_big, nnids, output, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev, False, Gexisting)
         
         for key in output.keys():
             output[key].append(metrics[key])
         covs[prune_quantile] = cov
         cov_prev = copy.deepcopy(cov)
-        covsmall_prev = copy.deepcopy(covsmall)
         GT_prev = copy.deepcopy(GT)
 
 
@@ -981,7 +1030,7 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
         GT_carconstrictedbike = copy.deepcopy(G_big)
         constrict_overlaps(GT_carconstrictedbike, GT)
         if verbose: print("Calculating carconstrictedbike network metrics for quantile " + str(prune_quantile))
-        metrics = calculate_metrics(GT_carconstrictedbike, GT_abstract, G_big, nnids, output_carconstrictedbike, buffer_walk, buffer_overlap, numnodepairs, verbose, False)
+        metrics = calculate_metrics(GT_carconstrictedbike, GT_abstract, G_big, nnids, output_carconstrictedbike, buffer_walk, numnodepairs, verbose, False)
         
         for key in output_carconstrictedbike.keys():
             output_carconstrictedbike[key].append(metrics[key])
@@ -1008,11 +1057,10 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
             }
     covs_carminusbike = {}
     cov_prev = Polygon()
-    covsmall_prev = Polygon()
     GT_prev = ig.Graph()
     for GT, prune_quantile in zip(GT_carminusbikes, reversed(prune_quantiles)):
         if verbose: print("Calculating carminusbike network metrics for quantile " + str(prune_quantile))
-        metrics, cov, _ = calculate_metrics(GT, GT, G_big, nnids, output_carminusbike, buffer_walk, buffer_overlap, numnodepairs, verbose, return_cov, GT_prev, cov_prev, covsmall_prev, True)
+        metrics, cov = calculate_metrics(GT, GT, G_big, nnids, output_carminusbike, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev, True)
         
         for key in output_carminusbike.keys():
             output_carminusbike[key].insert(0, metrics[key]) # append to beginning due to reversed order
@@ -1111,4 +1159,5 @@ def ig_to_shapely(G):
     return G_shapely
 
 
-print("Loaded functions")
+
+print("Loaded functions.")

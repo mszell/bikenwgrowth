@@ -41,7 +41,7 @@ import geopandas as gpd
 import geojson
 
 
-
+     
 # dict of placeid:placeinfo
 # If a city has a proper shapefile through nominatim
 # In case no (False), manual download of shapefile is necessary, see below
@@ -51,14 +51,13 @@ with open(PATH["parameters"] + 'cities.csv') as f:
     for row in csvreader:
         cities[row['placeid']] = {}
         for field in csvreader.fieldnames[1:]:
-            cities[row['placeid']][field] = row[field]
-            
+            cities[row['placeid']][field] = row[field]     
 if debug:
     print("\n\n=== Cities ===")
     pp.pprint(cities)
     print("==============\n\n")
 
-# Create city subfolders
+# Create city subfolders  
 for placeid, placeinfo in cities.items():
     for subfolder in ["data", "plots", "results", "exports"]:
         placepath = PATH[subfolder] + placeid + "/"
