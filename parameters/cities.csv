@@ -1,2 +1,4 @@
 placeid;nominatimstring;countryid
-testcity;bath;gbr
+paris;Paris, France;fra
+copenhagen;;dnk
+vienna;vienna, austria;aut

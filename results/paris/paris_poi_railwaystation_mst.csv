@@ -1,2 +1,2 @@
-length,coverage,directness,poi_coverage,components,efficiency_global,efficiency_local
-151.80939189157024,83.1380564919992,0.4946189177055937,282,1,0.5007478054026133,0.0
+length,length_lcc,coverage,directness,directness_lcc,poi_coverage,components,overlap_biketrack,overlap_bikeable,efficiency_global,efficiency_local
+151.80939189157024,151.80939189157024,83.1380564919992,0.5011214540648266,0.5011214540648266,282,1,12.441111396974309,45.9387143182902,0.5007478054026133,0.0
