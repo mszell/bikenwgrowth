@@ -1,6 +1,13 @@
 
 # GRAPH PLOTTING
 
+def initplot():
+    fig = plt.figure(figsize=(plotparam["bbox"][0]/plotparam["dpi"], plotparam["bbox"][1]/plotparam["dpi"]), dpi=plotparam["dpi"])
+    plt.axes().set_aspect('equal')
+    plt.axes().set_xmargin(0.01)
+    plt.axes().set_ymargin(0.01)
+    return fig
+
 def nodesize_from_pois(nnids):
     return max(30, 220-len(nnids))
 
@@ -14,7 +21,10 @@ def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.dra
         
     pos_transformed, map_center = project_nxpos(G_nx, map_center)
     if weighted is True:
-        widths = [i * 1.5 for i in list(nx.get_edge_attributes(G_nx, "width").values())]
+        # The max width should be the node diameter (=sqrt(nodesize))
+        widths = list(nx.get_edge_attributes(G_nx, "width").values())
+        widthfactor = 1.1 * math.sqrt(nodesize) / max(widths)
+        widths = [max(0.33, w * widthfactor) for w in widths]
         eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], node_size = nodesize, width = widths)
     elif type(weighted) is float or type(weighted) is int and weighted > 0:
         eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], node_size = nodesize, width = weighted)

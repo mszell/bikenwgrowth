@@ -1,6 +1,5 @@
 investigate/fix components measures for carminusbike network
 profile code
-auto adjust thickness for gt abstract networks
 styling for analysis plots
 implement pop density pois
 Export carconstrictedbike networks for betweenness calculations
@@ -11,6 +10,7 @@ calculate efficiencies for carminusbike simplified graphs
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X auto adjust thickness for gt abstract networks
 X investigate/fix overlap measures
 X remove cluster algorithms
 X polish plots
