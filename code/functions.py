@@ -1,21 +1,25 @@
 
 # GRAPH PLOTTING
 
-def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.draw", weighted = False):
+def nodesize_from_pois(nnids):
+    return max(30, 220-len(nnids))
+
+def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.draw", nodesize = 0, weighted = False):
     """Take an igraph graph G and draw it with a networkx drawfunc.
     """
     G_nx = G.to_networkx()
     if nnids: # Restrict to nnids node ids
         nnids_nx = [k for k,v in dict(G_nx.nodes(data=True)).items() if v['id'] in nnids]
         G_nx = G_nx.subgraph(nnids_nx)
+        
     pos_transformed, map_center = project_nxpos(G_nx, map_center)
     if weighted is True:
         widths = [i * 1.5 for i in list(nx.get_edge_attributes(G_nx, "width").values())]
-        eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], width = widths)
+        eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], node_size = nodesize, width = widths)
     elif type(weighted) is float or type(weighted) is int and weighted > 0:
-        eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], width = weighted)
+        eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], node_size = nodesize, width = weighted)
     else:
-        eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype])
+        eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], node_size = nodesize)
     return map_center
 
 
