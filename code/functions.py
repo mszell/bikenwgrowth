@@ -1,11 +1,47 @@
 
 # GRAPH PLOTTING
 
+def get_holes(cov):
+    holes = []
+    if isinstance(cov, shapely.geometry.multipolygon.MultiPolygon):
+        for pol in cov: # cov is generally a MultiPolygon, so we iterate through its Polygons
+            holes.append(pol.interiors)
+    elif isinstance(cov, shapely.geometry.polygon.Polygon) and not cov.is_empty:
+        holes.append(cov.interiors)
+    return holes
+
+def cov_to_patchlist(cov, map_center):
+    """Turns a coverage Polygon or MultiPolygon into a matplotlib patch list, for plotting
+    """
+    p = []
+    if isinstance(cov, shapely.geometry.multipolygon.MultiPolygon):
+        for pol in cov: # cov is generally a MultiPolygon, so we iterate through its Polygons
+            p.append(pol_to_patch(pol, map_center))
+    elif isinstance(cov, shapely.geometry.polygon.Polygon) and not cov.is_empty:
+        p.append(pol_to_patch(cov, map_center))
+    return p
+
+def pol_to_patch(pol, map_center):
+    """Turns a coverage Polygon into a matplotlib patch, for plotting
+    """
+    y, x = pol.exterior.coords.xy
+    pos_transformed, _ = project_pos(y, x, map_center)
+    return matplotlib.patches.Polygon(pos_transformed)
+
+def hole_to_patch(hole, map_center):
+    """Turns a LinearRing (hole) into a matplotlib patch, for plotting
+    """
+    y, x = hole.coords.xy
+    pos_transformed, _ = project_pos(y, x, map_center)
+    return matplotlib.patches.Polygon(pos_transformed)
+
+
 def initplot():
     fig = plt.figure(figsize=(plotparam["bbox"][0]/plotparam["dpi"], plotparam["bbox"][1]/plotparam["dpi"]), dpi=plotparam["dpi"])
     plt.axes().set_aspect('equal')
     plt.axes().set_xmargin(0.01)
     plt.axes().set_ymargin(0.01)
+    plt.axes().set_axis_off()
     return fig
 
 def nodesize_from_pois(nnids):
@@ -113,6 +149,25 @@ def project_nxpos(G, map_center = False):
         pyproj.Proj("+proj=longlat +datum=WGS84 +no_defs"),
         pyproj.Proj(local_azimuthal_projection))
     pos_transformed = {nid:list(ops.transform(wgs84_to_aeqd.transform, Point(latlon)).coords)[0] for nid, latlon in pos.items()}
+    return pos_transformed, (loncenter,latcenter)
+
+
+def project_pos(lats, lons, map_center = False):
+    """Project GPS coordinates to local azimuthal.
+    """
+    pos = [(lat,-lon) for lat,lon in zip(lats,lons)]
+    if map_center:
+        loncenter = map_center[0]
+        latcenter = map_center[1]
+    else:
+        loncenter = np.mean(list(lats.values()))
+        latcenter = -1* np.mean(list(lons.values()))
+    local_azimuthal_projection = "+proj=aeqd +R=6371000 +units=m +lat_0={} +lon_0={}".format(latcenter, loncenter)
+    # Use transformer: https://gis.stackexchange.com/questions/127427/transforming-shapely-polygon-and-multipolygon-objects
+    wgs84_to_aeqd = pyproj.Transformer.from_proj(
+        pyproj.Proj("+proj=longlat +datum=WGS84 +no_defs"),
+        pyproj.Proj(local_azimuthal_projection))
+    pos_transformed = [(ops.transform(wgs84_to_aeqd.transform, Point(latlon)).coords)[0] for latlon in pos]
     return pos_transformed, (loncenter,latcenter)
 
 
@@ -1095,7 +1150,7 @@ def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
     frame = cv2.imread(os.path.join(PATH["plots"] + placeid + "/", images[0]))
     height, width, layers = frame.shape
 
-    video = cv2.VideoWriter("../videos/" + placeid + imgname + '.avi', 0, 10, (width,height))
+    video = cv2.VideoWriter("../videos/" + placeid + imgname + '.avi', 0, 10, (width, height))
 
     for image in images:
         video.write(cv2.imread(os.path.join(PATH["plots"] + placeid + "/", image)))

@@ -4,12 +4,12 @@ styling for analysis plots
 implement pop density pois
 Export carconstrictedbike networks for betweenness calculations
 make test run of everything on a testcity
-cover plots
 run 04-07 for all parameter sets
 calculate efficiencies for carminusbike simplified graphs
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X cover plots
 X auto adjust thickness for gt abstract networks
 X investigate/fix overlap measures
 X remove cluster algorithms
