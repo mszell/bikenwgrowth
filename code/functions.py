@@ -1,6 +1,15 @@
 
 # GRAPH PLOTTING
 
+def get_holes(cov):
+    holes = []
+    if isinstance(cov, shapely.geometry.multipolygon.MultiPolygon):
+        for pol in cov: # cov is generally a MultiPolygon, so we iterate through its Polygons
+            holes.append(pol.interiors)
+    elif isinstance(cov, shapely.geometry.polygon.Polygon) and not cov.is_empty:
+        holes.append(cov.interiors)
+    return holes
+
 def cov_to_patchlist(cov, map_center):
     """Turns a coverage Polygon or MultiPolygon into a matplotlib patch list, for plotting
     """
@@ -16,6 +25,13 @@ def pol_to_patch(pol, map_center):
     """Turns a coverage Polygon into a matplotlib patch, for plotting
     """
     y, x = pol.exterior.coords.xy
+    pos_transformed, _ = project_pos(y, x, map_center)
+    return matplotlib.patches.Polygon(pos_transformed)
+
+def hole_to_patch(hole, map_center):
+    """Turns a LinearRing (hole) into a matplotlib patch, for plotting
+    """
+    y, x = hole.coords.xy
     pos_transformed, _ = project_pos(y, x, map_center)
     return matplotlib.patches.Polygon(pos_transformed)
 
