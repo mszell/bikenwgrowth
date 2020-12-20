@@ -1,7 +1,19 @@
 
 # GRAPH PLOTTING
 
+def holepatchlist_from_cov(cov, map_center):
+    """Get a patchlist of holes (= shapely interiors) from a coverage Polygon or MultiPolygon
+    """
+    holeseq_per_poly = get_holes(cov)
+    holepatchlist = []
+    for hole_per_poly in holeseq_per_poly:
+        for hole in hole_per_poly:
+            holepatchlist.append(hole_to_patch(hole, map_center))
+    return holepatchlist
+
 def get_holes(cov):
+    """Get holes (= shapely interiors) from a coverage Polygon or MultiPolygon
+    """
     holes = []
     if isinstance(cov, shapely.geometry.multipolygon.MultiPolygon):
         for pol in cov: # cov is generally a MultiPolygon, so we iterate through its Polygons
@@ -10,7 +22,7 @@ def get_holes(cov):
         holes.append(cov.interiors)
     return holes
 
-def cov_to_patchlist(cov, map_center):
+def cov_to_patchlist(cov, map_center, return_holes = True):
     """Turns a coverage Polygon or MultiPolygon into a matplotlib patch list, for plotting
     """
     p = []
@@ -19,7 +31,11 @@ def cov_to_patchlist(cov, map_center):
             p.append(pol_to_patch(pol, map_center))
     elif isinstance(cov, shapely.geometry.polygon.Polygon) and not cov.is_empty:
         p.append(pol_to_patch(cov, map_center))
-    return p
+    if not return_holes:
+        return p
+    else:
+        holepatchlist = holepatchlist_from_cov(cov, map_center)
+        return p, holepatchlist
 
 def pol_to_patch(pol, map_center):
     """Turns a coverage Polygon into a matplotlib patch, for plotting

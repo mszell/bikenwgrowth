@@ -1,6 +1,6 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "railwaystation" # railwaystation, grid
+poi_source = "grid" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness
 
 
