@@ -1,7 +1,19 @@
 
 # GRAPH PLOTTING
 
+def holepatchlist_from_cov(cov, map_center):
+    """Get a patchlist of holes (= shapely interiors) from a coverage Polygon or MultiPolygon
+    """
+    holeseq_per_poly = get_holes(cov)
+    holepatchlist = []
+    for hole_per_poly in holeseq_per_poly:
+        for hole in hole_per_poly:
+            holepatchlist.append(hole_to_patch(hole, map_center))
+    return holepatchlist
+
 def get_holes(cov):
+    """Get holes (= shapely interiors) from a coverage Polygon or MultiPolygon
+    """
     holes = []
     if isinstance(cov, shapely.geometry.multipolygon.MultiPolygon):
         for pol in cov: # cov is generally a MultiPolygon, so we iterate through its Polygons
@@ -10,7 +22,7 @@ def get_holes(cov):
         holes.append(cov.interiors)
     return holes
 
-def cov_to_patchlist(cov, map_center):
+def cov_to_patchlist(cov, map_center, return_holes = True):
     """Turns a coverage Polygon or MultiPolygon into a matplotlib patch list, for plotting
     """
     p = []
@@ -19,7 +31,11 @@ def cov_to_patchlist(cov, map_center):
             p.append(pol_to_patch(pol, map_center))
     elif isinstance(cov, shapely.geometry.polygon.Polygon) and not cov.is_empty:
         p.append(pol_to_patch(cov, map_center))
-    return p
+    if not return_holes:
+        return p
+    else:
+        holepatchlist = holepatchlist_from_cov(cov, map_center)
+        return p, holepatchlist
 
 def pol_to_patch(pol, map_center):
     """Turns a coverage Polygon into a matplotlib patch, for plotting
@@ -69,58 +85,9 @@ def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.dra
     return map_center
 
 
-def my_plot_reset(G, nids = False):
-    reset_plot_attributes(G)
-    color_nodes(G, "red", nids)
-    size_nodes(G, 6, nids)
-
-def reset_plot_attributes(G):
-    """Resets node attributes for plotting.
-    All black and size 0.
-    """
-    G.vs["color"] = "black"
-    G.vs["size"] = 0
-        
-def color_nodes(G, color = "blue", nids = False, use_id = True):
-    """Sets the color attribute of a set of nodes nids.
-    """
-    if nids is False:
-        nids = [v.index for v in G.vs]
-        use_id = False
-    if use_id:
-        G.vs.select(id_in = nids)["color"] = color
-    else:
-        G.vs[nids]["color"] = color
-
-def size_nodes(G, size = 6, nids = False, use_id = True):
-    """Sets the size attribute of a set of nodes nids.
-    """
-    if nids is False:
-        nids = [v.index for v in G.vs]
-        use_id = False
-    if use_id:
-        G.vs.select(id_in = nids)["size"] = size
-    else:
-        G.vs[nids]["size"] = size
-
-def color_edges(G, color = "blue", eids = False):
-    """Sets the color attribute of a set of edge eids.
-    """
-    if eids is False:
-        G.es["color"] = color
-    else:
-        G.es[eids]["color"] = color
-        
-def width_edges(G, width = 1, eids = False):
-    """Sets the width attribute of a set of edge eids.
-    """
-    if eids is False:
-        G.es["width"] = width
-    else:
-        G.es[eids]["width"] = width
-    
 
 # OTHER FUNCTIONS
+
 def common_entries(*dcts):
     """Like zip() but for dicts.
     See: https://stackoverflow.com/questions/16458340/python-equivalent-of-zip-for-dictionaries
@@ -324,6 +291,7 @@ def ig_to_geojson(G):
 
 
 # NETWORK GENERATION
+
 def highest_closeness_node(G):
     closeness_values = G.closeness(weights = 'weight')
     sorted_closeness = sorted(closeness_values, reverse = True)
