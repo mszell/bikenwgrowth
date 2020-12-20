@@ -85,58 +85,9 @@ def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.dra
     return map_center
 
 
-def my_plot_reset(G, nids = False):
-    reset_plot_attributes(G)
-    color_nodes(G, "red", nids)
-    size_nodes(G, 6, nids)
-
-def reset_plot_attributes(G):
-    """Resets node attributes for plotting.
-    All black and size 0.
-    """
-    G.vs["color"] = "black"
-    G.vs["size"] = 0
-        
-def color_nodes(G, color = "blue", nids = False, use_id = True):
-    """Sets the color attribute of a set of nodes nids.
-    """
-    if nids is False:
-        nids = [v.index for v in G.vs]
-        use_id = False
-    if use_id:
-        G.vs.select(id_in = nids)["color"] = color
-    else:
-        G.vs[nids]["color"] = color
-
-def size_nodes(G, size = 6, nids = False, use_id = True):
-    """Sets the size attribute of a set of nodes nids.
-    """
-    if nids is False:
-        nids = [v.index for v in G.vs]
-        use_id = False
-    if use_id:
-        G.vs.select(id_in = nids)["size"] = size
-    else:
-        G.vs[nids]["size"] = size
-
-def color_edges(G, color = "blue", eids = False):
-    """Sets the color attribute of a set of edge eids.
-    """
-    if eids is False:
-        G.es["color"] = color
-    else:
-        G.es[eids]["color"] = color
-        
-def width_edges(G, width = 1, eids = False):
-    """Sets the width attribute of a set of edge eids.
-    """
-    if eids is False:
-        G.es["width"] = width
-    else:
-        G.es[eids]["width"] = width
-    
 
 # OTHER FUNCTIONS
+
 def common_entries(*dcts):
     """Like zip() but for dicts.
     See: https://stackoverflow.com/questions/16458340/python-equivalent-of-zip-for-dictionaries
@@ -340,6 +291,7 @@ def ig_to_geojson(G):
 
 
 # NETWORK GENERATION
+
 def highest_closeness_node(G):
     closeness_values = G.closeness(weights = 'weight')
     sorted_closeness = sorted(closeness_values, reverse = True)
