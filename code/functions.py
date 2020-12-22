@@ -63,10 +63,25 @@ def initplot():
 def nodesize_from_pois(nnids):
     return max(30, 220-len(nnids))
 
-def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.draw", nodesize = 0, weighted = False, maxwidthsquared = 0):
+
+def simplify_ig(G):
+    """Simplify an igraph with ox.simplify_graph
+    """
+    G_temp = copy.deepcopy(G)
+    G_temp.es["length"] = G_temp.es["weight"]
+    output = ig.Graph.from_networkx(ox.simplify_graph(nx.MultiDiGraph(G_temp.to_networkx())).to_undirected())
+    output.es["weight"] = output.es["length"]
+    return output
+
+
+def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.draw", nodesize = 0, weighted = False, maxwidthsquared = 0, simplified = False):
     """Take an igraph graph G and draw it with a networkx drawfunc.
     """
-    G_nx = G.to_networkx()
+    if simplified:
+        G.es["length"] = G.es["weight"]
+        G_nx = ox.simplify_graph(nx.MultiDiGraph(G.to_networkx())).to_undirected()
+    else:
+        G_nx = G.to_networkx()
     if nnids: # Restrict to nnids node ids
         nnids_nx = [k for k,v in dict(G_nx.nodes(data=True)).items() if v['id'] in nnids]
         G_nx = G_nx.subgraph(nnids_nx)
@@ -74,7 +89,7 @@ def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.dra
     pos_transformed, map_center = project_nxpos(G_nx, map_center)
     if weighted is True:
         # The max width should be the node diameter (=sqrt(nodesize))
-        widths = list(nx.get_edge_attributes(G_nx, "width").values())
+        widths = list(nx.get_edge_attributes(G_nx, "weight").values())
         widthfactor = 1.1 * math.sqrt(maxwidthsquared) / max(widths)
         widths = [max(0.33, w * widthfactor) for w in widths]
         eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], node_size = nodesize, width = widths)

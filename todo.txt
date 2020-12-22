@@ -7,6 +7,7 @@ run 04-07 for all parameter sets
 calculate efficiencies for carminusbike simplified graphs
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
+split up functions.py?
 
 X Export carconstrictedbike networks for betweenness calculations
 X investigate/fix components measures for carminusbike network
