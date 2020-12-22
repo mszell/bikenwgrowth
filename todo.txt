@@ -1,4 +1,3 @@
-investigate/fix components measures for carminusbike network
 profile code
 styling for analysis plots
 implement pop density pois
@@ -9,6 +8,7 @@ calculate efficiencies for carminusbike simplified graphs
 add largest US/UK cities
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 
+X investigate/fix components measures for carminusbike network
 X cover plots
 X auto adjust thickness for gt abstract networks
 X investigate/fix overlap measures
