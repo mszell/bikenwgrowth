@@ -63,7 +63,7 @@ def initplot():
 def nodesize_from_pois(nnids):
     return max(30, 220-len(nnids))
 
-def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.draw", nodesize = 0, weighted = False):
+def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.draw", nodesize = 0, weighted = False, maxwidthsquared = 0):
     """Take an igraph graph G and draw it with a networkx drawfunc.
     """
     G_nx = G.to_networkx()
@@ -75,7 +75,7 @@ def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.dra
     if weighted is True:
         # The max width should be the node diameter (=sqrt(nodesize))
         widths = list(nx.get_edge_attributes(G_nx, "width").values())
-        widthfactor = 1.1 * math.sqrt(nodesize) / max(widths)
+        widthfactor = 1.1 * math.sqrt(maxwidthsquared) / max(widths)
         widths = [max(0.33, w * widthfactor) for w in widths]
         eval(drawfunc)(G_nx, pos_transformed, **plotparam[networktype], node_size = nodesize, width = widths)
     elif type(weighted) is float or type(weighted) is int and weighted > 0:
@@ -353,18 +353,17 @@ def delete_overlaps(G_res, G_orig, verbose = False):
     G_res.delete_vertices(isolated_nodes)
     if verbose: print("Removed " + str(len(del_edges)) + " overlapping edges and " + str(len(isolated_nodes)) + " nodes.")
 
-def constrict_overlaps(G_res, G_orig, verbose = False, factor = 10):
+def constrict_overlaps(G_res, G_orig, factor = 10):
     """Increases length by factor of all overlaps of G_res with G_orig (in G_res) based on edge ids.
     """
     for e in list(G_res.es):
         try:
             n1_id = e.source_vertex["id"]
             n2_id = e.target_vertex["id"]
-            # If there is already an edge in the original network, delete it
             n1_index = G_orig.vs.find(id = n1_id).index
             n2_index = G_orig.vs.find(id = n2_id).index
             if G_orig.are_connected(n1_index, n2_index):
-                G_orig[n1_index, n2_index] = factor * G_orig[n1_index, n2_index]
+                G_res.es[e.index]["weight"] = factor * G_res.es[e.index]["weight"]
         except:
             pass
 
