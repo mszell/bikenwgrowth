@@ -36,12 +36,19 @@ plotparam = {"bbox": (1280,1280),
 			"biketrack_offstreet": {"width": 0.75, "edge_color": '#00aa22'},
 			"bikeable": {"width": 0.75, "edge_color": '#222222'},
 			"bikegrown": {"width": 4.25, "edge_color": '#008ecc', "node_color": '#008ecc'},
-			"highlight": {"width": 4.25, "edge_color": '#ff00aa', "node_color": '#ff00aa'},
+			"highlight_biketrack": {"width": 4.25, "edge_color": '#2222ff', "node_color": '#2222ff'},
+			"highlight_bikeable": {"width": 4.25, "edge_color": '#222222', "node_color": '#222222'},
 			"poi_unreached": {"node_color": '#ff7338', "edgecolors": '#ffefe9'},
 			"poi_reached": {"node_color": '#004c6c', "edgecolors": '#f1fbff'},
 			"abstract": {"edge_color": '#000000', "alpha": 0.75}
 			}
 
+plotparam_analysis = {
+			"bikegrown": {"linewidth": 4.25, "color": '#008ecc', "linestyle": "solid", "label": "Grown"},
+			"mst": {"linewidth": 2, "color": '#008ecc', "linestyle": "dashed", "label": "MST"},
+			"biketrack": {"linewidth": 1, "color": '#2222ff', "linestyle": "solid", "label": "Protected"},
+			"bikeable": {"linewidth": 1, "color": '#222222', "linestyle": "dashed", "label": "Bikeable"}
+}
 
 
 # CONSTANTS
@@ -49,7 +56,7 @@ plotparam = {"bbox": (1280,1280),
 
 # 01
 osmnxparameters = {'car30': {'network_type':'drive', 'custom_filter':'["maxspeed"~"^30$|^20$|^15$|^10$|^5$|^20 mph|^15 mph|^10 mph|^5 mph"]', 'export': True},
-                   'carall': {'network_type':'drive', 'custom_filter':'', 'export': True},
+                   'carall': {'network_type':'drive', 'custom_filter': None, 'export': True},
                    'bike_cyclewaytrack': {'network_type':'bike', 'custom_filter':'["cycleway"~"track"]', 'export': False},
                    'bike_highwaycycleway': {'network_type':'bike', 'custom_filter':'["highway"~"cycleway"]', 'export': False},
                    'bike_bicycledesignated': {'network_type':'bike', 'custom_filter':'["bicycle"~"designated"]', 'export': False},
