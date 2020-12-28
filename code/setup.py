@@ -11,6 +11,8 @@ import zipfile
 from collections import defaultdict
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
+from tqdm.notebook import tqdm
+import warnings
 
 # Math/Data
 import math

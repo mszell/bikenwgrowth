@@ -4,8 +4,9 @@
 ## Setting up code environment
 ```
 conda create --override-channels -c   
-conda-forge -n OSMNX python=3 osmnx python-igraph watermark haversine rasterio
+conda-forge -n OSMNX python=3 osmnx python-igraph watermark haversine rasterio tqdm
 conda activate OSMNX
+conda install -c conda-forge ipywidgets
 pip install opencv-python
 conda install -c anaconda gdal
 pip install --user ipykernel

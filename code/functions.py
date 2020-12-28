@@ -208,7 +208,9 @@ def compress_file(p, f, filetype = ".csv", delete_uncompressed = True):
     if delete_uncompressed: os.remove(p + f + filetype)
 
 def ox_to_csv(G, p, placeid, parameterid, postfix = "", compress = True, verbose = True):
-    node,edge = ox.graph_to_gdfs(G)
+    if "crs" not in G.graph:
+        G.graph["crs"] = 'epsg:4326' # needed for OSMNX's graph_to_gdfs in utils_graph.py
+    node, edge = ox.graph_to_gdfs(G)
     prefix = placeid + '_' + parameterid + postfix
 
     node.to_csv(p + prefix + '_nodes.csv', index = False)
@@ -242,8 +244,8 @@ def check_extract_zip(p, prefix):
 
 def csv_to_ox(p, placeid, parameterid):
     """ Load a networkx graph from _edges.csv and _nodes.csv
-    The edge file has attributes u,v,~,nodeid,...
-    The node file has attributes y,x,nodeid,...
+    The edge file must have attributes u,v,osmid
+    The node file must have attributes y,x,osmid
     Only these attributes are loaded, and edge lengths are calculated.
     """
     prefix = placeid + '_' + parameterid
@@ -255,18 +257,19 @@ def csv_to_ox(p, placeid, parameterid):
         lines = []
         for line in csv.reader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
             line_list = [c for c in line]
-            line_string = "" + line_list[0] + " "+ line_list[1] + " " + line_list[3]
+            osmid = str(eval(line_list[header.index("osmid")])[0]) if isinstance(eval(line_list[header.index("osmid")]), list) else line_list[header.index("osmid")] # If this is a list due to multiedges, just load the first osmid
+            line_string = "" + line_list[header.index("u")] + " "+ line_list[header.index("v")] + " " + osmid
             lines.append(line_string)
-        G = nx.parse_edgelist(lines, nodetype=int, data=(("osmid", int),), create_using=nx.MultiDiGraph) # MultiDiGraph is necessary for OSMNX, for example for get_undirected(G) in utils_graph.py
+        G = nx.parse_edgelist(lines, nodetype = int, data = (("osmid", int),), create_using = nx.MultiDiGraph) # MultiDiGraph is necessary for OSMNX, for example for get_undirected(G) in utils_graph.py
     with open(p + prefix + '_nodes.csv', 'r') as f:
         header = f.readline().strip().split(",")
         values_x = {}
         values_y = {}
         for line in csv.reader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
             line_list = [c for c in line]
-            osmid = int(line_list[2])
-            values_x[osmid] = float(line_list[1])
-            values_y[osmid] = float(line_list[0])
+            osmid = int(line_list[header.index("osmid")])
+            values_x[osmid] = float(line_list[header.index("x")])
+            values_y[osmid] = float(line_list[header.index("y")])
 
         nx.set_node_attributes(G, values_x, "x")
         nx.set_node_attributes(G, values_y, "y")
@@ -1060,7 +1063,7 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
     covs = {} # covers using buffer_walk
     cov_prev = Polygon()
     GT_prev = ig.Graph()
-    for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, prune_quantiles):
+    for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, tqdm(prune_quantiles, desc = "Bicycle networks")):
         if verbose: print("Calculating bike network metrics for quantile " + str(prune_quantile))
         metrics, cov = calculate_metrics(GT, GT_abstract, G_big, nnids, output, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev, False, Gexisting)
         
@@ -1071,55 +1074,56 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
         GT_prev = copy.deepcopy(GT)
 
 
-    # CAR CONSTRICTED BICYCLE NETWORKS
-    # These are the car networks where the length of the bike subnetwork is increased 10 times, effectively implementing a speed reduction from 50 km/h to 5 km/h. We are only interested in directness, as all other metrics do not change or are already calculated elsewhere.
-    output_carconstrictedbike = {
-              "directness": [],
-              "directness_lcc": []
-             }
-    for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, prune_quantiles):
-        GT_carconstrictedbike = copy.deepcopy(G_big)
-        constrict_overlaps(GT_carconstrictedbike, GT)
-        if verbose: print("Calculating carconstrictedbike network metrics for quantile " + str(prune_quantile))
-        metrics = calculate_metrics(GT_carconstrictedbike, GT_abstract, G_big, nnids, output_carconstrictedbike, buffer_walk, numnodepairs, verbose, False)
+    # # CAR CONSTRICTED BICYCLE NETWORKS (takes too long - commented out for now)
+    # # These are the car networks where the length of the bike subnetwork is increased 10 times, effectively implementing a speed reduction from 50 km/h to 5 km/h. We are only interested in directness, as all other metrics do not change or are already calculated elsewhere.
+    # output_carconstrictedbike = {
+    #           "directness": [],
+    #           "directness_lcc": []
+    #          }
+    # for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, tqdm(prune_quantiles, desc = "Car constricted bicycle networks")):
+    #     GT_carconstrictedbike = copy.deepcopy(G_big)
+    #     constrict_overlaps(GT_carconstrictedbike, GT)
+    #     if verbose: print("Calculating carconstrictedbike network metrics for quantile " + str(prune_quantile))
+    #     metrics = calculate_metrics(GT_carconstrictedbike, GT_abstract, G_big, nnids, output_carconstrictedbike, buffer_walk, numnodepairs, verbose, False)
         
-        for key in output_carconstrictedbike.keys():
-            output_carconstrictedbike[key].append(metrics[key])
+    #     for key in output_carconstrictedbike.keys():
+    #         output_carconstrictedbike[key].append(metrics[key])
 
 
-    # CAR MINUS BICYCLE NETWORKS
-    # These are the car networks where the links from the bike subnetworks are completely removed. Here we follow a reverse order to build up the costly cover calculations additively.
-    # First construct the negative networks
-    GT_carminusbikes = []
-    for GT, prune_quantile in zip(reversed(Gs), reversed(prune_quantiles)):
-        GT_carminusbike = copy.deepcopy(G_big)
-        delete_overlaps(GT_carminusbike, GT)
-        GT_carminusbikes.append(GT_carminusbike)
-        # print((GT_carminusbike.ecount() + GT.ecount()), GT_carminusbike.ecount(), GT.ecount()) # sanity check
+    # # CAR MINUS BICYCLE NETWORKS
+    # # These are the car networks where the links from the bike subnetworks are completely removed. Here we follow a reverse order to build up the costly cover calculations additively.
+    # # First construct the negative networks
+    # GT_carminusbikes = []
+    # for GT, prune_quantile in zip(reversed(Gs), reversed(prune_quantiles)):
+    #     GT_carminusbike = copy.deepcopy(G_big)
+    #     delete_overlaps(GT_carminusbike, GT)
+    #     GT_carminusbikes.append(GT_carminusbike)
+    #     # print((GT_carminusbike.ecount() + GT.ecount()), GT_carminusbike.ecount(), GT.ecount()) # sanity check
 
-    output_carminusbike = {
-            "length":[],
-            "length_lcc":[],
-            "coverage": [],
-            "directness": [],
-            "directness_lcc": [],
-            "poi_coverage": [],
-            "components": []
-            }
-    covs_carminusbike = {}
-    cov_prev = Polygon()
-    GT_prev = ig.Graph()
-    for GT, prune_quantile in zip(GT_carminusbikes, reversed(prune_quantiles)):
-        if verbose: print("Calculating carminusbike network metrics for quantile " + str(prune_quantile))
-        metrics, cov = calculate_metrics(GT, GT, G_big, nnids, output_carminusbike, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev, True)
+    # output_carminusbike = {
+    #         "length":[],
+    #         "length_lcc":[],
+    #         "coverage": [],
+    #         "directness": [],
+    #         "directness_lcc": [],
+    #         "poi_coverage": [],
+    #         "components": []
+    #         }
+    # covs_carminusbike = {}
+    # cov_prev = Polygon()
+    # GT_prev = ig.Graph()
+    # for GT, prune_quantile in zip(GT_carminusbikes, tqdm(reversed(prune_quantiles), desc = "Car minus bicycle networks")):
+    #     if verbose: print("Calculating carminusbike network metrics for quantile " + str(prune_quantile))
+    #     metrics, cov = calculate_metrics(GT, GT, G_big, nnids, output_carminusbike, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev, True)
         
-        for key in output_carminusbike.keys():
-            output_carminusbike[key].insert(0, metrics[key]) # append to beginning due to reversed order
-        covs_carminusbike[prune_quantile] = cov
-        cov_prev = copy.deepcopy(cov)
-        GT_prev = copy.deepcopy(GT)
+    #     for key in output_carminusbike.keys():
+    #         output_carminusbike[key].insert(0, metrics[key]) # append to beginning due to reversed order
+    #     covs_carminusbike[prune_quantile] = cov
+    #     cov_prev = copy.deepcopy(cov)
+    #     GT_prev = copy.deepcopy(GT)
 
-    return (output, covs, output_carminusbike, covs_carminusbike, output_carconstrictedbike)
+    # return (output, covs, output_carminusbike, covs_carminusbike, output_carconstrictedbike)
+    return (output, covs)
 
 
 def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):

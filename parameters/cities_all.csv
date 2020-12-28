@@ -12,7 +12,6 @@ barcelona;Barcelona, Barcelonès, Barcelona, Catalonia, 08001, Spain;esp
 beihai;Beihai, Guangxi, China;chn
 detroit;Detroit, Wayne County, Michigan, United States of America;usa
 jakarta;Jakarta Special Capital Region, Indonesia;idn
-losangeles;Los Angeles, Los Angeles County, California, United States of America;usa
 mexico;;mex
 phoenix;Phoenix, Maricopa County, Arizona, United States of America;usa
 portland;Portland, Multnomah County, Oregon, United States of America;usa
@@ -41,3 +40,17 @@ buenosaires;Autonomous City of Buenos Aires, Argentina;arg
 luanda;Luanda, Angola;ago
 ulaanbaatar;ulaanbaatar;mng
 tashkent;Tashkent, 100000, Uzbekistan;uzb
+hamburg;hamburg;ger
+houston;;usa
+losangeles;;usa
+phoenix;;usa
+philadelphia;philadelphia;usa
+birmingham;birmingham;gbr
+leeds;leeds;gbr
+glasgow;glasgow city;gbr
+sheffield;sheffield;gbr
+bradford;bradford;gbr
+manchestergreater;greater manchester;gbr
+edinburgh;city of edinburgh;gbr
+cologne;cologne;ger
+munich;munich;ger

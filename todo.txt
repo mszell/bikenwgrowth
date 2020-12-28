@@ -1,14 +1,17 @@
-make most calculations with simplified graphs!
+get missing shape files
 profile code
 styling for analysis plots
 implement pop density pois
 make test run of everything on a testcity
 run 04-07 for all parameter sets
 calculate efficiencies for carminusbike simplified graphs
-add largest US/UK cities
+make most calculations with simplified graphs
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 split up functions.py?
 
+X osmnx 0.16 compatibility updates: geocode_to_gdf, etc
+X add largest US/UK cities
+X snap POIs to simplfied networks
 X Export carconstrictedbike networks for betweenness calculations
 X investigate/fix components measures for carminusbike network
 X cover plots
