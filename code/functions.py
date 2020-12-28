@@ -61,7 +61,12 @@ def initplot():
     return fig
 
 def nodesize_from_pois(nnids):
-    return max(30, 220-len(nnids))
+    """Determine POI node size based on number of POIs.
+    The more POIs the smaller (linearly) to avoid overlaps.
+    """
+    minnodesize = 30
+    maxnodesize = 220
+    return max(minnodesize, maxnodesize-len(nnids))
 
 
 def simplify_ig(G):

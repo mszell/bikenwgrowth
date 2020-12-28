@@ -43,6 +43,12 @@ plotparam = {"bbox": (1280,1280),
 			"abstract": {"edge_color": '#000000', "alpha": 0.75}
 			}
 
+plotparam_analysis = {
+			"bikegrown": {"linewidth": 4.25, "color": '#008ecc', "linestyle": "solid", "label": "Grown"},
+			"mst": {"linewidth": 2, "color": '#008ecc', "linestyle": "dashed", "label": "MST"},
+			"biketrack": {"linewidth": 1, "color": '#2222ff', "linestyle": "solid", "label": "Protected"},
+			"bikeable": {"linewidth": 1, "color": '#222222', "linestyle": "dashed", "label": "Bikeable"}
+}
 
 
 # CONSTANTS
