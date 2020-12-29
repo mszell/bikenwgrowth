@@ -651,7 +651,7 @@ def greedy_triangulation_routing(G, pois, prune_quantiles = [1], prune_measure =
     
     GT_abstracts = []
     GTs = []
-    for prune_quantile in prune_quantiles:
+    for prune_quantile in tqdm(prune_quantiles, desc = "Greedy triangulation"):
         GT_abstract = copy.deepcopy(G_temp.subgraph(pois_indices))
         GT_abstract = greedy_triangulation(GT_abstract, poipairs, prune_quantile, prune_measure)
         GT_abstracts.append(GT_abstract)
