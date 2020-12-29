@@ -2,7 +2,6 @@ get missing shape files
 profile code
 implement pop density pois
 make test run of everything on a testcity
-run 04-07 for all parameter sets
 calculate efficiencies for carminusbike simplified graphs
 make most calculations with simplified graphs
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
