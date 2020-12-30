@@ -45,11 +45,11 @@ plotparam = {"bbox": (1280,1280),
 
 plotparam_analysis = {
 			"bikegrown": {"linewidth": 4.25, "color": '#0ebddb', "linestyle": "solid", "label": "Grown"},
-			"mst": {"linewidth": 2, "color": '#0ebddb', "linestyle": "dashed", "label": "MST"},
-			"biketrack": {"linewidth": 1, "color": '#2222ff', "linestyle": "solid", "label": "Protected"},
-			"bikeable": {"linewidth": 1, "color": '#222222', "linestyle": "dashed", "label": "Bikeable"},
 			"bikegrown_abstract": {"linewidth": 4.25, "color": '#000000', "linestyle": "solid", "label": "Grown (abstract)", "alpha": 0.75},
-			"mst_abstract": {"linewidth": 2, "color": '#000000', "linestyle": "dashed", "label": "MST (abstract)", "alpha": 0.75}
+			"mst": {"linewidth": 2, "color": '#0ebddb', "linestyle": "dashed", "label": "MST"},
+			"mst_abstract": {"linewidth": 2, "color": '#000000', "linestyle": "dashed", "label": "MST (abstract)", "alpha": 0.75},
+			"biketrack": {"linewidth": 1, "color": '#2222ff', "linestyle": "solid", "label": "Protected"},
+			"bikeable": {"linewidth": 1, "color": '#222222', "linestyle": "dashed", "label": "Bikeable"}
 			}
 
 
