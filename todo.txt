@@ -1,3 +1,4 @@
+location polygon: takes largest if multipolygon, and fill holes
 get missing shape files
 profile code
 implement pop density pois

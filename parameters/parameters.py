@@ -1,6 +1,6 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "grid" # railwaystation, grid
+poi_source = "railwaystation" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness
 
 
@@ -32,23 +32,25 @@ nodesize_grown = 10.5
 plotparam = {"bbox": (1280,1280),
 			"dpi": 96,
 			"carall": {"width": 0.5, "edge_color": '#999999'},
-			"biketrack": {"width": 1.5, "edge_color": '#2222ff'},
+			"biketrack": {"width": 1.25, "edge_color": '#2222ff'},
 			"biketrack_offstreet": {"width": 0.75, "edge_color": '#00aa22'},
 			"bikeable": {"width": 0.75, "edge_color": '#222222'},
-			"bikegrown": {"width": 4.25, "edge_color": '#008ecc', "node_color": '#008ecc'},
+			"bikegrown": {"width": 4.25, "edge_color": '#0ebddb', "node_color": '#0ebddb'},
 			"highlight_biketrack": {"width": 4.25, "edge_color": '#2222ff', "node_color": '#2222ff'},
 			"highlight_bikeable": {"width": 4.25, "edge_color": '#222222', "node_color": '#222222'},
 			"poi_unreached": {"node_color": '#ff7338', "edgecolors": '#ffefe9'},
-			"poi_reached": {"node_color": '#004c6c', "edgecolors": '#f1fbff'},
+			"poi_reached": {"node_color": '#0b8fa6', "edgecolors": '#f1fbff'},
 			"abstract": {"edge_color": '#000000', "alpha": 0.75}
 			}
 
 plotparam_analysis = {
-			"bikegrown": {"linewidth": 4.25, "color": '#008ecc', "linestyle": "solid", "label": "Grown"},
-			"mst": {"linewidth": 2, "color": '#008ecc', "linestyle": "dashed", "label": "MST"},
+			"bikegrown": {"linewidth": 4.25, "color": '#0ebddb', "linestyle": "solid", "label": "Grown"},
+			"mst": {"linewidth": 2, "color": '#0ebddb', "linestyle": "dashed", "label": "MST"},
 			"biketrack": {"linewidth": 1, "color": '#2222ff', "linestyle": "solid", "label": "Protected"},
-			"bikeable": {"linewidth": 1, "color": '#222222', "linestyle": "dashed", "label": "Bikeable"}
-}
+			"bikeable": {"linewidth": 1, "color": '#222222', "linestyle": "dashed", "label": "Bikeable"},
+			"bikegrown_abstract": {"linewidth": 4.25, "color": '#000000', "linestyle": "solid", "label": "Grown (abstract)", "alpha": 0.75},
+			"mst_abstract": {"linewidth": 2, "color": '#000000', "linestyle": "dashed", "label": "MST (abstract)", "alpha": 0.75}
+			}
 
 
 # CONSTANTS
