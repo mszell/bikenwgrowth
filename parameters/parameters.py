@@ -11,7 +11,7 @@ prune_measure = "betweenness" # betweenness, closeness
 
 prune_measures = {"betweenness": "Bq", "closeness": "Cq"}
 prune_quantiles = [x/40 for x in list(range(1, 41))] # The quantiles where the GT should be pruned using the prune_measure
-networktypes = ["biketrack", "carall", "bikeable", "biketrackcarall"] # Existing infrastructures to analyze
+networktypes = ["biketrack", "carall", "bikeable", "biketrackcarall", "biketrack_onstreet", "bikeable_offstreet"] # Existing infrastructures to analyze
 
 # 02
 gridl = 1707 # in m, for generating the grid
@@ -55,17 +55,19 @@ plotparam_analysis = {
 # These values should be set once and not be changed
 
 # 01
-osmnxparameters = {'car30': {'network_type':'drive', 'custom_filter':'["maxspeed"~"^30$|^20$|^15$|^10$|^5$|^20 mph|^15 mph|^10 mph|^5 mph"]', 'export': True},
-                   'carall': {'network_type':'drive', 'custom_filter': None, 'export': True},
-                   'bike_cyclewaytrack': {'network_type':'bike', 'custom_filter':'["cycleway"~"track"]', 'export': False},
-                   'bike_highwaycycleway': {'network_type':'bike', 'custom_filter':'["highway"~"cycleway"]', 'export': False},
-                   'bike_bicycledesignated': {'network_type':'bike', 'custom_filter':'["bicycle"~"designated"]', 'export': False},
-                   'bike_cyclewayrighttrack': {'network_type':'bike', 'custom_filter':'["cycleway:right"~"track"]', 'export': False},
-                   'bike_cyclewaylefttrack': {'network_type':'bike', 'custom_filter':'["cycleway:left"~"track"]', 'export': False}
+osmnxparameters = {'car30': {'network_type':'drive', 'custom_filter':'["maxspeed"~"^30$|^20$|^15$|^10$|^5$|^20 mph|^15 mph|^10 mph|^5 mph"]', 'export': True, 'retain_all': True},
+                   'carall': {'network_type':'drive', 'custom_filter': None, 'export': True, 'retain_all': False},
+                   'bike_cyclewaytrack': {'network_type':'bike', 'custom_filter':'["cycleway"~"track"]', 'export': False, 'retain_all': True},
+                   'bike_highwaycycleway': {'network_type':'bike', 'custom_filter':'["highway"~"cycleway"]', 'export': False, 'retain_all': True},
+                   'bike_bicycledesignated': {'network_type':'bike', 'custom_filter':'["bicycle"~"designated"]', 'export': False, 'retain_all': True},
+                   'bike_designatedpath': {'network_type':'all', 'custom_filter':'["highway"~"path"]["bicycle"~"designated"]', 'export': False, 'retain_all': True},
+                   'bike_cyclewayrighttrack': {'network_type':'bike', 'custom_filter':'["cycleway:right"~"track"]', 'export': False, 'retain_all': True},
+                   'bike_cyclewaylefttrack': {'network_type':'bike', 'custom_filter':'["cycleway:left"~"track"]', 'export': False, 'retain_all': True}
                   }  
-# Special case 'biketrack': "cycleway"~"track" OR "highway"~"cycleway" OR "bicycle"~"designated" OR "cycleway:right=track" OR "cycleway:left=track"
+# Special case 'biketrack': "cycleway"~"track" OR "highway"~"cycleway" OR "bicycle"~"designated" OR "cycleway:right=track" OR "cycleway:left=track" OR ("highway"~"path" AND "bicycle"~"designated")
 # Special case 'bikeable': biketrack OR car30
 # See: https://wiki.openstreetmap.org/wiki/Key:cycleway#Cycle_tracks
+# And: https://wiki.openstreetmap.org/wiki/Tag:highway=path#Usage_as_a_universal_tag
 
 # 02
 snapthreshold = 500 # in m, tolerance for snapping POIs to network
