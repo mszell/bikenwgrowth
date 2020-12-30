@@ -1,4 +1,3 @@
-get missing shape files
 profile code
 implement pop density pois
 make test run of everything on a testcity
@@ -7,6 +6,9 @@ make most calculations with simplified graphs
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 split up functions.py?
 
+X get missing shape files
+X location MultiPolygon: get largest polygon for cases like Amsterdam, account for Tokyo
+X location polygon: fill holes
 X styling for analysis plots
 X osmnx 0.16 compatibility updates: geocode_to_gdf, etc
 X add largest US/UK cities

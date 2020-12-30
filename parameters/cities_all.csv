@@ -5,45 +5,43 @@ manhattan;Manhattan, NYC, NY, USA;usa
 bogota;bogota, colombia;col
 budapest;Budapest, Hungary;hun
 paris;Paris, France;fra
-copenhagen;;dnk
 vienna;vienna, austria;aut
-amsterdam;Amsterdam, North Holland, Netherlands, The Netherlands;nld
+amsterdam;amsterdam;nld
 barcelona;Barcelona, Barcelonès, Barcelona, Catalonia, 08001, Spain;esp
 beihai;Beihai, Guangxi, China;chn
-detroit;Detroit, Wayne County, Michigan, United States of America;usa
-jakarta;Jakarta Special Capital Region, Indonesia;idn
-mexico;;mex
+detroit;detroit;usa
+jakarta;jakarta;idn
 phoenix;Phoenix, Maricopa County, Arizona, United States of America;usa
 portland;Portland, Multnomah County, Oregon, United States of America;usa
-singapore;;sgp
-beijing;;chn
+singapore;singapore;sgp
+beijing;Peiping Municipal Administrative Area;chn
 berlin;Berlin, Germany;deu
-boston;Boston, Suffolk County, Massachusetts, United States of America;usa
-chicago;Chicago, Cook County, Illinois, United States of America;usa
-helsinki;Helsinki, Helsinki sub-region, Uusimaa, Mainland Finland, Finland;fin
-hongkong;;hkg
-johannesburg;;zaf
-moscow;Moscow, Central Administrative Okrug, Moscow, Central Federal District, Russia;rus
+boston;Boston;usa
+chicago;chicago;usa
+helsinki;helsinki;fin
+hongkong;Hong Kong Special Administrative Region;hkg
+moscow;moscow;rus
 rome;Rome, Roma Capitale, Italy;ita
-sanfrancisco;;usa
-stuttgart;Stuttgart, Baden-Württemberg, Germany;deu
-tokyo;;jpn
-milan;Milan, Lombardy, Italy;ita
-telaviv;Tel Aviv-Yafo, Tel Aviv District, Israel;isr
-marrakesh;Marrakesh, Pachalik de Marrakech, Préfecture de Marrakech عمالة مراكش, Marrakech-Safi, Morocco;mar
-rabat;Rabat, pachalik de Rabat, Prefecture of Rabat, Rabat-Salé-Kenitra, Morocco;mar
-kathmandu;Kathmandu, Bagmati Pradesh, Nepal;npl
-shahalam;Shah Alam, Selangor, Malaysia;mys
-saopaulo;São Paulo, Região Imediata de São Paulo, Região Metropolitana de São Paulo, Região Geográfica Intermediária de São Paulo, São Paulo, Southeast Region, Brazil;bra
+sanfrancisco;san francisco;usa
+stuttgart;stuttgart;deu
+tokyo;tokyo;jpn
+milan;milan;ita
+telaviv;tel aviv;isr
+marrakesh;marrakesh;mar
+rabat;rabat;mar
+kathmandu;kathmandu;npl
+shahalam;shah alam;mys
+saopaulo;sao paolo;bra
 santiago;Santiago, Provincia de Santiago, Santiago Metropolitan Region, Chile;chl
-buenosaires;Autonomous City of Buenos Aires, Argentina;arg
-luanda;Luanda, Angola;ago
+buenosaires;buenos aires;arg
+luanda;luanda;ago
 ulaanbaatar;ulaanbaatar;mng
-tashkent;Tashkent, 100000, Uzbekistan;uzb
+tashkent;tashkent;uzb
+mexico;mexico city;mex
 hamburg;hamburg;ger
-houston;;usa
-losangeles;;usa
-phoenix;;usa
+houston;houston;usa
+losangeles;los angeles;usa
+phoenix;phoenix;usa
 philadelphia;philadelphia;usa
 birmingham;birmingham;gbr
 leeds;leeds;gbr
@@ -54,3 +52,4 @@ manchestergreater;greater manchester;gbr
 edinburgh;city of edinburgh;gbr
 cologne;cologne;ger
 munich;munich;ger
+copenhagen;;dnk

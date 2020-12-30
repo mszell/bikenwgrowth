@@ -11,6 +11,31 @@ def holepatchlist_from_cov(cov, map_center):
             holepatchlist.append(hole_to_patch(hole, map_center))
     return holepatchlist
 
+def fill_holes(cov):
+    """Fill holes (= shapely interiors) from a coverage Polygon or MultiPolygon
+    """
+    holeseq_per_poly = get_holes(cov)
+    holes = []
+    for hole_per_poly in holeseq_per_poly:
+        for hole in hole_per_poly:
+            holes.append(hole)
+    eps = 0.00000001
+    if isinstance(cov, shapely.geometry.multipolygon.MultiPolygon):
+        cov_filled = ops.unary_union([poly for poly in cov] + [Polygon(hole).buffer(eps) for hole in holes])
+    elif isinstance(cov, shapely.geometry.polygon.Polygon) and not cov.is_empty:
+        cov_filled = ops.unary_union([cov] + [Polygon(hole).buffer(eps) for hole in holes])
+    return cov_filled
+
+def extract_relevant_polygon(placeid, mp):
+    """Return the most relevant polygon of a multipolygon mp, for being considered the city limit.
+    Depends on location.
+    """
+    if placeid == "tokyo": # If Tokyo, take poly with most northern bound, otherwise largest
+        p = max(mp, key=lambda a: a.bounds[-1])
+    else:
+        p = max(mp, key=lambda a: a.area)
+    return p
+
 def get_holes(cov):
     """Get holes (= shapely interiors) from a coverage Polygon or MultiPolygon
     """
