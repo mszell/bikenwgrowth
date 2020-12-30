@@ -355,7 +355,7 @@ def new_edge_intersects(G, enew):
     
 
 def delete_overlaps(G_res, G_orig, verbose = False):
-    """Deletes all overlaps of G_res with G_orig (from G_res)
+    """Deletes inplace all overlaps of G_res with G_orig (from G_res)
     based on node ids. In other words: G_res -= G_orig
     """
     del_edges = []
@@ -651,7 +651,7 @@ def greedy_triangulation_routing(G, pois, prune_quantiles = [1], prune_measure =
     
     GT_abstracts = []
     GTs = []
-    for prune_quantile in tqdm(prune_quantiles, desc = "Greedy triangulation"):
+    for prune_quantile in tqdm(prune_quantiles, desc = "Greedy triangulation", leave = False):
         GT_abstract = copy.deepcopy(G_temp.subgraph(pois_indices))
         GT_abstract = greedy_triangulation(GT_abstract, poipairs, prune_quantile, prune_measure)
         GT_abstracts.append(GT_abstract)
@@ -1068,7 +1068,7 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
     covs = {} # covers using buffer_walk
     cov_prev = Polygon()
     GT_prev = ig.Graph()
-    for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, tqdm(prune_quantiles, desc = "Bicycle networks")):
+    for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, tqdm(prune_quantiles, desc = "Bicycle networks", leave = False)):
         if verbose: print("Calculating bike network metrics for quantile " + str(prune_quantile))
         metrics, cov = calculate_metrics(GT, GT_abstract, G_big, nnids, output, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev, False, Gexisting)
         
@@ -1085,7 +1085,7 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
     #           "directness": [],
     #           "directness_lcc": []
     #          }
-    # for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, tqdm(prune_quantiles, desc = "Car constricted bicycle networks")):
+    # for GT, GT_abstract, prune_quantile in zip(Gs, GT_abstracts, tqdm(prune_quantiles, desc = "Car constricted bicycle networks", leave = False)):
     #     GT_carconstrictedbike = copy.deepcopy(G_big)
     #     constrict_overlaps(GT_carconstrictedbike, GT)
     #     if verbose: print("Calculating carconstrictedbike network metrics for quantile " + str(prune_quantile))
@@ -1117,7 +1117,7 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
     # covs_carminusbike = {}
     # cov_prev = Polygon()
     # GT_prev = ig.Graph()
-    # for GT, prune_quantile in zip(GT_carminusbikes, tqdm(reversed(prune_quantiles), desc = "Car minus bicycle networks")):
+    # for GT, prune_quantile in zip(GT_carminusbikes, tqdm(reversed(prune_quantiles), desc = "Car minus bicycle networks", leave = False)):
     #     if verbose: print("Calculating carminusbike network metrics for quantile " + str(prune_quantile))
     #     metrics, cov = calculate_metrics(GT, GT, G_big, nnids, output_carminusbike, buffer_walk, numnodepairs, verbose, return_cov, GT_prev, cov_prev, True)
         
