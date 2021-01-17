@@ -1,2 +1,61 @@
 placeid;nominatimstring;countryid
+oslo;oslo;nor
+bath;bath;gbr
+london;greater london;gbr
+manhattan;manhattan;usa
+bogota;bogota, colombia;col
+budapest;Budapest, Hungary;hun
+paris;Paris, France;fra
+vienna;vienna, austria;aut
+amsterdam;amsterdam;nld
+barcelona;Barcelona, Barcelonès, Barcelona, Catalonia, 08001, Spain;esp
+detroit;detroit;usa
+jakarta;jakarta;idn
+phoenix;Phoenix, Maricopa County, Arizona, United States of America;usa
+portland;Portland, Multnomah County, Oregon, United States of America;usa
+singapore;singapore;sgp
+berlin;Berlin, Germany;deu
+boston;Boston;usa
+mumbai;mumbai;ind
+karachi;karachi;pak
+chicago;chicago;usa
+helsinki;helsinki;fin
+hongkong;Hong Kong Special Administrative Region;hkg
+moscow;moscow;rus
+rome;Rome, Roma Capitale, Italy;ita
+sanfrancisco;san francisco;usa
+stuttgart;stuttgart;deu
+tokyo;tokyo;jpn
+milan;milan;ita
+turin;turin;ita
+telaviv;tel aviv;isr
+marrakesh;marrakesh;mar
+rabat;rabat;mar
+kathmandu;kathmandu;npl
+shahalam;shah alam;mys
+saopaulo;sao paolo;bra
+santiago;Santiago, Provincia de Santiago, Santiago Metropolitan Region, Chile;chl
+buenosaires;buenos aires;arg
+luanda;luanda;ago
+ulaanbaatar;ulaanbaatar;mng
+tashkent;tashkent;uzb
+mexico;mexico city;mex
+hamburg;hamburg;ger
 houston;houston;usa
+losangeles;los angeles;usa
+phoenix;phoenix;usa
+philadelphia;philadelphia;usa
+birmingham;birmingham;gbr
+leeds;leeds;gbr
+glasgow;glasgow city;gbr
+sheffield;sheffield;gbr
+bradford;bradford;gbr
+manchestergreater;greater manchester;gbr
+edinburgh;city of edinburgh;gbr
+cologne;cologne;ger
+munich;munich;ger
+bern;bern;che
+zurich;zurich;che
+malmo;malmo;swe
+delft;delft;nld
+copenhagen;;dnk

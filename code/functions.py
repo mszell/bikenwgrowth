@@ -30,6 +30,8 @@ def extract_relevant_polygon(placeid, mp):
     """Return the most relevant polygon of a multipolygon mp, for being considered the city limit.
     Depends on location.
     """
+    if isinstance(mp, shapely.geometry.polygon.Polygon):
+        return mp
     if placeid == "tokyo": # If Tokyo, take poly with most northern bound, otherwise largest
         p = max(mp, key=lambda a: a.bounds[-1])
     else:
@@ -112,7 +114,7 @@ def nxdraw(G, networktype, map_center = False, nnids = False, drawfunc = "nx.dra
         G_nx = ox.simplify_graph(nx.MultiDiGraph(G.to_networkx())).to_undirected()
     else:
         G_nx = G.to_networkx()
-    if nnids: # Restrict to nnids node ids
+    if nnids is not False: # Restrict to nnids node ids
         nnids_nx = [k for k,v in dict(G_nx.nodes(data=True)).items() if v['id'] in nnids]
         G_nx = G_nx.subgraph(nnids_nx)
         
@@ -240,7 +242,10 @@ def compress_file(p, f, filetype = ".csv", delete_uncompressed = True):
 def ox_to_csv(G, p, placeid, parameterid, postfix = "", compress = True, verbose = True):
     if "crs" not in G.graph:
         G.graph["crs"] = 'epsg:4326' # needed for OSMNX's graph_to_gdfs in utils_graph.py
-    node, edge = ox.graph_to_gdfs(G)
+    try:
+        node, edge = ox.graph_to_gdfs(G)
+    except ValueError:
+        node, edge = gpd.GeoDataFrame(), gpd.GeoDataFrame()
     prefix = placeid + '_' + parameterid + postfix
 
     node.to_csv(p + prefix + '_nodes.csv', index = False)
@@ -317,16 +322,21 @@ def csv_to_ox(p, placeid, parameterid):
 def csv_to_ig(p, placeid, parameterid):
     prefix = placeid + '_' + parameterid
     compress = check_extract_zip(p, prefix)
-
-    n = pd.read_csv(p + prefix + '_nodes.csv')
-    e = pd.read_csv(p + prefix + '_edges.csv')
+    empty = False
+    try:
+        n = pd.read_csv(p + prefix + '_nodes.csv')
+        e = pd.read_csv(p + prefix + '_edges.csv')
+    except:
+        empty = True
     if compress:
         os.remove(p + prefix + '_nodes.csv')
         os.remove(p + prefix + '_edges.csv')
+    if empty:
+        return ig.Graph(directed = False)
     G = osm_to_ig(n, e)
     round_coordinates(G)
     mirror_y(G)
-    return(G)
+    return G
 
 def ig_to_geojson(G):
     linestring_list = []
@@ -1161,18 +1171,18 @@ def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
     """
     # Code adapted from: https://stackoverflow.com/questions/44947505/how-to-make-a-movie-out-of-images-in-python#44948030
     
-    images = [img for img in os.listdir(PATH["plots"] + placeid + "/") if img.startswith(placeid + imgname)]
+    images = [img for img in os.listdir(PATH["plots_networks"] + placeid + "/") if img.startswith(placeid + imgname)]
     images.sort()
-    frame = cv2.imread(os.path.join(PATH["plots"] + placeid + "/", images[0]))
+    frame = cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", images[0]))
     height, width, layers = frame.shape
 
-    video = cv2.VideoWriter("../videos/" + placeid + imgname + '.avi', 0, 10, (width, height))
+    video = cv2.VideoWriter(PATH["videos"] + placeid + imgname + '.avi', 0, 10, (width, height))
 
     for image in images:
-        video.write(cv2.imread(os.path.join(PATH["plots"] + placeid + "/", image)))
+        video.write(cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", image)))
     # Add the last frame duplicatelastframe more times:
     for i in range(0, duplicatelastframe):
-        video.write(cv2.imread(os.path.join(PATH["plots"] + placeid + "/", images[-1])))
+        video.write(cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", images[-1])))
 
     cv2.destroyAllWindows()
     video.release()
@@ -1245,4 +1255,4 @@ def ig_to_shapely(G):
 
 
 
-print("Loaded functions.")
+print("Loaded functions.\n")

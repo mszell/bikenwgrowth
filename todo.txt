@@ -1,11 +1,18 @@
+use shapely simplify
+zip result pickles
+existing analysis: union carall and biketrack for biketrackcarall
 profile code
-implement pop density pois
-make test run of everything on a testcity
 calculate efficiencies for carminusbike simplified graphs
 make most calculations with simplified graphs
+simulate random GT growth
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
+simulate random link growth?
 split up functions.py?
+implement pop density pois?
 
+X external plot and results folder due to github size limites https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com
+X make test run of everything on a testcity
+X add living_street and cyclestreet to biketrack, for netherlands
 X get missing shape files
 X location MultiPolygon: get largest polygon for cases like Amsterdam, account for Tokyo
 X location polygon: fill holes

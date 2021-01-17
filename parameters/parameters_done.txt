@@ -1,7 +1,2 @@
-prune_measure = "betweenness", poi_source = "grid"
-prune_measure = "betweenness", poi_source = "railwaystation"
-prune_measure = "closeness", poi_source = "railwaystation"
-prune_measure = "closeness", poi_source = "grid"
-prune_measure = "betweenness", cutofftype = "abs", cutoff = 1000
-prune_measure = "betweenness", cutofftype = "abs", cutoff = 2000
-prune_measure = "closeness", cutofftype = "abs", cutoff = 2000
+03: prune_measure = "betweenness", poi_source = "grid"
+04: prune_measure = "betweenness", poi_source = "grid"
