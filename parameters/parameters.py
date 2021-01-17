@@ -28,25 +28,25 @@ buffer_walk = 500 # Buffer in m for coverage calculations. (How far people are w
 numnodepairs = 500 # Number of node pairs to consider for random sample to calculate directness (O(numnodepairs^2), so better not go over 1000)
 
 #05
-nodesize_grown = 10.5
+nodesize_grown = 7.5
 plotparam = {"bbox": (1280,1280),
 			"dpi": 96,
 			"carall": {"width": 0.5, "edge_color": '#999999'},
 			"biketrack": {"width": 1.25, "edge_color": '#2222ff'},
 			"biketrack_offstreet": {"width": 0.75, "edge_color": '#00aa22'},
 			"bikeable": {"width": 0.75, "edge_color": '#222222'},
-			"bikegrown": {"width": 4.25, "edge_color": '#0ebddb', "node_color": '#0ebddb'},
-			"highlight_biketrack": {"width": 4.25, "edge_color": '#2222ff', "node_color": '#2222ff'},
-			"highlight_bikeable": {"width": 4.25, "edge_color": '#222222', "node_color": '#222222'},
+			"bikegrown": {"width": 3.75, "edge_color": '#0eb6d2', "node_color": '#0eb6d2'},
+			"highlight_biketrack": {"width": 3.75, "edge_color": '#2222ff', "node_color": '#2222ff'},
+			"highlight_bikeable": {"width": 3.75, "edge_color": '#222222', "node_color": '#222222'},
 			"poi_unreached": {"node_color": '#ff7338', "edgecolors": '#ffefe9'},
 			"poi_reached": {"node_color": '#0b8fa6', "edgecolors": '#f1fbff'},
 			"abstract": {"edge_color": '#000000', "alpha": 0.75}
 			}
 
 plotparam_analysis = {
-			"bikegrown": {"linewidth": 4.25, "color": '#0ebddb', "linestyle": "solid", "label": "Grown"},
-			"bikegrown_abstract": {"linewidth": 4.25, "color": '#000000', "linestyle": "solid", "label": "Grown (abstract)", "alpha": 0.75},
-			"mst": {"linewidth": 2, "color": '#0ebddb', "linestyle": "dashed", "label": "MST"},
+			"bikegrown": {"linewidth": 3.75, "color": '#0eb6d2', "linestyle": "solid", "label": "Grown"},
+			"bikegrown_abstract": {"linewidth": 3.75, "color": '#000000', "linestyle": "solid", "label": "Grown (abstract)", "alpha": 0.75},
+			"mst": {"linewidth": 2, "color": '#0eb6d2', "linestyle": "dashed", "label": "MST"},
 			"mst_abstract": {"linewidth": 2, "color": '#000000', "linestyle": "dashed", "label": "MST (abstract)", "alpha": 0.75},
 			"biketrack": {"linewidth": 1, "color": '#2222ff', "linestyle": "solid", "label": "Protected"},
 			"bikeable": {"linewidth": 1, "color": '#222222', "linestyle": "dashed", "label": "Bikeable"}
