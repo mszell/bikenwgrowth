@@ -1,4 +1,3 @@
-use shapely simplify
 zip result pickles
 existing analysis: union carall and biketrack for biketrackcarall
 profile code
@@ -10,6 +9,7 @@ simulate random link growth?
 split up functions.py?
 implement pop density pois?
 
+X use shapely simplify (dont use - covers become too imprecise)
 X external plot and results folder due to github size limites https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com
 X make test run of everything on a testcity
 X add living_street and cyclestreet to biketrack, for netherlands
