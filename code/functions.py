@@ -1171,18 +1171,18 @@ def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
     """
     # Code adapted from: https://stackoverflow.com/questions/44947505/how-to-make-a-movie-out-of-images-in-python#44948030
     
-    images = [img for img in os.listdir(PATH["plots"] + placeid + "/") if img.startswith(placeid + imgname)]
+    images = [img for img in os.listdir(PATH["plots_networks"] + placeid + "/") if img.startswith(placeid + imgname)]
     images.sort()
-    frame = cv2.imread(os.path.join(PATH["plots"] + placeid + "/", images[0]))
+    frame = cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", images[0]))
     height, width, layers = frame.shape
 
-    video = cv2.VideoWriter("../videos/" + placeid + imgname + '.avi', 0, 10, (width, height))
+    video = cv2.VideoWriter(PATH["videos"] + placeid + imgname + '.avi', 0, 10, (width, height))
 
     for image in images:
-        video.write(cv2.imread(os.path.join(PATH["plots"] + placeid + "/", image)))
+        video.write(cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", image)))
     # Add the last frame duplicatelastframe more times:
     for i in range(0, duplicatelastframe):
-        video.write(cv2.imread(os.path.join(PATH["plots"] + placeid + "/", images[-1])))
+        video.write(cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", images[-1])))
 
     cv2.destroyAllWindows()
     video.release()
