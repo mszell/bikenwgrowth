@@ -1,61 +1,60 @@
 placeid;nominatimstring;countryid
-oslo;oslo;nor
+santiago;Santiago, Provincia de Santiago, Santiago Metropolitan Region, Chile;chl
 bath;bath;gbr
-london;greater london;gbr
+delft;delft;nld
 manhattan;manhattan;usa
-bogota;bogota, colombia;col
-budapest;Budapest, Hungary;hun
+telaviv;tel aviv;isr
+bern;bern;che
+kathmandu;kathmandu;npl
+rabat;rabat;mar
+malmo;malmo;swe
+luanda;luanda;ago
+turin;turin;ita
+copenhagen;;dnk
+zurich;zurich;che
+buenosaires;buenos aires;arg
+marrakesh;marrakesh;mar
+sanfrancisco;san francisco;usa
+tashkent;tashkent;uzb
+bradford;bradford;gbr
+boston;Boston;usa
+shahalam;shah alam;mys
+glasgow;glasgow city;gbr
+mumbai;mumbai;ind
+milan;milan;ita
 paris;Paris, France;fra
-vienna;vienna, austria;aut
-amsterdam;amsterdam;nld
 barcelona;Barcelona, Barcelonès, Barcelona, Catalonia, 08001, Spain;esp
 detroit;detroit;usa
-jakarta;jakarta;idn
-phoenix;Phoenix, Maricopa County, Arizona, United States of America;usa
-portland;Portland, Multnomah County, Oregon, United States of America;usa
-singapore;singapore;sgp
-berlin;Berlin, Germany;deu
-boston;Boston;usa
-mumbai;mumbai;ind
-karachi;karachi;pak
-chicago;chicago;usa
-helsinki;helsinki;fin
-hongkong;Hong Kong Special Administrative Region;hkg
-moscow;moscow;rus
-rome;Rome, Roma Capitale, Italy;ita
-sanfrancisco;san francisco;usa
+sheffield;sheffield;gbr
 stuttgart;stuttgart;deu
-tokyo;tokyo;jpn
-milan;milan;ita
-turin;turin;ita
-telaviv;tel aviv;isr
-marrakesh;marrakesh;mar
-rabat;rabat;mar
-kathmandu;kathmandu;npl
-shahalam;shah alam;mys
-saopaulo;sao paolo;bra
-santiago;Santiago, Provincia de Santiago, Santiago Metropolitan Region, Chile;chl
-buenosaires;buenos aires;arg
-luanda;luanda;ago
+philadelphia;philadelphia;usa
+amsterdam;amsterdam;nld
 ulaanbaatar;ulaanbaatar;mng
-tashkent;tashkent;uzb
-mexico;mexico city;mex
+birmingham;birmingham;gbr
+oslo;oslo;nor
+leeds;leeds;gbr
+edinburgh;city of edinburgh;gbr
+chicago;chicago;usa
+hongkong;Hong Kong Special Administrative Region;hkg
+budapest;Budapest, Hungary;hun
+cologne;cologne;ger
+singapore;singapore;sgp
+vienna;vienna, austria;aut
+moscow;moscow;rus
+munich;munich;ger
+bogota;bogota, colombia;col
+helsinki;helsinki;fin
+portland;Portland, Multnomah County, Oregon, United States of America;usa
+rome;Rome, Roma Capitale, Italy;ita
+phoenix;phoenix;usa
 hamburg;hamburg;ger
 houston;houston;usa
+berlin;Berlin, Germany;deu
 losangeles;los angeles;usa
-phoenix;phoenix;usa
-philadelphia;philadelphia;usa
-birmingham;birmingham;gbr
-leeds;leeds;gbr
-glasgow;glasgow city;gbr
-sheffield;sheffield;gbr
-bradford;bradford;gbr
+mexico;mexico city;mex
+karachi;karachi;pak
 manchestergreater;greater manchester;gbr
-edinburgh;city of edinburgh;gbr
-cologne;cologne;ger
-munich;munich;ger
-bern;bern;che
-zurich;zurich;che
-malmo;malmo;swe
-delft;delft;nld
-copenhagen;;dnk
+jakarta;jakarta;idn
+saopaulo;sao paolo;bra
+tokyo;tokyo;jpn
+london;greater london;gbr
