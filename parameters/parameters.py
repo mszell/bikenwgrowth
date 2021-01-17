@@ -1,6 +1,6 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "railwaystation" # railwaystation, grid
+poi_source = "grid" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness
 
 
@@ -64,12 +64,17 @@ osmnxparameters = {'car30': {'network_type':'drive', 'custom_filter':'["maxspeed
                    'bike_bicycledesignated': {'network_type':'bike', 'custom_filter':'["bicycle"~"designated"]', 'export': False, 'retain_all': True},
                    'bike_designatedpath': {'network_type':'all', 'custom_filter':'["highway"~"path"]["bicycle"~"designated"]', 'export': False, 'retain_all': True},
                    'bike_cyclewayrighttrack': {'network_type':'bike', 'custom_filter':'["cycleway:right"~"track"]', 'export': False, 'retain_all': True},
-                   'bike_cyclewaylefttrack': {'network_type':'bike', 'custom_filter':'["cycleway:left"~"track"]', 'export': False, 'retain_all': True}
+                   'bike_cyclewaylefttrack': {'network_type':'bike', 'custom_filter':'["cycleway:left"~"track"]', 'export': False, 'retain_all': True},
+                   'bike_cyclestreet': {'network_type':'bike', 'custom_filter':'["cyclestreet"]', 'export': False, 'retain_all': True},
+                   'bike_livingstreet': {'network_type':'bike', 'custom_filter':'["highway"~"living_street"]', 'export': False, 'retain_all': True}
                   }  
-# Special case 'biketrack': "cycleway"~"track" OR "highway"~"cycleway" OR "bicycle"~"designated" OR "cycleway:right=track" OR "cycleway:left=track" OR ("highway"~"path" AND "bicycle"~"designated")
+# Special case 'biketrack': "cycleway"~"track" OR "highway"~"cycleway" OR "bicycle"~"designated" OR "cycleway:right=track" OR "cycleway:left=track" OR ("highway"~"path" AND "bicycle"~"designated") OR "cyclestreet" OR "highway"~"living_street"
 # Special case 'bikeable': biketrack OR car30
 # See: https://wiki.openstreetmap.org/wiki/Key:cycleway#Cycle_tracks
-# And: https://wiki.openstreetmap.org/wiki/Tag:highway=path#Usage_as_a_universal_tag
+# https://wiki.openstreetmap.org/wiki/Tag:highway=path#Usage_as_a_universal_tag
+# https://wiki.openstreetmap.org/wiki/Tag:highway%3Dliving_street
+# https://wiki.openstreetmap.org/wiki/Key:cyclestreet
+
 
 # 02
 snapthreshold = 500 # in m, tolerance for snapping POIs to network

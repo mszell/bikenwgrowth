@@ -31,7 +31,7 @@ from matplotlib.collections import PatchCollection
 
 # Geo
 import osmnx as ox
-# ox.utils.config(timeout = 300) # should work, but doc inconsistent: https://osmnx.readthedocs.io/en/stable/osmnx.html#osmnx.utils.config
+ox.utils.config(timeout = 300, logs_folder = PATH["logs"], log_file = True)
 import fiona
 import shapely
 import gdal
@@ -63,7 +63,7 @@ if debug:
 
 # Create city subfolders  
 for placeid, placeinfo in cities.items():
-    for subfolder in ["data", "plots", "results", "exports"]:
+    for subfolder in ["data", "plots", "plots_networks", "results", "exports"]:
         placepath = PATH[subfolder] + placeid + "/"
         if not os.path.exists(placepath):
             os.makedirs(placepath)

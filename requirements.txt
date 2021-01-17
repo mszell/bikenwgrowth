@@ -12,3 +12,4 @@ fiona>=1.8.18
 osmnx==0.16.2
 geopandas>=0.8.1
 tqdm>=4.55.0
+haversine>=2.3.0

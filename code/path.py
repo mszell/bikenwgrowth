@@ -2,7 +2,9 @@ PATH = {}
 PATH["parameters"] = "../parameters/"
 PATH["data"] = "../data/"
 PATH["plots"] = "../plots/"
-PATH["results"] = "../results/"
+PATH["plots_networks"] = "../../bikenwgrowth_plotsnetworks/"
+PATH["results"] = "../../bikenwgrowth_results/"
 PATH["exports"] = "../exports/"
+PATH["logs"] = "../logs/"
 
 print("Loaded PATH")
