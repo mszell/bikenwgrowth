@@ -619,7 +619,7 @@ def mst_routing(G, pois):
     level.
     """
 
-    if len(pois) < 2: return ([], []) # We can't do anything with less than 2 POIs
+    if len(pois) < 2: return (ig.Graph(), ig.Graph()) # We can't do anything with less than 2 POIs
 
     # MST_abstract is the MST with same nodes but euclidian links
     pois_indices = set()
@@ -630,7 +630,7 @@ def mst_routing(G, pois):
         G_temp.es.delete(e)
         
     poipairs = poipairs_by_distance(G, pois, True)
-    if len(poipairs) == 0: return ([], [])
+    if len(poipairs) == 0: return (ig.Graph(), ig.Graph())
 
     MST_abstract = copy.deepcopy(G_temp.subgraph(pois_indices))
     for poipair, poipair_distance in poipairs:

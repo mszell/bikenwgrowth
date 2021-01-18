@@ -1,6 +1,6 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "grid" # railwaystation, grid
+poi_source = "railwaystation" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness
 
 
@@ -19,7 +19,7 @@ gridl = 1707 # in m, for generating the grid
 # 2*0.5 = a+a-sqrt(2)a   |   1 = a(2-sqrt2)   |   a = 1/(2-sqrt2) = 1.707
 # This leads to a full 500m coverage when a (worst-case) square is being triangulated
 bearingbins = 72 # number of bins to determine bearing. e.g. 72 will create 5 degrees bins
-poiparameters = {"railwaystation":{'railway':['station','halt']}#,
+poiparameters = {"railwaystation":{'railway':['station','halt']}#, # should maybe also add: ["railway"!~"entrance"], but afaik osmnx is not capable of this: https://osmnx.readthedocs.io/en/stable/osmnx.html?highlight=geometries_from_polygon#osmnx.geometries.geometries_from_polygon
                  #"busstop":{'highway':'bus_stop'}
                 }
 

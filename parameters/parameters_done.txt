@@ -1,2 +1,3 @@
 03: prune_measure = "betweenness", poi_source = "grid"
 04: prune_measure = "betweenness", poi_source = "grid"
+03: prune_measure = "betweenness", poi_source = "railwaystation"

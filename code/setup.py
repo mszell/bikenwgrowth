@@ -63,7 +63,7 @@ if debug:
 
 # Create city subfolders  
 for placeid, placeinfo in cities.items():
-    for subfolder in ["data", "plots", "plots_networks", "results", "exports"]:
+    for subfolder in ["data", "plots", "plots_networks", "results", "exports", "videos"]:
         placepath = PATH[subfolder] + placeid + "/"
         if not os.path.exists(placepath):
             os.makedirs(placepath)
