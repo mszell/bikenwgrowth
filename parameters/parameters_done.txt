@@ -1,3 +1,33 @@
+DONE
 03: prune_measure = "betweenness", poi_source = "grid"
-04: prune_measure = "betweenness", poi_source = "grid"
+03: prune_measure = "betweenness", poi_source = "grid", bicycledesignatedredo
 03: prune_measure = "betweenness", poi_source = "railwaystation"
+03: prune_measure = "betweenness", poi_source = "railwaystation", bicycledesignatedredo
+03: prune_measure = "closeness", poi_source = "grid"
+03: prune_measure = "closeness", poi_source = "grid", bicycledesignatedredo
+03: prune_measure = "closeness", poi_source = "railwaystation"
+03: prune_measure = "closeness", poi_source = "railwaystation", bicycledesignatedredo
+04: prune_measure = "betweenness", poi_source = "grid"
+04: prune_measure = "betweenness", poi_source = "grid", bicycledesignatedredo
+04: prune_measure = "betweenness", poi_source = "railwaystation"
+04: prune_measure = "closeness", poi_source = "grid"
+05 (no covers): prune_measure = "betweenness", poi_source = "grid"
+01: bicycledesignatedredo
+02: bicycledesignatedredo
+07: prune_measure = "betweenness", poi_source = "grid", all until Munich
+
+RUNNING
+
+
+TO DO
+07: geojson: houston+saopaolo
+04: prune_measure = "betweenness", poi_source = "railwaystation", bicycledesignatedredo
+05 (no covers): prune_measure = "betweenness", poi_source = "grid", bicycledesignatedredo
+05 (covers): prune_measure = "betweenness", poi_source = "grid"
+04: prune_measure = "closeness", poi_source = "grid"
+04: prune_measure = "closeness", poi_source = "railwaystation"
+05: prune_measure = "betweenness", poi_source = "railwaystation"
+05: prune_measure = "closeness", poi_source = "grid"
+05: prune_measure = "closeness", poi_source = "railwaystation"
++random models
++custom models (hierarchy, artificial grid?)

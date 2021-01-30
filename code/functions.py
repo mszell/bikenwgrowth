@@ -411,7 +411,7 @@ def delete_overlaps(G_res, G_orig, verbose = False):
     G_res.delete_vertices(isolated_nodes)
     if verbose: print("Removed " + str(len(del_edges)) + " overlapping edges and " + str(len(isolated_nodes)) + " nodes.")
 
-def constrict_overlaps(G_res, G_orig, factor = 10):
+def constrict_overlaps(G_res, G_orig, factor = 5):
     """Increases length by factor of all overlaps of G_res with G_orig (in G_res) based on edge ids.
     """
     for e in list(G_res.es):
