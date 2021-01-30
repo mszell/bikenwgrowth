@@ -19,7 +19,7 @@ gridl = 1707 # in m, for generating the grid
 # 2*0.5 = a+a-sqrt(2)a   |   1 = a(2-sqrt2)   |   a = 1/(2-sqrt2) = 1.707
 # This leads to a full 500m coverage when a (worst-case) square is being triangulated
 bearingbins = 72 # number of bins to determine bearing. e.g. 72 will create 5 degrees bins
-poiparameters = {"railwaystation":{'railway':['station','halt']}#,
+poiparameters = {"railwaystation":{'railway':['station','halt']}#, # should maybe also add: ["railway"!~"entrance"], but afaik osmnx is not capable of this: https://osmnx.readthedocs.io/en/stable/osmnx.html?highlight=geometries_from_polygon#osmnx.geometries.geometries_from_polygon
                  #"busstop":{'highway':'bus_stop'}
                 }
 
@@ -61,11 +61,11 @@ osmnxparameters = {'car30': {'network_type':'drive', 'custom_filter':'["maxspeed
                    'carall': {'network_type':'drive', 'custom_filter': None, 'export': True, 'retain_all': False},
                    'bike_cyclewaytrack': {'network_type':'bike', 'custom_filter':'["cycleway"~"track"]', 'export': False, 'retain_all': True},
                    'bike_highwaycycleway': {'network_type':'bike', 'custom_filter':'["highway"~"cycleway"]', 'export': False, 'retain_all': True},
-                   'bike_bicycledesignated': {'network_type':'bike', 'custom_filter':'["bicycle"~"designated"]', 'export': False, 'retain_all': True},
                    'bike_designatedpath': {'network_type':'all', 'custom_filter':'["highway"~"path"]["bicycle"~"designated"]', 'export': False, 'retain_all': True},
                    'bike_cyclewayrighttrack': {'network_type':'bike', 'custom_filter':'["cycleway:right"~"track"]', 'export': False, 'retain_all': True},
                    'bike_cyclewaylefttrack': {'network_type':'bike', 'custom_filter':'["cycleway:left"~"track"]', 'export': False, 'retain_all': True},
                    'bike_cyclestreet': {'network_type':'bike', 'custom_filter':'["cyclestreet"]', 'export': False, 'retain_all': True},
+                   'bike_bicycleroad': {'network_type':'bike', 'custom_filter':'["bicycle_road"]', 'export': False, 'retain_all': True},
                    'bike_livingstreet': {'network_type':'bike', 'custom_filter':'["highway"~"living_street"]', 'export': False, 'retain_all': True}
                   }  
 # Special case 'biketrack': "cycleway"~"track" OR "highway"~"cycleway" OR "bicycle"~"designated" OR "cycleway:right=track" OR "cycleway:left=track" OR ("highway"~"path" AND "bicycle"~"designated") OR "cyclestreet" OR "highway"~"living_street"

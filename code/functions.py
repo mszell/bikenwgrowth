@@ -411,7 +411,7 @@ def delete_overlaps(G_res, G_orig, verbose = False):
     G_res.delete_vertices(isolated_nodes)
     if verbose: print("Removed " + str(len(del_edges)) + " overlapping edges and " + str(len(isolated_nodes)) + " nodes.")
 
-def constrict_overlaps(G_res, G_orig, factor = 10):
+def constrict_overlaps(G_res, G_orig, factor = 5):
     """Increases length by factor of all overlaps of G_res with G_orig (in G_res) based on edge ids.
     """
     for e in list(G_res.es):
@@ -619,7 +619,7 @@ def mst_routing(G, pois):
     level.
     """
 
-    if len(pois) < 2: return ([], []) # We can't do anything with less than 2 POIs
+    if len(pois) < 2: return (ig.Graph(), ig.Graph()) # We can't do anything with less than 2 POIs
 
     # MST_abstract is the MST with same nodes but euclidian links
     pois_indices = set()
@@ -630,7 +630,7 @@ def mst_routing(G, pois):
         G_temp.es.delete(e)
         
     poipairs = poipairs_by_distance(G, pois, True)
-    if len(poipairs) == 0: return ([], [])
+    if len(poipairs) == 0: return (ig.Graph(), ig.Graph())
 
     MST_abstract = copy.deepcopy(G_temp.subgraph(pois_indices))
     for poipair, poipair_distance in poipairs:

@@ -1,5 +1,5 @@
+remove bicycle~designated and re-run where relevant (e.g. portland, chicago)
 zip result pickles
-existing analysis: union carall and biketrack for biketrackcarall
 profile code
 calculate efficiencies for carminusbike simplified graphs
 make most calculations with simplified graphs
@@ -8,6 +8,7 @@ add comments to all functions, https://www.datacamp.com/community/tutorials/docs
 simulate random link growth?
 split up functions.py?
 implement pop density pois?
+existing analysis: union carall and biketrack for biketrackcarall?
 
 X use shapely simplify (dont use - covers become too imprecise)
 X external plot and results folder due to github size limites https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com
