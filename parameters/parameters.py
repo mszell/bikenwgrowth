@@ -1,7 +1,7 @@
 # PARAMETERS
 # These are values to loop through for different runs
 poi_source = "grid" # railwaystation, grid
-prune_measure = "betweenness" # betweenness, closeness
+prune_measure = "closeness" # betweenness, closeness, random
 
 
 
@@ -9,7 +9,7 @@ prune_measure = "betweenness" # betweenness, closeness
 # SEMI-CONSTANTS
 # These values should not be changed, unless the analysis shows we need to
 
-prune_measures = {"betweenness": "Bq", "closeness": "Cq"}
+prune_measures = {"betweenness": "Bq", "closeness": "Cq", "random": "Rq"}
 prune_quantiles = [x/40 for x in list(range(1, 41))] # The quantiles where the GT should be pruned using the prune_measure
 networktypes = ["biketrack", "carall", "bikeable", "biketrackcarall", "biketrack_onstreet", "bikeable_offstreet"] # Existing infrastructures to analyze
 
