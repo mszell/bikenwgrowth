@@ -10,24 +10,32 @@ DONE
 04: prune_measure = "betweenness", poi_source = "grid"
 04: prune_measure = "betweenness", poi_source = "grid", bicycledesignatedredo
 04: prune_measure = "betweenness", poi_source = "railwaystation"
+04: prune_measure = "betweenness", poi_source = "railwaystation", bicycledesignatedredo
 04: prune_measure = "closeness", poi_source = "grid"
-05 (no covers): prune_measure = "betweenness", poi_source = "grid"
+04: prune_measure = "closeness", poi_source = "grid", bicycledesignatedredo
+04: prune_measure = "closeness", poi_source = "railwaystation", bicycledesignatedredo
+05: (no covers): prune_measure = "betweenness", poi_source = "railwaystation"
+05: (no covers): prune_measure = "betweenness", poi_source = "grid"
+05: (no covers): prune_measure = "betweenness", poi_source = "grid", bicycledesignatedredo
 01: bicycledesignatedredo
 02: bicycledesignatedredo
 07: prune_measure = "betweenness", poi_source = "grid", all until Munich
+07: geojson: houston+saopaolo
+03: prune_measure = "random", poi_source = "railwaystation"
+03: prune_measure = "random", poi_source = "grid"
+04: prune_measure = "closeness", poi_source = "railwaystation"
+05: prune_measure = "closeness", poi_source = "grid"
 
 RUNNING
 
 
 TO DO
-07: geojson: houston+saopaolo
-04: prune_measure = "betweenness", poi_source = "railwaystation", bicycledesignatedredo
-05 (no covers): prune_measure = "betweenness", poi_source = "grid", bicycledesignatedredo
+07: grid pois
 05 (covers): prune_measure = "betweenness", poi_source = "grid"
-04: prune_measure = "closeness", poi_source = "grid"
-04: prune_measure = "closeness", poi_source = "railwaystation"
-05: prune_measure = "betweenness", poi_source = "railwaystation"
-05: prune_measure = "closeness", poi_source = "grid"
 05: prune_measure = "closeness", poi_source = "railwaystation"
 +random models
 +custom models (hierarchy, artificial grid?)
+portland all redo
+04: prune_measure = "random", poi_source = "railwaystation"
+04: prune_measure = "random", poi_source = "grid"
+06: prune_measure = "closeness"

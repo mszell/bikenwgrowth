@@ -1,15 +1,20 @@
-remove bicycle~designated and re-run where relevant (e.g. portland, chicago)
-zip result pickles
-profile code
-calculate efficiencies for carminusbike simplified graphs
-make most calculations with simplified graphs
-simulate random GT growth
+MUST
+calculate efficiencies for simplified graphs
+
+OPTIONAL
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 simulate random link growth?
+calculate efficiencies for carminusbike simplified graphs
 split up functions.py?
-implement pop density pois?
 existing analysis: union carall and biketrack for biketrackcarall?
+zip result pickles?
+profile code?
 
+DONE
+X clean up analysis plots
+X simulate random GT growth
+X implement pop density pois? <- no reliable data
+X remove bicycle~designated and re-run where relevant (e.g. portland, chicago)
 X use shapely simplify (dont use - covers become too imprecise)
 X external plot and results folder due to github size limites https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com
 X make test run of everything on a testcity

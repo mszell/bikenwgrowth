@@ -426,44 +426,7 @@ def constrict_overlaps(G_res, G_orig, factor = 5):
             pass
 
 
-def greedy_triangulation(GT, poipairs, prune_quantile = 1, prune_measure = "betweenness"):
-    """Greedy Triangulation (GT) of a graph GT with an empty edge set.
-    Distances between pairs of nodes are given by poipairs.
-    
-    The GT connects pairs of nodes in ascending order of their distance provided
-    that no edge crossing is introduced. It leads to a maximal connected planar
-    graph, while minimizing the total length of edges considered. 
-    See: cardillo2006spp
-    """
-    
-    for poipair, poipair_distance in poipairs:
-        poipair_ind = (GT.vs.find(id = poipair[0]).index, GT.vs.find(id = poipair[1]).index)
-        if not new_edge_intersects(GT, (GT.vs[poipair_ind[0]]["x"], GT.vs[poipair_ind[0]]["y"], GT.vs[poipair_ind[1]]["x"], GT.vs[poipair_ind[1]]["y"])):
-            GT.add_edge(poipair_ind[0], poipair_ind[1], weight = poipair_distance)
-            
-    # Get the measure for pruning
-    if prune_measure == "betweenness":
-        BW = GT.edge_betweenness(directed = False, weights = "weight")
-        qt = np.quantile(BW, 1-prune_quantile)
-        sub_edges = []
-        for c, e in enumerate(GT.es):
-            if BW[c] >= qt: 
-                sub_edges.append(c)
-            GT.es[c]["bw"] = BW[c]
-            GT.es[c]["width"] = math.sqrt(BW[c]+1)*0.5
-        # Prune
-        GT = GT.subgraph_edges(sub_edges)
-    elif prune_measure == "closeness":
-        CC = GT.closeness(vertices = None, weights = "weight")
-        qt = np.quantile(CC, 1-prune_quantile)
-        sub_nodes = []
-        for c, v in enumerate(GT.vs):
-            if CC[c] >= qt: 
-                sub_nodes.append(c)
-            GT.vs[c]["cc"] = CC[c]
-        GT = GT.induced_subgraph(sub_nodes)
-    
-    return GT
+
     
 
 def greedy_triangulation_routing_clusters(G, G_total, clusters, clusterinfo, prune_quantiles = [1], prune_measure = "betweenness", verbose = False, full_run = False):
@@ -656,6 +619,50 @@ def mst_routing(G, pois):
     return (MST, MST_abstract)
 
 
+
+def greedy_triangulation(GT, poipairs, prune_quantile = 1, prune_measure = "betweenness", edgeorder = False):
+    """Greedy Triangulation (GT) of a graph GT with an empty edge set.
+    Distances between pairs of nodes are given by poipairs.
+    
+    The GT connects pairs of nodes in ascending order of their distance provided
+    that no edge crossing is introduced. It leads to a maximal connected planar
+    graph, while minimizing the total length of edges considered. 
+    See: cardillo2006spp
+    """
+    
+    for poipair, poipair_distance in poipairs:
+        poipair_ind = (GT.vs.find(id = poipair[0]).index, GT.vs.find(id = poipair[1]).index)
+        if not new_edge_intersects(GT, (GT.vs[poipair_ind[0]]["x"], GT.vs[poipair_ind[0]]["y"], GT.vs[poipair_ind[1]]["x"], GT.vs[poipair_ind[1]]["y"])):
+            GT.add_edge(poipair_ind[0], poipair_ind[1], weight = poipair_distance)
+            
+    # Get the measure for pruning
+    if prune_measure == "betweenness":
+        BW = GT.edge_betweenness(directed = False, weights = "weight")
+        qt = np.quantile(BW, 1-prune_quantile)
+        sub_edges = []
+        for c, e in enumerate(GT.es):
+            if BW[c] >= qt: 
+                sub_edges.append(c)
+            GT.es[c]["bw"] = BW[c]
+            GT.es[c]["width"] = math.sqrt(BW[c]+1)*0.5
+        # Prune
+        GT = GT.subgraph_edges(sub_edges)
+    elif prune_measure == "closeness":
+        CC = GT.closeness(vertices = None, weights = "weight")
+        qt = np.quantile(CC, 1-prune_quantile)
+        sub_nodes = []
+        for c, v in enumerate(GT.vs):
+            if CC[c] >= qt: 
+                sub_nodes.append(c)
+            GT.vs[c]["cc"] = CC[c]
+        GT = GT.induced_subgraph(sub_nodes)
+    elif prune_measure == "random":
+        ind = np.quantile(np.arange(len(edgeorder)), prune_quantile, interpolation = "lower") + 1 # "lower" and + 1 so smallest quantile has at least one edge
+        GT = GT.subgraph_edges(edgeorder[:ind])
+    
+    return GT
+
+
 def greedy_triangulation_routing(G, pois, prune_quantiles = [1], prune_measure = "betweenness"):
     """Greedy Triangulation (GT) of a graph G's node subset pois,
     then routing to connect the GT (up to a quantile of betweenness
@@ -683,12 +690,25 @@ def greedy_triangulation_routing(G, pois, prune_quantiles = [1], prune_measure =
         
     poipairs = poipairs_by_distance(G, pois, True)
     if len(poipairs) == 0: return ([], [])
+
+    if prune_measure == "random":
+        # run the whole GT first
+        GT = copy.deepcopy(G_temp.subgraph(pois_indices))
+        for poipair, poipair_distance in poipairs:
+            poipair_ind = (GT.vs.find(id = poipair[0]).index, GT.vs.find(id = poipair[1]).index)
+            if not new_edge_intersects(GT, (GT.vs[poipair_ind[0]]["x"], GT.vs[poipair_ind[0]]["y"], GT.vs[poipair_ind[1]]["x"], GT.vs[poipair_ind[1]]["y"])):
+                GT.add_edge(poipair_ind[0], poipair_ind[1], weight = poipair_distance)
+        # create a random order for the edges
+        random.seed(0) # const seed for reproducibility
+        edgeorder = random.sample(range(GT.ecount()), k = GT.ecount())
+    else: 
+        edgeorder = False
     
     GT_abstracts = []
     GTs = []
     for prune_quantile in tqdm(prune_quantiles, desc = "Greedy triangulation", leave = False):
         GT_abstract = copy.deepcopy(G_temp.subgraph(pois_indices))
-        GT_abstract = greedy_triangulation(GT_abstract, poipairs, prune_quantile, prune_measure)
+        GT_abstract = greedy_triangulation(GT_abstract, poipairs, prune_quantile, prune_measure, edgeorder)
         GT_abstracts.append(GT_abstract)
         
         # Get node pairs we need to route, sorted by distance
@@ -1176,7 +1196,7 @@ def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
     frame = cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", images[0]))
     height, width, layers = frame.shape
 
-    video = cv2.VideoWriter(PATH["videos"] + placeid + imgname + '.avi', 0, 10, (width, height))
+    video = cv2.VideoWriter(PATH["videos"] + placeid + "/" + placeid + imgname + '.avi', 0, 10, (width, height))
 
     for image in images:
         video.write(cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", image)))

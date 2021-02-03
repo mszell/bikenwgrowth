@@ -28,6 +28,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import matplotlib
 from matplotlib.collections import PatchCollection
+from matplotlib.ticker import MaxNLocator
 
 # Geo
 import osmnx as ox
