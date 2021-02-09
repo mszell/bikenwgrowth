@@ -25,17 +25,23 @@ DONE
 03: prune_measure = "random", poi_source = "grid"
 04: prune_measure = "closeness", poi_source = "railwaystation"
 05: prune_measure = "closeness", poi_source = "grid"
+05: prune_measure = "closeness", poi_source = "railwaystation"
+07: prune_measure = "betweenness", poi_source = "railwaystation", all until Munich
+04: prune_measure = "random", poi_source = "railwaystation"
+05: prune_measure = "random", poi_source = "railwaystation"
+04: prune_measure = "random", poi_source = "grid"
 
 RUNNING
 
 
 TO DO
+07: prune_measure = "closeness", poi_source = "railwaystation", all until Munich
+07: prune_measure = "closeness", poi_source = "grid", all until Munich
+07: prune_measure = "random", poi_source = "railwaystation", all until Munich
+07: prune_measure = "random", poi_source = "grid", all until Munich
 07: grid pois
 05 (covers): prune_measure = "betweenness", poi_source = "grid"
-05: prune_measure = "closeness", poi_source = "railwaystation"
-+random models
 +custom models (hierarchy, artificial grid?)
 portland all redo
-04: prune_measure = "random", poi_source = "railwaystation"
-04: prune_measure = "random", poi_source = "grid"
+05: prune_measure = "random", poi_source = "grid"
 06: prune_measure = "closeness"
