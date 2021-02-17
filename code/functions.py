@@ -988,6 +988,21 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, calcmetrics = {"length":0,
             if "efficiency_local" in calcmetrics:
                 output["efficiency_local"] = calculate_efficiency_local(GT_abstract, numnodepairs) 
         
+        # EFFICIENCY ROUTED
+        if verbose and ("efficiency_global_routed" in calcmetrics or "efficiency_local_routed" in calcmetrics): print("Calculating efficiency (routed)...")
+        if "efficiency_global_routed" in calcmetrics:
+            try:
+                output["efficiency_global_routed"] = calculate_efficiency_global(simplify_ig(G), numnodepairs)
+            except:
+                print("Problem with efficiency_global_routed.") # This try is needed for some pathological cases, for example loops generating empty graphs (only happened in Zurich, railwaystation/closeness)
+                pass
+        if "efficiency_local_routed" in calcmetrics:
+            try:
+                output["efficiency_local_routed"] = calculate_efficiency_local(simplify_ig(G), numnodepairs)
+            except:
+                print("Problem with efficiency_local_routed.") # This try is needed for some pathological cases, for example loops generating empty graphs (only happened in Zurich, railwaystation/closeness)
+                pass
+
         # LENGTH
         if verbose and ("length" in calcmetrics or "length_lcc" in calcmetrics): print("Calculating length...")
         if "length" in calcmetrics:
@@ -1101,13 +1116,7 @@ def intersect_igraphs(G1, G2):
     return G_inter
 
 
-def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True, Gexisting = {}):
-    """Calculates all metrics, additively. 
-    Coverage differences are calculated in every step instead of the whole coverage.
-    """
-
-    # BICYCLE NETWORKS
-    output = {
+def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True, Gexisting = {}, output = {
             "length":[],
             "length_lcc":[],
             "coverage": [],
@@ -1119,7 +1128,12 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
             "overlap_bikeable": [],
             "efficiency_global": [],
             "efficiency_local": []
-            }
+            }):
+    """Calculates all metrics, additively. 
+    Coverage differences are calculated in every step instead of the whole coverage.
+    """
+
+    # BICYCLE NETWORKS
     covs = {} # covers using buffer_walk
     cov_prev = Polygon()
     GT_prev = ig.Graph()

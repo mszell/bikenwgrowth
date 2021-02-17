@@ -1,7 +1,7 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "railwaystation" # railwaystation, grid
-prune_measure = "random" # betweenness, closeness, random
+poi_source = "grid" # railwaystation, grid
+prune_measure = "closeness" # betweenness, closeness, random
 
 
 

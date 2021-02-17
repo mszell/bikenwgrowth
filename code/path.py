@@ -9,4 +9,4 @@ PATH["exports"] = "../../bikenwgrowth_external/exports/"
 PATH["exports_json"] = "../../bikenwgrowth_external/exports_json/"
 PATH["logs"] = "../../bikenwgrowth_external/logs/"
 
-print("Loaded PATH")
+print("Loaded PATH.\n")
