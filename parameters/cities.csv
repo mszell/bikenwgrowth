@@ -1,2 +1,2 @@
-placeid;nominatimstring;countryid
-london;greater london;gbr
+placeid;nominatimstring;countryid;name
+copenhagen;;dnk;Copenhagen

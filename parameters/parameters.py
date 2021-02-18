@@ -1,7 +1,7 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "grid" # railwaystation, grid
-prune_measure = "closeness" # betweenness, closeness, random
+poi_source = "railwaystation" # railwaystation, grid
+prune_measure = "betweenness" # betweenness, closeness, random
 
 
 
@@ -45,9 +45,9 @@ plotparam = {"bbox": (1280,1280),
 
 plotparam_analysis = {
 			"bikegrown": {"linewidth": 3.75, "color": '#0eb6d2', "linestyle": "solid", "label": "Grown"},
-			"bikegrown_abstract": {"linewidth": 3.75, "color": '#000000', "linestyle": "solid", "label": "Grown (abstract)", "alpha": 0.75},
+			"bikegrown_abstract": {"linewidth": 3.75, "color": '#000000', "linestyle": "solid", "label": "Grown (unrouted)", "alpha": 0.75},
 			"mst": {"linewidth": 2, "color": '#0eb6d2', "linestyle": "dashed", "label": "MST"},
-			"mst_abstract": {"linewidth": 2, "color": '#000000', "linestyle": "dashed", "label": "MST (abstract)", "alpha": 0.75},
+			"mst_abstract": {"linewidth": 2, "color": '#000000', "linestyle": "dashed", "label": "MST (unrouted)", "alpha": 0.75},
 			"biketrack": {"linewidth": 1, "color": '#2222ff', "linestyle": "solid", "label": "Protected"},
 			"bikeable": {"linewidth": 1, "color": '#222222', "linestyle": "dashed", "label": "Bikeable"}
 			}

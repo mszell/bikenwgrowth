@@ -39,7 +39,7 @@ RUNNING
 
 
 TO DO
-05: prune_measure = "random", poi_source = "grid"
+05: from cologne: prune_measure = "random", poi_source = "grid"
 07: prune_measure = "closeness", poi_source = "railwaystation", all until Munich
 07: prune_measure = "closeness", poi_source = "grid", all until Munich
 07: prune_measure = "random", poi_source = "railwaystation", all until Munich
