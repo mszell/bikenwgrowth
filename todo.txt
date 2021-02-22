@@ -1,7 +1,9 @@
 MUST
-calculate efficiencies for simplified graphs
+check GT chicago: lat lon mixed up for length calculations?!
+plots: for each city: length ratio of grown/existing versus ratio of metric (efficiency)
 
 OPTIONAL
+make visual distinction between covered and reached pois in cover plots
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 simulate random link growth?
 calculate efficiencies for carminusbike simplified graphs
@@ -11,6 +13,7 @@ zip result pickles?
 profile code?
 
 DONE
+X calculate efficiencies for simplified graphs
 X clean up analysis plots
 X simulate random GT growth
 X implement pop density pois? <- no reliable data
