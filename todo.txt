@@ -1,4 +1,6 @@
 MUST
+check GT chicago: lat lon mixed up for length calculations?!
+plots: for each city: length ratio of grown/existing versus ratio of metric (efficiency)
 
 OPTIONAL
 make visual distinction between covered and reached pois in cover plots

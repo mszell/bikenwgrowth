@@ -79,6 +79,17 @@ def hole_to_patch(hole, map_center):
     return matplotlib.patches.Polygon(pos_transformed)
 
 
+def set_analysissubplot(key):
+    ax.set_xlim(0, 1)
+    ax.set_xticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+    if key in ["length", "length_lcc", "coverage", "poi_coverage", "overlap_bikeable", "overlap_biketrack", "components", "efficiency_local", "efficiency_global"]:
+        ax.set_ylim(bottom = 0)
+    if key in ["directness_lcc"]:
+        ax.set_ylim(bottom = 0.2)
+    if key in ["directness_lcc", "efficiency_global", "efficiency_local"]:
+        ax.set_ylim(top = 1)
+
+
 def initplot():
     fig = plt.figure(figsize=(plotparam["bbox"][0]/plotparam["dpi"], plotparam["bbox"][1]/plotparam["dpi"]), dpi=plotparam["dpi"])
     plt.axes().set_aspect('equal')
