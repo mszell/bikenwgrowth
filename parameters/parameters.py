@@ -1,6 +1,6 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "railwaystation" # railwaystation, grid
+poi_source = "grid" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness, random
 
 
@@ -84,6 +84,5 @@ osmnxparameters = {'car30': {'network_type':'drive', 'custom_filter':'["maxspeed
 
 # 02
 snapthreshold = 500 # in m, tolerance for snapping POIs to network
-consolidatethreshold = 15  # in m, tolerance for consolidating intersections
 
 print("Loaded parameters.\n")
