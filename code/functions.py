@@ -206,10 +206,13 @@ def mirror_y(G):
         y = G.vs[v.index]["y"]
         G.vs[v.index]["y"] = -y
     
-def dist(v1,v2):
-    dist = haversine((v1['x'],v1['y']),(v2['x'],v2['y']))
+def dist(v1, v2):
+    dist = haversine((v1['y'],v1['x']),(v2['y'],v2['x']), unit="m") # x is lon, y is lat
     return dist
 
+def dist_vector(v1_list, v2_list):
+    dist_list = haversine_vector(v1_list, v2_list, unit="m") # [(lat,lon)], [(lat,lon)]
+    return dist_list
 
 def osm_to_ig(node, edge):
     """ Turns a node and edge dataframe into an igraph Graph.
@@ -230,20 +233,22 @@ def osm_to_ig(node, edge):
     coords_dict = dict(zip(np.arange(0, G.vcount()).tolist(), coords))
 
     edge_list = []
+    edge_info = {}
+    edge_info["weight"] = []
+    edge_info["osmid"] = []
     for i in range(len(edge)):
         edge_list.append([id_dict.get(edge['u'][i]), id_dict.get(edge['v'][i])])
-        
-    G.add_edges(edge_list)
-    G.simplify()
-    new_edges = G.get_edgelist()
-    
-    distances_list = []
-    for i in range(len(new_edges)):
-        distances_list.append(haversine(coords_dict.get(new_edges[i][0]), coords_dict.get(new_edges[i][1])))
+        edge_info["weight"].append(round(edge['length'][i], 10))
+        edge_info["osmid"].append(edge['osmid'][i])
 
-    G.es()['weight'] = distances_list
-    
+    G.add_edges(edge_list) # attributes = edge_info doesn't work although it should: https://igraph.org/python/doc/igraph.Graph-class.html#add_edges
+    for i in range(len(edge)):
+        G.es[i]["weight"] = edge_info["weight"][i]
+        G.es[i]["osmid"] = edge_info["osmid"][i]
+
+    G.simplify(combine_edges=max)
     return G
+
 
 def compress_file(p, f, filetype = ".csv", delete_uncompressed = True):
     with zipfile.ZipFile(p + f + ".zip", 'w', zipfile.ZIP_DEFLATED) as zfile:
@@ -290,9 +295,9 @@ def check_extract_zip(p, prefix):
 
 def csv_to_ox(p, placeid, parameterid):
     """ Load a networkx graph from _edges.csv and _nodes.csv
-    The edge file must have attributes u,v,osmid
+    The edge file must have attributes u,v,osmid,length
     The node file must have attributes y,x,osmid
-    Only these attributes are loaded, and edge lengths are calculated.
+    Only these attributes are loaded.
     """
     prefix = placeid + '_' + parameterid
     compress = check_extract_zip(p, prefix)
@@ -304,9 +309,10 @@ def csv_to_ox(p, placeid, parameterid):
         for line in csv.reader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
             line_list = [c for c in line]
             osmid = str(eval(line_list[header.index("osmid")])[0]) if isinstance(eval(line_list[header.index("osmid")]), list) else line_list[header.index("osmid")] # If this is a list due to multiedges, just load the first osmid
-            line_string = "" + line_list[header.index("u")] + " "+ line_list[header.index("v")] + " " + osmid
+            length = str(eval(line_list[header.index("length")])[0]) if isinstance(eval(line_list[header.index("length")]), list) else line_list[header.index("length")] # If this is a list due to multiedges, just load the first osmid
+            line_string = "" + line_list[header.index("u")] + " "+ line_list[header.index("v")] + " " + osmid + " " + length
             lines.append(line_string)
-        G = nx.parse_edgelist(lines, nodetype = int, data = (("osmid", int),), create_using = nx.MultiDiGraph) # MultiDiGraph is necessary for OSMNX, for example for get_undirected(G) in utils_graph.py
+        G = nx.parse_edgelist(lines, nodetype = int, data = (("osmid", int),("length", float)), create_using = nx.MultiDiGraph) # MultiDiGraph is necessary for OSMNX, for example for get_undirected(G) in utils_graph.py
     with open(p + prefix + '_nodes.csv', 'r') as f:
         header = f.readline().strip().split(",")
         values_x = {}
@@ -320,17 +326,18 @@ def csv_to_ox(p, placeid, parameterid):
         nx.set_node_attributes(G, values_x, "x")
         nx.set_node_attributes(G, values_y, "y")
 
-    edge_lengths = {}
-    for e in G.edges(keys=True):
-        edge_lengths[e] = haversine((values_x[e[0]], values_y[e[0]]), (values_x[e[1]], values_y[e[1]]))
-    nx.set_edge_attributes(G, edge_lengths, "length")
-
     if compress:
         os.remove(p + prefix + '_nodes.csv')
         os.remove(p + prefix + '_edges.csv')
     return G
 
+
 def csv_to_ig(p, placeid, parameterid):
+    """ Load an ig graph from _edges.csv and _nodes.csv
+    The edge file must have attributes u,v,osmid,length
+    The node file must have attributes y,x,osmid
+    Only these attributes are loaded.
+    """
     prefix = placeid + '_' + parameterid
     compress = check_extract_zip(p, prefix)
     empty = False
@@ -348,6 +355,7 @@ def csv_to_ig(p, placeid, parameterid):
     round_coordinates(G)
     mirror_y(G)
     return G
+
 
 def ig_to_geojson(G):
     linestring_list = []
@@ -830,11 +838,11 @@ def calculate_directness(G, numnodepairs = 500):
     poi_edges = []
     v1 = []
     v2 = []
-    total_distance_haversine = 0
+    total_distance_direct = 0
     for c, v in enumerate(indices):
         poi_edges.append(G.get_shortest_paths(v, indices[c:], weights = "weight", output = "epath"))
         temp = G.get_shortest_paths(v, indices[c:], weights = "weight", output = "vpath")
-        total_distance_haversine += sum(haversine_vector([(G.vs[t[0]]["x"], G.vs[t[0]]["y"]) for t in temp], [(G.vs[t[-1]]["x"], G.vs[t[-1]]["y"]) for t in temp]))
+        total_distance_direct += sum(dist_vector([(G.vs[t[0]]["y"], G.vs[t[0]]["x"]) for t in temp], [(G.vs[t[-1]]["y"], G.vs[t[-1]]["x"]) for t in temp])) # must be in format lat,lon = y, x
     
     total_distance_network = 0
     for paths_e in poi_edges:
@@ -842,14 +850,14 @@ def calculate_directness(G, numnodepairs = 500):
             # Sum up distances of path segments from first to last node
             total_distance_network += sum([G.es[e]['weight'] for e in path_e])
     
-    return total_distance_haversine / total_distance_network
+    return total_distance_direct / total_distance_network
 
 
 def listmean(lst): 
     try: return sum(lst) / len(lst)
     except: return 0
 
-def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False, G_prev = ig.Graph(), cov_prev = Polygon()):
+def calculate_coverage_edges(G, buffer_m = 500, return_cov = False, G_prev = ig.Graph(), cov_prev = Polygon()):
     """Calculates the area and shape covered by the graph's edges.
     If G_prev and cov_prev are given, only the difference between G and G_prev are calculated, then added to cov_prev.
     """
@@ -875,7 +883,7 @@ def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False, G_prev = ig
     for c, t in enumerate(edgetuples):
         # if cov.geom_type == 'MultiPolygon' and c % 1000 == 0: print(str(c)+"/"+str(len(edgetuples)), sum([len(pol.exterior.coords) for pol in cov]))
         # elif cov.geom_type == 'Polygon' and c % 1000 == 0: print(str(c)+"/"+str(len(edgetuples)), len(pol.exterior.coords))
-        buf = ops.transform(aeqd_to_wgs84.transform, ops.transform(wgs84_to_aeqd.transform, LineString(t)).buffer(buffer_km * 1000))
+        buf = ops.transform(aeqd_to_wgs84.transform, ops.transform(wgs84_to_aeqd.transform, LineString(t)).buffer(buffer_m))
         cov_added = ops.unary_union([cov_added, Polygon(buf)])
 
     # Merge with cov_prev
@@ -885,7 +893,7 @@ def calculate_coverage_edges(G, buffer_km = 0.5, return_cov = False, G_prev = ig
         cov = cov_prev
 
     cov_transformed = ops.transform(wgs84_to_aeqd.transform, cov)
-    covered_area = cov_transformed.area / 1000000
+    covered_area = cov_transformed.area / 1000000 # turn from m2 to km2
 
     if return_cov:
         return (covered_area, cov)
@@ -927,8 +935,8 @@ def calculate_efficiency_global(G, numnodepairs = 500, normalized = True):
     if not normalized: return EG
     pairs = list(itertools.permutations(nodeindices, 2))
     if len(pairs) < 1: return 0
-    l_ij = haversine_vector([(G.vs[p[0]]["x"], G.vs[p[0]]["y"]) for p in pairs],
-                            [(G.vs[p[1]]["x"], G.vs[p[1]]["y"]) for p in pairs])
+    l_ij = dist_vector([(G.vs[p[0]]["y"], G.vs[p[0]]["x"]) for p in pairs],
+                            [(G.vs[p[1]]["y"], G.vs[p[1]]["x"]) for p in pairs]) # must be in format lat,lon = y,x
     EG_id = sum([1/l for l in l_ij if l != 0])
     # if (EG / EG_id) > 1: # This should not be allowed to happen!
     #     pp.pprint(d_ij)
@@ -1028,7 +1036,7 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, calcmetrics = {"length":0,
         if "coverage" in calcmetrics:
             if verbose: print("Calculating coverage...")
             # G_added = G.difference(G_prev) # This doesnt work
-            covered_area, cov = calculate_coverage_edges(G, buffer_walk/1000, return_cov, G_prev, cov_prev)
+            covered_area, cov = calculate_coverage_edges(G, buffer_walk, return_cov, G_prev, cov_prev)
             output["coverage"] = covered_area
             # OVERLAP WITH EXISTING NETS
             if Gexisting:
@@ -1138,7 +1146,9 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
             "overlap_biketrack": [],
             "overlap_bikeable": [],
             "efficiency_global": [],
-            "efficiency_local": []
+            "efficiency_local": [],
+            "efficiency_global_routed": [],
+            "efficiency_local_routed": []            
             }):
     """Calculates all metrics, additively. 
     Coverage differences are calculated in every step instead of the whole coverage.

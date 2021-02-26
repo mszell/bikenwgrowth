@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#SBATCH --job-name=bikenwgrowth_downloads        # Job name
+#SBATCH --output=outs/job.%j.out      # Name of output file (%j expands to jobId)
+#SBATCH --error=outs/job.%j.err
+#SBATCH --exclusive
+#SBATCH --cpus-per-task=1        # Schedule one core
+#SBATCH --time=12:00:00          # Run time (hh:mm:ss) - run for one hour max
+#SBATCH --partition=red    # Run on either the Red or Brown queue
+
+module load Anaconda3
+. $(conda info --base)/etc/profile.d/conda.sh
+conda activate OSMNX
+
+~/.conda/envs/OSMNX/bin/python downloadloop.py

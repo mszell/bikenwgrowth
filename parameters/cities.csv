@@ -2,6 +2,7 @@ placeid;nominatimstring;countryid;name
 santiago;Santiago, Provincia de Santiago, Santiago Metropolitan Region, Chile;chl;Santiago Centro
 bath;bath;gbr;Bath
 delft;delft;nld;Delft
+lyon;lyon;fra;Lyon
 manhattan;manhattan;usa;Manhattan
 telaviv;tel aviv;isr;Tel Aviv
 bern;bern;che;Bern
@@ -22,6 +23,7 @@ shahalam;shah alam;mys;Shah Alam
 glasgow;glasgow city;gbr;Glasgow
 mumbai;mumbai;ind;Mumbai
 milan;milan;ita;Milan
+montreal;montreal (06);can;Montreal
 paris;Paris, France;fra;Paris
 barcelona;Barcelona, Barcelonès, Barcelona, Catalonia, 08001, Spain;esp;Barcelona
 detroit;detroit;usa;Detroit
@@ -40,7 +42,9 @@ budapest;Budapest, Hungary;hun;Budapest
 cologne;cologne;ger;Cologne
 singapore;singapore;sgp;Singapore
 vienna;vienna, austria;aut;Vienna
+warsaw;warsaw;pol;Warsaw
 moscow;moscow;rus;Moscow
+toronto;toronto;can;Toronto
 munich;munich;ger;Munich
 bogota;bogota, colombia;col;Bogota
 helsinki;helsinki;fin;Helsinki

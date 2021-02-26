@@ -1,61 +1,63 @@
-placeid;nominatimstring;countryid
-oslo;oslo;nor
-bath;bath;gbr
-london;greater london;gbr
-manhattan;manhattan;usa
-bogota;bogota, colombia;col
-budapest;Budapest, Hungary;hun
-paris;Paris, France;fra
-vienna;vienna, austria;aut
-amsterdam;amsterdam;nld
-barcelona;Barcelona, Barcelonès, Barcelona, Catalonia, 08001, Spain;esp
-detroit;detroit;usa
-jakarta;jakarta;idn
-phoenix;Phoenix, Maricopa County, Arizona, United States of America;usa
-portland;Portland, Multnomah County, Oregon, United States of America;usa
-singapore;singapore;sgp
-berlin;Berlin, Germany;deu
-boston;Boston;usa
-mumbai;mumbai;ind
-karachi;karachi;pak
-chicago;chicago;usa
-helsinki;helsinki;fin
-hongkong;Hong Kong Special Administrative Region;hkg
-moscow;moscow;rus
-rome;Rome, Roma Capitale, Italy;ita
-sanfrancisco;san francisco;usa
-stuttgart;stuttgart;deu
-tokyo;tokyo;jpn
-milan;milan;ita
-turin;turin;ita
-telaviv;tel aviv;isr
-marrakesh;marrakesh;mar
-rabat;rabat;mar
-kathmandu;kathmandu;npl
-shahalam;shah alam;mys
-saopaulo;sao paolo;bra
-santiago;Santiago, Provincia de Santiago, Santiago Metropolitan Region, Chile;chl
-buenosaires;buenos aires;arg
-luanda;luanda;ago
-ulaanbaatar;ulaanbaatar;mng
-tashkent;tashkent;uzb
-mexico;mexico city;mex
-hamburg;hamburg;ger
-houston;houston;usa
-losangeles;los angeles;usa
-phoenix;phoenix;usa
-philadelphia;philadelphia;usa
-birmingham;birmingham;gbr
-leeds;leeds;gbr
-glasgow;glasgow city;gbr
-sheffield;sheffield;gbr
-bradford;bradford;gbr
-manchestergreater;greater manchester;gbr
-edinburgh;city of edinburgh;gbr
-cologne;cologne;ger
-munich;munich;ger
-bern;bern;che
-zurich;zurich;che
-malmo;malmo;swe
-delft;delft;nld
-copenhagen;;dnk
+placeid;nominatimstring;countryid;name
+santiago;Santiago, Provincia de Santiago, Santiago Metropolitan Region, Chile;chl;Santiago Centro
+bath;bath;gbr;Bath
+delft;delft;nld;Delft
+lyon;lyon;fra;Lyon
+manhattan;manhattan;usa;Manhattan
+telaviv;tel aviv;isr;Tel Aviv
+bern;bern;che;Bern
+kathmandu;kathmandu;npl;Kathmandu
+rabat;rabat;mar;Rabat
+malmo;malmo;swe;Malmo
+luanda;luanda;ago;Luanda
+turin;turin;ita;Turin
+copenhagen;;dnk;Copenhagen
+zurich;zurich;che;Zurich
+buenosaires;buenos aires;arg;Buenos Aires
+marrakesh;marrakesh;mar;Marrakesh
+sanfrancisco;san francisco;usa;San Francisco
+tashkent;tashkent;uzb;Tashkent
+bradford;bradford;gbr;Bradford
+boston;Boston;usa;Boston
+shahalam;shah alam;mys;Shah Alam
+glasgow;glasgow city;gbr;Glasgow
+mumbai;mumbai;ind;Mumbai
+milan;milan;ita;Milan
+montreal;montreal (06);can;Montreal
+paris;Paris, France;fra;Paris
+barcelona;Barcelona, Barcelonès, Barcelona, Catalonia, 08001, Spain;esp;Barcelona
+detroit;detroit;usa;Detroit
+sheffield;sheffield;gbr;Sheffield
+stuttgart;stuttgart;deu;Stuttgart
+philadelphia;philadelphia;usa;Philadelphia
+amsterdam;amsterdam;nld;Amsterdam
+ulaanbaatar;ulaanbaatar;mng;Ulan Baatar
+birmingham;birmingham;gbr;Birmingham
+oslo;oslo;nor;Oslo
+leeds;leeds;gbr;Leeds
+edinburgh;city of edinburgh;gbr;Edinburgh
+chicago;chicago;usa;Chicago
+hongkong;Hong Kong Special Administrative Region;hkg;Hong Kong
+budapest;Budapest, Hungary;hun;Budapest
+cologne;cologne;ger;Cologne
+singapore;singapore;sgp;Singapore
+vienna;vienna, austria;aut;Vienna
+warsaw;warsaw;pol;Warsaw
+moscow;moscow;rus;Moscow
+toronto;toronto;can;Toronto
+munich;munich;ger;Munich
+bogota;bogota, colombia;col;Bogota
+helsinki;helsinki;fin;Helsinki
+rome;Rome, Roma Capitale, Italy;ita;Rome
+phoenix;phoenix;usa;Phoenix
+hamburg;hamburg;ger;Hamburg
+houston;houston;usa;Houston
+berlin;Berlin, Germany;deu;Berlin
+losangeles;los angeles;usa;Los Angeles
+mexico;mexico city;mex;Mexico City
+karachi;karachi;pak;Karachi
+manchestergreater;greater manchester;gbr;Greater Manchester
+jakarta;jakarta;idn;Jakarta
+saopaulo;sao paolo;bra;Sao Paolo
+tokyo;tokyo;jpn;Tokyo
+london;greater london;gbr;London
