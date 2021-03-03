@@ -17,7 +17,7 @@ Run Jupyter Notebook with kernel OSMNX (Kernel > Change Kernel > OSMNX)
 1. Populate `parameters/cities.csv` 
 2. Run 01 and 02 once locally to download and prepare all networks and POIs (The alternative is server-side `sbatch scripts/download.job`, but OSMNX throws too many connection issues, so manual supervision is needed)
 3. Upload `code/*.py`, `parameters/*`, `scripts/*`
-3. `sbatch scripts/array.job` 
+4. Run: `./mastersbatch.sh`
 
 ## Running the code locally
 1. Populate `parameters/cities.csv` 
