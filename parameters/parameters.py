@@ -3,7 +3,7 @@
 poi_source = "grid" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness, random
 
-
+SERVER = True # Whether the code runs on the server (important so parallel jobs don't interfere)
 
 
 # SEMI-CONSTANTS

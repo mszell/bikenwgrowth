@@ -332,7 +332,7 @@ def csv_to_ox(p, placeid, parameterid):
     return G
 
 
-def csv_to_ig(p, placeid, parameterid):
+def csv_to_ig(p, placeid, parameterid, cleanup = True):
     """ Load an ig graph from _edges.csv and _nodes.csv
     The edge file must have attributes u,v,osmid,length
     The node file must have attributes y,x,osmid
@@ -346,7 +346,7 @@ def csv_to_ig(p, placeid, parameterid):
         e = pd.read_csv(p + prefix + '_edges.csv')
     except:
         empty = True
-    if compress:
+    if compress and cleanup and not SERVER: # do not clean up on the server as csv is needed in parallel jobs
         os.remove(p + prefix + '_nodes.csv')
         os.remove(p + prefix + '_edges.csv')
     if empty:
