@@ -1,14 +1,15 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "grid" # railwaystation, grid
+poi_source = "railwaystation" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness, random
 
-SERVER = True # Whether the code runs on the server (important so parallel jobs don't interfere)
+SERVER = False # Whether the code runs on the server (important so parallel jobs don't interfere)
 
 
 # SEMI-CONSTANTS
 # These values should not be changed, unless the analysis shows we need to
 
+smallcitythreshold = 46 # cities smaller or equal than this rank in the city list will be treated as "small" and get full calculations
 prune_measures = {"betweenness": "Bq", "closeness": "Cq", "random": "Rq"}
 prune_quantiles = [x/40 for x in list(range(1, 41))] # The quantiles where the GT should be pruned using the prune_measure
 networktypes = ["biketrack", "carall", "bikeable", "biketrackcarall", "biketrack_onstreet", "bikeable_offstreet"] # Existing infrastructures to analyze

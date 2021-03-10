@@ -1,5 +1,4 @@
 # Algorithmic bicycle network design
-#### Michael Szell, Tyler Perlman, Sayat Mimar, Gourab Ghoshal, Roberta Sinatra
 
 ## Setting up code environment
 ```
@@ -17,7 +16,9 @@ Run Jupyter Notebook with kernel OSMNX (Kernel > Change Kernel > OSMNX)
 1. Populate `parameters/cities.csv` 
 2. Run 01 and 02 once locally to download and prepare all networks and POIs (The alternative is server-side `sbatch scripts/download.job`, but OSMNX throws too many connection issues, so manual supervision is needed)
 3. Upload `code/*.py`, `parameters/*`, `scripts/*`
-4. Run: `./mastersbatch.sh`
+4. Run: `./mastersbatch_analysis.sh`
+5. Run, if needed: `./mastersbatch_export.sh`
+5. Run: `./cleanup.sh`
 
 ## Running the code locally
 1. Populate `parameters/cities.csv` 

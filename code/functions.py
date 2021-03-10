@@ -1231,7 +1231,9 @@ def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
     frame = cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", images[0]))
     height, width, layers = frame.shape
 
-    video = cv2.VideoWriter(PATH["videos"] + placeid + "/" + placeid + imgname + '.avi', 0, 10, (width, height))
+    # https://www.pyimagesearch.com/2016/02/22/writing-to-video-with-opencv/#comment-390650
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video = cv2.VideoWriter(PATH["videos"] + placeid + "/" + placeid + imgname + '.mp4', fourcc, 10, (width, height))
 
     for image in images:
         video.write(cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", image)))
@@ -1242,7 +1244,7 @@ def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
     cv2.destroyAllWindows()
     video.release()
     if verbose:
-        print("Video " + placeid + imgname + '.avi generated from ' + str(len(images)) + " frames.")
+        print("Video " + placeid + imgname + '.mp4 generated from ' + str(len(images)) + " frames.")
 
 
 

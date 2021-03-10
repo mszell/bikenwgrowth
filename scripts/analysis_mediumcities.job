@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#SBATCH --job-name=bikenwgrowth        # Job name
+#SBATCH --array=32-58              # the array iterates through the cities, running all parameter sets
+#SBATCH --output=outs/job.%j.out      # Name of output file (%j expands to jobId)
+#SBATCH --error=outs/job.%j.err
+#SBATCH --mem=80000
+#SBATCH --cpus-per-task=1        # Schedule one core
+#SBATCH --time=71:59:00          # Run time (hh:mm:ss)
+#SBATCH --partition=red    # Run on the Red queue
+#SBATCH --mail-type=FAIL,END     # Send an email when job fails or finishes
+
+module load Anaconda3
+. $(conda info --base)/etc/profile.d/conda.sh
+conda activate OSMNX
+
+~/.conda/envs/OSMNX/bin/python analysisloop.py $SLURM_ARRAY_TASK_ID
