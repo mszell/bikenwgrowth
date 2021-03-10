@@ -1,5 +1,4 @@
 # Algorithmic bicycle network design
-#### Michael Szell, Tyler Perlman, Sayat Mimar, Gourab Ghoshal, Roberta Sinatra
 
 ## Setting up code environment
 ```
