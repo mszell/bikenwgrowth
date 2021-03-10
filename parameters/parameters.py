@@ -1,7 +1,7 @@
 # PARAMETERS
 # These are values to loop through for different runs
 poi_source = "railwaystation" # railwaystation, grid
-prune_measure = "closeness" # betweenness, closeness, random
+prune_measure = "betweenness" # betweenness, closeness, random
 
 SERVER = False # Whether the code runs on the server (important so parallel jobs don't interfere)
 
