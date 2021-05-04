@@ -1,7 +1,9 @@
 MUST
-plots: for each city: length ratio of grown/existing versus ratio of metric (efficiency)
+fix: analysisplots: pois covered railwaystation not grid
+make coverage + lcchighlight plot for paper (milan?, london?, moscow?)
 
 OPTIONAL
+measure gt-abstract avg degree growth
 make visual distinction between covered and reached pois in cover plots
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 simulate random link growth?
@@ -11,6 +13,7 @@ zip result pickles?
 profile code?
 
 DONE
+X plots: for each city: length ratio of grown/existing versus ratio of metric (efficiency)
 X calculate efficiencies for carminusbike simplified graphs - sayat
 X check+fix GT chicago: lat lon mixed up for length calculations?!
 X calculate efficiencies for simplified graphs

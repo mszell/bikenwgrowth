@@ -943,8 +943,8 @@ def calculate_efficiency_global(G, numnodepairs = 500, normalized = True):
     #     pp.pprint(l_ij)
     #     pp.pprint([e for e in G.es])
     #     print(pairs)
-    #     print([(G.vs[p[0]]["x"], G.vs[p[0]]["y"]) for p in pairs],
-    #                         [(G.vs[p[1]]["x"], G.vs[p[1]]["y"]) for p in pairs])
+    #     print([(G.vs[p[0]]["y"], G.vs[p[0]]["x"]) for p in pairs],
+    #                         [(G.vs[p[1]]["y"], G.vs[p[1]]["x"]) for p in pairs]) # must be in format lat,lon = y,x
     #     print(EG, EG_id)
     #     sys.exit()
     # assert EG / EG_id <= 1, "Normalized EG > 1. This should not be possible."

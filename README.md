@@ -12,19 +12,23 @@ python -m ipykernel install --user --name=OSMNX
 ```
 Run Jupyter Notebook with kernel OSMNX (Kernel > Change Kernel > OSMNX)
 
-## Running the code on cluster (using SLURM)
-1. Populate `parameters/cities.csv` 
+## Running the code on an HPC cluster with SLURM
+For multiple, esp. large, cities, running the code on a high performance computing cluster is strongly suggested as the tasks are easy to paralellize. The shell scripts are written for [SLURM](https://slurm.schedmd.com/overview.html).  
+
+1. Populate `parameters/cities.csv`, see below.
 2. Run 01 and 02 once locally to download and prepare all networks and POIs (The alternative is server-side `sbatch scripts/download.job`, but OSMNX throws too many connection issues, so manual supervision is needed)
 3. Upload `code/*.py`, `parameters/*`, `scripts/*`
 4. Run: `./mastersbatch_analysis.sh`
 5. Run, if needed: `./mastersbatch_export.sh`
-5. Run: `./cleanup.sh`
+6. After all is finished, run: `./cleanup.sh`
 
 ## Running the code locally
-1. Populate `parameters/cities.csv` 
+Single (or few/small) cities could be run locally but require manual, step-by-step execution of Jupyter notebooks:
+
+1. Populate `parameters/cities.csv`, see below.
 2. Run 01 and 02 once to download and prepare all networks and POIs  
 3. Run 03,04,05 for each parameter set (see below), set in `parameters/parameters.py`  
-4. Run 06 for selected cities
+4. Run 06 or other steps as needed.
 
 ### Parameter sets 
 1. `prune_measure = "betweenness"`, `poi_source =  "railwaystation"`  
@@ -33,3 +37,13 @@ Run Jupyter Notebook with kernel OSMNX (Kernel > Change Kernel > OSMNX)
 4. `prune_measure = "closeness"`, `poi_source =  "grid"`  
 5. `prune_measure = "random"`, `poi_source =  "railwaystation"`  
 6. `prune_measure = "random"`, `poi_source =  "grid"` 
+
+## Populating cities.csv
+### Checking nominatimstring  
+* Go to e.g. [https://nominatim.openstreetmap.org/search.php?q=paris%2C+france&polygon_geojson=1&viewbox=](https://nominatim.openstreetmap.org/search.php?q=paris%2C+france&polygon_geojson=1&viewbox=) and enter the search string. If a correct polygon (or multipolygon) pops up it should be fine. If not leave the field empty and acquire a shape file, see below.
+
+### Acquiring shape file  
+* Go to [Overpass](overpass-turbo.eu), to the city, and run:
+    `relation["boundary"="administrative"]["name:en"="Copenhagen Municipality"]({{bbox}});(._;>;);out skel;`
+* Export: Download as GPX
+* Use QGIS to create a polygon, with Vector > Join Multiple Lines, and Processing Toolbox > Polygonize (see [Stackexchange answer 1](https://gis.stackexchange.com/questions/98320/connecting-two-line-ends-in-qgis-without-resorting-to-other-software) and [Stackexchange answer 2](https://gis.stackexchange.com/questions/207463/convert-a-line-to-polygon))

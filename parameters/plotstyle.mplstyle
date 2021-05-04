@@ -1,0 +1,19 @@
+axes.titlesize : 9
+axes.labelsize : 8
+xtick.labelsize : 7
+ytick.labelsize : 7
+legend.fontsize :7
+axes.linewidth : 0.5
+xtick.major.width : 0.5
+xtick.minor.width : 0.5
+ytick.major.width : 0.5
+ytick.minor.width : 0.5
+legend.fancybox : False
+boxplot.flierprops.linewidth: 0.5
+boxplot.boxprops.linewidth: 0.5
+boxplot.whiskerprops.linewidth: 0.5
+boxplot.capprops.linewidth: 0.5
+boxplot.medianprops.linewidth: 0.5
+boxplot.meanprops.linewidth: 0.5
+font.family : sans-serif
+font.sans-serif : Arial
