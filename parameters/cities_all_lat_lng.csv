@@ -1,0 +1,63 @@
+,placeid,nominatimstring,countryid,name,population,lat,lng
+0,tokyo,tokyo,jpn,Tokyo,37977000.0,35.6897,139.6922
+1,jakarta,jakarta,idn,Jakarta,34540000.0,-6.2146,106.8451
+2,mumbai,mumbai,ind,Mumbai,23355000.0,18.9667,72.8333
+3,saopaulo,sao paolo,bra,Sao Paulo,22046000.0,-23.5504,-46.6339
+4,mexico,mexico city,mex,Mexico City,20996000.0,19.4333,-99.1333
+5,moscow,moscow,rus,Moscow,17125000.0,55.7558,37.6178
+7,buenosaires,buenos aires,arg,Buenos Aires,16157000.0,-34.5997,-58.3819
+9,karachi,karachi,pak,Karachi,14835000.0,24.86,67.01
+10,losangeles,los angeles,usa,Los Angeles,12750807.0,34.1139,-118.4068
+12,paris,"Paris, France",fra,Paris,11020000.0,48.8566,2.3522
+18,london,greater london,gbr,London,10979000.0,51.5072,-0.1275
+22,bogota,"bogota, colombia",col,Bogota,9464000.0,4.6126,-74.0705
+24,chicago,chicago,usa,Chicago,8604203.0,41.8373,-87.6862
+25,luanda,luanda,ago,Luanda,8417000.0,-8.8383,13.2344
+26,hongkong,Hong Kong Special Administrative Region,hkg,Hong Kong,7347000.0,22.305,114.185
+27,santiago,"Santiago, Provincia de Santiago, Santiago Metropolitan Region, Chile",chl,Santiago Centro,7007000.0,-33.45,-70.6667
+34,singapore,singapore,sgp,Singapore,5745000.0,1.3,103.8
+35,philadelphia,philadelphia,usa,Philadelphia,5649300.0,40.0077,-75.1339
+37,houston,houston,usa,Houston,5464251.0,29.7863,-95.3889
+39,toronto,toronto,can,Toronto,5429524.0,43.7417,-79.3733
+40,boston,Boston,usa,Boston,4688346.0,42.3188,-71.0846
+43,barcelona,"Barcelona, Barcelonès, Barcelona, Catalonia, 08001, Spain",esp,Barcelona,4588000.0,41.3825,2.1769
+45,phoenix,phoenix,usa,Phoenix,4219697.0,33.5722,-112.0891
+46,berlin,"Berlin, Germany",ger,Berlin,3644826.0,52.5167,13.3833
+50,sanfrancisco,san francisco,usa,San Francisco,3592294.0,37.7562,-122.443
+54,montreal,montreal (06),can,Montreal,3519595.0,45.5089,-73.5617
+55,detroit,detroit,usa,Detroit,3506126.0,42.3834,-83.1024
+56,birmingham,birmingham,gbr,Birmingham,2897303.0,52.48,-1.9025
+59,rome,"Rome, Roma Capitale, Italy",ita,Rome,2872800.0,41.8931,12.4828
+62,manchestergreater,greater manchester,gbr,Greater Manchester,2705000.0,53.4794,-2.2453
+72,tashkent,tashkent,uzb,Tashkent,2424100.0,41.3,69.2667
+73,leeds,leeds,gbr,Leeds,1901934.0,53.7997,-1.5492
+75,vienna,"vienna, austria",aut,Vienna,1840573.0,48.2083,16.3731
+79,hamburg,hamburg,ger,Hamburg,1841179.0,53.55,10.0
+81,warsaw,warsaw,pol,Warsaw,1790658.0,52.2167,21.0333
+83,budapest,"Budapest, Hungary",hun,Budapest,1752286.0,47.4983,19.0408
+84,rabat,rabat,mar,Rabat,1628000.0,34.0253,-6.8361
+86,manhattan,manhattan,usa,Manhattan,1628706.0,40.7834,-73.9662
+89,munich,munich,ger,Munich,1471508.0,48.1372,11.5755
+90,ulaanbaatar,ulaanbaatar,mng,Ulan Baatar,1396288.0,47.9203,106.9172
+91,milan,milan,ita,Milan,1351562.0,45.4669,9.19
+94,copenhagen,,dnk,Copenhagen,1085000.0,55.6786,12.5635
+95,cologne,cologne,ger,Cologne,1085664.0,50.9422,6.9578
+96,amsterdam,amsterdam,nld,Amsterdam,1031000.0,52.35,4.9166
+98,kathmandu,kathmandu,npl,Kathmandu,975453.0,27.7167,85.3667
+99,oslo,oslo,nor,Oslo,693494.0,59.9111,10.7528
+100,helsinki,helsinki,fin,Helsinki,642045.0,60.1756,24.9342
+101,bern,bern,che,Bern,133798.0,46.948,7.4474
+103,glasgow,glasgow city,gbr,Glasgow,985290.0,55.8609,-4.2514
+106,marrakesh,marrakesh,mar,Marrakesh,928850.0,31.6295,-7.9811
+107,turin,turin,ita,Turin,870952.0,45.0667,7.7
+108,sheffield,sheffield,gbr,Sheffield,685368.0,53.3833,-1.4667
+110,stuttgart,stuttgart,ger,Stuttgart,634830.0,48.7761,9.1775
+112,shahalam,shah alam,mys,Shah Alam,584340.0,3.0833,101.5333
+113,lyon,lyon,fra,Lyon,516092.0,45.76,4.84
+114,edinburgh,city of edinburgh,gbr,Edinburgh,488050.0,55.953,-3.189
+115,telaviv,tel aviv,isr,Tel Aviv,451523.0,32.0833,34.8
+116,zurich,zurich,che,Zurich,434008.0,47.3786,8.54
+117,malmo,malmo,swe,Malmo,321845.0,55.5932,13.0214
+118,bath,bath,gbr,Bath,88859.0,51.38,-2.36
+121,bradford,bradford,gbr,Bradford,540000.0,53.8,-1.75
+2,delft,delft,nld,Delft,103000.0,52.011736,4.359208

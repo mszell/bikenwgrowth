@@ -1,7 +1,9 @@
 MUST
 fix: analysisplots: pois covered railwaystation not grid
+make coverage + lcchighlight plot for paper (milan?, london?, moscow?)
 
 OPTIONAL
+measure gt-abstract avg degree growth
 make visual distinction between covered and reached pois in cover plots
 add comments to all functions, https://www.datacamp.com/community/tutorials/docstrings-python
 simulate random link growth?
