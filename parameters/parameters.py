@@ -1,6 +1,6 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "grid" # railwaystation, grid
+poi_source = "railwaystation" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness, random
 
 SERVER = False # Whether the code runs on the server (important to avoid parallel job conflicts)
@@ -33,11 +33,14 @@ nodesize_grown = 7.5
 plotparam = {"bbox": (1280,1280),
 			"dpi": 96,
 			"carall": {"width": 0.5, "edge_color": '#999999'},
-			"biketrack": {"width": 1.25, "edge_color": '#2222ff'},
+			# "biketrack": {"width": 1.25, "edge_color": '#2222ff'},
+            "biketrack": {"width": 1, "edge_color": '#000000'},
 			"biketrack_offstreet": {"width": 0.75, "edge_color": '#00aa22'},
 			"bikeable": {"width": 0.75, "edge_color": '#222222'},
-			"bikegrown": {"width": 3.75, "edge_color": '#0eb6d2', "node_color": '#0eb6d2'},
-			"highlight_biketrack": {"width": 3.75, "edge_color": '#2222ff', "node_color": '#2222ff'},
+			"bikegrown": {"width": 6.75, "edge_color": '#ff6200', "node_color": '#ff6200'},
+			"highlight_biketrack": {"width": 6.75, "edge_color": '#0eb6d2', "node_color": '#0eb6d2'},
+            # "bikegrown": {"width": 3.75, "edge_color": '#0eb6d2', "node_color": '#0eb6d2'},
+            # "highlight_biketrack": {"width": 3.75, "edge_color": '#2222ff', "node_color": '#2222ff'},
 			"highlight_bikeable": {"width": 3.75, "edge_color": '#222222', "node_color": '#222222'},
 			"poi_unreached": {"node_color": '#ff7338', "edgecolors": '#ffefe9'},
 			"poi_reached": {"node_color": '#0b8fa6', "edgecolors": '#f1fbff'},
@@ -51,7 +54,7 @@ plotparam_analysis = {
 			"mst_abstract": {"linewidth": 2, "color": '#000000', "linestyle": "dashed", "label": "MST (unrouted)", "alpha": 0.75},
 			"biketrack": {"linewidth": 1, "color": '#2222ff', "linestyle": "solid", "label": "Protected"},
 			"bikeable": {"linewidth": 1, "color": '#222222', "linestyle": "dashed", "label": "Bikeable"},
-			"constricted": {"linewidth": 1.5, "color": '#D22A0E', "linestyle": "solid", "label": "Betw. cars"},
+			"constricted": {"linewidth": 3.75, "color": '#D22A0E', "linestyle": "solid", "label": "Street network"},
 			"constricted_3": {"linewidth": 2, "color": '#D22A0E', "linestyle": "solid", "label": "Top 3%"},
 			"constricted_5": {"linewidth": 2, "color": '#a3210b', "linestyle": "solid", "label": "Top 5%"},
 			"constricted_10": {"linewidth": 2, "color": '#5a1206', "linestyle": "solid", "label": "Top 10%"},
