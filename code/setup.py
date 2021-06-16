@@ -13,6 +13,7 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 from tqdm.notebook import tqdm
 import warnings
+import shutil
 
 # Math/Data
 import math

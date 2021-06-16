@@ -82,7 +82,7 @@ def hole_to_patch(hole, map_center):
 def set_analysissubplot(key):
     ax.set_xlim(0, 1)
     ax.set_xticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-    if key in ["length", "length_lcc", "coverage", "poi_coverage", "overlap_bikeable", "overlap_biketrack", "components", "efficiency_local", "efficiency_global"]:
+    if key in ["length", "length_lcc", "coverage", "poi_coverage", "components", "efficiency_local", "efficiency_global"]:
         ax.set_ylim(bottom = 0)
     if key in ["directness_lcc"]:
         ax.set_ylim(bottom = 0.2)

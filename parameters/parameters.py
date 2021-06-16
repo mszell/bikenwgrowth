@@ -33,11 +33,14 @@ nodesize_grown = 7.5
 plotparam = {"bbox": (1280,1280),
 			"dpi": 96,
 			"carall": {"width": 0.5, "edge_color": '#999999'},
-			"biketrack": {"width": 1.25, "edge_color": '#2222ff'},
+			# "biketrack": {"width": 1.25, "edge_color": '#2222ff'},
+            "biketrack": {"width": 1, "edge_color": '#000000'},
 			"biketrack_offstreet": {"width": 0.75, "edge_color": '#00aa22'},
 			"bikeable": {"width": 0.75, "edge_color": '#222222'},
-			"bikegrown": {"width": 3.75, "edge_color": '#0eb6d2', "node_color": '#0eb6d2'},
-			"highlight_biketrack": {"width": 3.75, "edge_color": '#2222ff', "node_color": '#2222ff'},
+			# "bikegrown": {"width": 6.75, "edge_color": '#ff6200', "node_color": '#ff6200'},
+			# "highlight_biketrack": {"width": 6.75, "edge_color": '#0eb6d2', "node_color": '#0eb6d2'},
+            "bikegrown": {"width": 3.75, "edge_color": '#0eb6d2', "node_color": '#0eb6d2'},
+            "highlight_biketrack": {"width": 3.75, "edge_color": '#2222ff', "node_color": '#2222ff'},
 			"highlight_bikeable": {"width": 3.75, "edge_color": '#222222', "node_color": '#222222'},
 			"poi_unreached": {"node_color": '#ff7338', "edgecolors": '#ffefe9'},
 			"poi_reached": {"node_color": '#0b8fa6', "edgecolors": '#f1fbff'},
@@ -62,7 +65,7 @@ plotparam_analysis = {
 
 constricted_parameternamemap = {"betweenness": "_metrics", "grid": "", "railwaystation": "_rail"}
 constricted_plotinfo = {"title": ["Global Efficiency", "Local Efficiency", "Directness of LCC", "Spatial Clustering", "Anisotropy"]}
-analysis_existing_rowkeys = {"bikeable": 0, "bikeable_offstreet": 1, "biketrack": 2, "biketrack_offstreet": 3, "biketrackcarall": 4, "carall": 5}
+analysis_existing_rowkeys = {"bikeable": 0, "bikeable_offstreet": 1, "biketrack": 2, "biketrack_onstreet": 3, "biketrackcarall": 4, "carall": 5}
 
 
 # CONSTANTS

@@ -1,6 +1,5 @@
 MUST
-fix: analysisplots: pois covered railwaystation not grid
-make coverage + lcchighlight plot for paper (milan?, london?, moscow?)
+
 
 OPTIONAL
 measure gt-abstract avg degree growth
@@ -12,7 +11,10 @@ existing analysis: union carall and biketrack for biketrackcarall?
 zip result pickles?
 profile code?
 
+
 DONE
+X make coverage + lcchighlight plot for paper (milan?, london?, moscow?)
+X fix: analysisplots: pois covered railwaystation not grid
 X plots: for each city: length ratio of grown/existing versus ratio of metric (efficiency)
 X calculate efficiencies for carminusbike simplified graphs - sayat
 X check+fix GT chicago: lat lon mixed up for length calculations?!
