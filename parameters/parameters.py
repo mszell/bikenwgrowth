@@ -1,6 +1,6 @@
 # PARAMETERS
 # These are values to loop through for different runs
-poi_source = "railwaystation" # railwaystation, grid
+poi_source = "grid" # railwaystation, grid
 prune_measure = "betweenness" # betweenness, closeness, random
 
 SERVER = False # Whether the code runs on the server (important to avoid parallel job conflicts)
@@ -37,10 +37,10 @@ plotparam = {"bbox": (1280,1280),
             "biketrack": {"width": 1, "edge_color": '#000000'},
 			"biketrack_offstreet": {"width": 0.75, "edge_color": '#00aa22'},
 			"bikeable": {"width": 0.75, "edge_color": '#222222'},
-			"bikegrown": {"width": 6.75, "edge_color": '#ff6200', "node_color": '#ff6200'},
-			"highlight_biketrack": {"width": 6.75, "edge_color": '#0eb6d2', "node_color": '#0eb6d2'},
-            # "bikegrown": {"width": 3.75, "edge_color": '#0eb6d2', "node_color": '#0eb6d2'},
-            # "highlight_biketrack": {"width": 3.75, "edge_color": '#2222ff', "node_color": '#2222ff'},
+			# "bikegrown": {"width": 6.75, "edge_color": '#ff6200', "node_color": '#ff6200'},
+			# "highlight_biketrack": {"width": 6.75, "edge_color": '#0eb6d2', "node_color": '#0eb6d2'},
+            "bikegrown": {"width": 3.75, "edge_color": '#0eb6d2', "node_color": '#0eb6d2'},
+            "highlight_biketrack": {"width": 3.75, "edge_color": '#2222ff', "node_color": '#2222ff'},
 			"highlight_bikeable": {"width": 3.75, "edge_color": '#222222', "node_color": '#222222'},
 			"poi_unreached": {"node_color": '#ff7338', "edgecolors": '#ffefe9'},
 			"poi_reached": {"node_color": '#0b8fa6', "edgecolors": '#f1fbff'},
