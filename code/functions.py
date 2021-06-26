@@ -1221,7 +1221,7 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
     return (output, covs)
 
 
-def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
+def generate_video(placeid, imgname, vformat = "webm", duplicatelastframe = 5, verbose = True):
     """Generate a video from a set of images using OpenCV
     """
     # Code adapted from: https://stackoverflow.com/questions/44947505/how-to-make-a-movie-out-of-images-in-python#44948030
@@ -1231,9 +1231,14 @@ def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
     frame = cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", images[0]))
     height, width, layers = frame.shape
 
-    # https://www.pyimagesearch.com/2016/02/22/writing-to-video-with-opencv/#comment-390650
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    video = cv2.VideoWriter(PATH["videos"] + placeid + "/" + placeid + imgname + '.mp4', fourcc, 10, (width, height))
+    if vformat == "webm":
+        # https://stackoverflow.com/questions/49530857/python-opencv-video-format-play-in-browser
+        fourcc = cv2.VideoWriter_fourcc(*'vp80')
+        video = cv2.VideoWriter(PATH["videos"] + placeid + "/" + placeid + imgname + '.webm', fourcc, 10, (width, height))
+    elif vformat == "mp4":
+        # https://www.pyimagesearch.com/2016/02/22/writing-to-video-with-opencv/#comment-390650
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        video = cv2.VideoWriter(PATH["videos"] + placeid + "/" + placeid + imgname + '.mp4', fourcc, 10, (width, height))
 
     for image in images:
         video.write(cv2.imread(os.path.join(PATH["plots_networks"] + placeid + "/", image)))
@@ -1244,7 +1249,7 @@ def generate_video(placeid, imgname, duplicatelastframe = 5, verbose = True):
     cv2.destroyAllWindows()
     video.release()
     if verbose:
-        print("Video " + placeid + imgname + '.mp4 generated from ' + str(len(images)) + " frames.")
+        print("Video " + placeid + imgname + '.' + vformat + ' generated from ' + str(len(images)) + " frames.")
 
 
 
