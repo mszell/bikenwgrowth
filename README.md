@@ -1,4 +1,11 @@
-# Algorithmic bicycle network design
+# Growing Urban Bicycle Networks
+
+This is the source code for the scientific paper *Growing Urban Bicycle Networks* by M. Szell, S. Mimar, T. Perlman, G. Ghoshal, and R. Sinatra. The code downloads and pre-processes data from OpenStreetMap, prepares points of interest, runs simulations, measures and saves the results, creates videos and plots. Large data files (exports, logs, plots, results, videos) make up many GBs and are stored in the external folder `bikenwgrowth_external` due to Github's space limitations.
+
+Preprint: [insert arXiv link]  
+Data repository: [insert link]  
+Visualization: [GrowBike.Net](http://growbike.net) (Source code: [https://gitlab.com/Lynghede/bikeviz](https://gitlab.com/Lynghede/bikeviz))
+
 
 ## Setting up code environment
 ```
