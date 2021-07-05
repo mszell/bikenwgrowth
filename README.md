@@ -1,12 +1,18 @@
 # Growing Urban Bicycle Networks
 
-This is the source code for the scientific paper *Growing Urban Bicycle Networks* by M. Szell, S. Mimar, T. Perlman, G. Ghoshal, and R. Sinatra. The code downloads and pre-processes data from OpenStreetMap, prepares points of interest, runs simulations, measures and saves the results, creates videos and plots. Large data files (exports, logs, plots, results, videos) make up many GBs and are stored in the external folder `bikenwgrowth_external` due to Github's space limitations.
+This is the source code for the scientific paper *Growing Urban Bicycle Networks* by [M. Szell](http://michael.szell.net/), S. Mimar, T. Perlman, [G. Ghoshal](http://gghoshal.pas.rochester.edu/), and [R. Sinatra](http://www.robertasinatra.com/). The code downloads and pre-processes data from OpenStreetMap, prepares points of interest, runs simulations, measures and saves the results, creates videos and plots. 
 
-Preprint: [insert arXiv link]  
-Data repository: [insert link]  
-Visualization: [GrowBike.Net](http://growbike.net) (Source code: [https://gitlab.com/Lynghede/bikeviz](https://gitlab.com/Lynghede/bikeviz))
+**Preprint**: [insert arXiv link]  
+**Data repository**: [insert link]  
+**Visualization**: [GrowBike.Net](http://growbike.net)  
+**Videos & Plots**: [http://growbike.net/download](http://growbike.net/download)
 
-![Growing Urban Bicycle Networks](readmevideo.gif)
+[![Growing Urban Bicycle Networks](readmevideo.gif)](http://growbike.net/city/paris)
+
+## Folder structure
+The main folder/repo is `bikenwgrowth`, containing Jupyter notebooks (`code/`), preprocessed data (`data/`), parameters (`parameters/`), result plots (`plots/`), HPC server scripts and jobs (`scripts/`).
+
+Other data files (network plots, videos, results, exports, logs) make up many GBs and are stored in the separate external folder `bikenwgrowth_external` due to Github's space limitations.
 
 ## Setting up code environment
 ```
