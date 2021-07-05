@@ -6,7 +6,7 @@ Preprint: [insert arXiv link]
 Data repository: [insert link]  
 Visualization: [GrowBike.Net](http://growbike.net) (Source code: [https://gitlab.com/Lynghede/bikeviz](https://gitlab.com/Lynghede/bikeviz))
 
-![Growing Urban Bicycle Networks](readmevideo.webp)
+![Growing Urban Bicycle Networks](readmevideo.gif)
 
 ## Setting up code environment
 ```
