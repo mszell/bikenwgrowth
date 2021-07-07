@@ -1,8 +1,8 @@
 # Growing Urban Bicycle Networks
 
-This is the source code for the scientific paper *Growing Urban Bicycle Networks* by [M. Szell](http://michael.szell.net/), S. Mimar, T. Perlman, [G. Ghoshal](http://gghoshal.pas.rochester.edu/), and [R. Sinatra](http://www.robertasinatra.com/). The code downloads and pre-processes data from OpenStreetMap, prepares points of interest, runs simulations, measures and saves the results, creates videos and plots. 
+This is the source code for the scientific paper [*Growing Urban Bicycle Networks*](https://arxiv.org/abs/2107.02185) by [M. Szell](http://michael.szell.net/), S. Mimar, T. Perlman, [G. Ghoshal](http://gghoshal.pas.rochester.edu/), and [R. Sinatra](http://www.robertasinatra.com/). The code downloads and pre-processes data from OpenStreetMap, prepares points of interest, runs simulations, measures and saves the results, creates videos and plots. 
 
-**Preprint**: [insert arXiv link]  
+**Preprint**: [arXiv:2107.02185](https://arxiv.org/abs/2107.02185)  
 **Data repository**: [insert link]  
 **Visualization**: [GrowBike.Net](http://growbike.net)  
 **Videos & Plots**: [http://growbike.net/download](http://growbike.net/download)
