@@ -3,7 +3,7 @@
 This is the source code for the scientific paper [*Growing Urban Bicycle Networks*](https://arxiv.org/abs/2107.02185) by [M. Szell](http://michael.szell.net/), S. Mimar, T. Perlman, [G. Ghoshal](http://gghoshal.pas.rochester.edu/), and [R. Sinatra](http://www.robertasinatra.com/). The code downloads and pre-processes data from OpenStreetMap, prepares points of interest, runs simulations, measures and saves the results, creates videos and plots. 
 
 **Preprint**: [arXiv:2107.02185](https://arxiv.org/abs/2107.02185)  
-**Data repository**: [insert link]  
+**Data repository**: [zenodo.5083049](https://zenodo.org/record/5083049) 
 **Visualization**: [GrowBike.Net](http://growbike.net)  
 **Videos & Plots**: [http://growbike.net/download](http://growbike.net/download)
 
