@@ -830,14 +830,12 @@ def count_and_merge(n, bearings):
 
 
 def calculate_directness(G, numnodepairs = 500):
-    """Calculate directness on G over all connected node pairs in indices.
+    """Calculate directness on G over all connected node pairs in indices. This calculation method divides the total sum of euclidian distances by total sum of network distances.
     """
     
     indices = random.sample(list(G.vs), min(numnodepairs, len(G.vs)))
 
     poi_edges = []
-    v1 = []
-    v2 = []
     total_distance_direct = 0
     for c, v in enumerate(indices):
         poi_edges.append(G.get_shortest_paths(v, indices[c:], weights = "weight", output = "epath"))
@@ -851,6 +849,25 @@ def calculate_directness(G, numnodepairs = 500):
             total_distance_network += sum([G.es[e]['weight'] for e in path_e])
     
     return total_distance_direct / total_distance_network
+
+def calculate_directness_linkwise(G, numnodepairs = 500):
+    """Calculate directness on G over all connected node pairs in indices. This is the common calculation method: It takes the average of linkwise euclidian distances divided by network distances.
+    """
+
+    indices = random.sample(list(G.vs), min(numnodepairs, len(G.vs)))
+
+    directness_links = np.zeros(int((len(indices)*(len(indices)-1))/2))
+    ind = 0
+    for c, v in enumerate(indices):
+        poi_edges = G.get_shortest_paths(v, indices[c:], weights = "weight", output = "epath")
+        for c_delta, path_e in enumerate(poi_edges[1:]): # Discard first empty list because it is the node to itself
+            distance_network = sum([G.es[e]['weight'] for e in path_e]) # sum over all edges of path
+            distance_direct = dist(v, indices[c+c_delta+1]) # dist first to last node, must be in format lat,lon = y, x
+
+            directness_links[ind] = distance_direct / distance_network
+            ind += 1
+
+    return np.mean(directness_links)
 
 
 def listmean(lst): 
@@ -1065,6 +1082,14 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, calcmetrics = {"length":0,
             else:
                 output["directness_lcc"] = output["directness"]
 
+        # DIRECTNESS LINKWISE
+        if verbose and ("directness_lcc_linkwise" in calcmetrics): print("Calculating directness linkwise...")
+        if "directness_lcc_linkwise" in calcmetrics:
+            if len(cl) > 1:
+                output["directness_lcc_linkwise"] = calculate_directness_linkwise(LCC, numnodepairs)
+            else:
+                output["directness_lcc_linkwise"] = calculate_directness_linkwise(G, numnodepairs)
+
     if return_cov: 
         return (output, cov)
     else:
@@ -1148,7 +1173,8 @@ def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids
             "efficiency_global": [],
             "efficiency_local": [],
             "efficiency_global_routed": [],
-            "efficiency_local_routed": []            
+            "efficiency_local_routed": [],
+            "directness_lcc_linkwise": []        
             }):
     """Calculates all metrics, additively. 
     Coverage differences are calculated in every step instead of the whole coverage.
