@@ -1,5 +1,5 @@
 warnings.filterwarnings('ignore')
-rerun_existing = False
+rerun_existing = True
 
 for placeid, placeinfo in cities.items():
     print(placeid + ": Analyzing existing infrastructure.")
@@ -19,7 +19,9 @@ for placeid, placeinfo in cities.items():
                          "efficiency_global": 0,
                          "efficiency_local": 0,
                          "efficiency_global_routed": 0,
-                         "efficiency_local_routed": 0
+                         "efficiency_local_routed": 0,
+                         "directness_lcc_linkwise": 0,
+                         "directness_all_linkwise": 0
                         }
         output_place = {}
         for networktype in networktypes:

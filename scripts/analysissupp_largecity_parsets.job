@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=bikeexport        # Job name
+#SBATCH --job-name=bikenwgrowth        # Job name
 #SBATCH --array=0-5             # the array iterates through the parameter sets for one city
 #SBATCH --output=../outs/job.%j.out      # Name of output file (%j expands to jobId)
 #SBATCH --error=../outs/job.%j.err
@@ -15,5 +15,5 @@ module load Anaconda3
 conda activate OSMNX
 
 if [ $# > 0 ]; then
-    ~/.conda/envs/OSMNX/bin/python exportloop.py $1 $SLURM_ARRAY_TASK_ID
+    ~/.conda/envs/OSMNX/bin/python analysissupploop.py $1 $SLURM_ARRAY_TASK_ID
 fi
