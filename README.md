@@ -4,10 +4,10 @@ This is the source code for the scientific paper [*Growing Urban Bicycle Network
 
 **Preprint**: [arXiv:2107.02185](https://arxiv.org/abs/2107.02185)  
 **Data repository**: [zenodo.5083049](https://zenodo.org/record/5083049)  
-**Visualization**: [GrowBike.Net](http://growbike.net)  
-**Videos & Plots**: [http://growbike.net/download](http://growbike.net/download)
+**Visualization**: [GrowBike.Net](https://growbike.net)  
+**Videos & Plots**: [https://growbike.net/download](https://growbike.net/download)
 
-[![Growing Urban Bicycle Networks](readmevideo.gif)](http://growbike.net/city/paris)
+[![Growing Urban Bicycle Networks](readmevideo.gif)](https://growbike.net/city/paris)
 
 ## Folder structure
 The main folder/repo is `bikenwgrowth`, containing Jupyter notebooks (`code/`), preprocessed data (`data/`), parameters (`parameters/`), result plots (`plots/`), HPC server scripts and jobs (`scripts/`).
