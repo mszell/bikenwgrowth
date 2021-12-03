@@ -1,10 +1,10 @@
 #!/bin/bash
 
-#SBATCH --job-name=bikeexport        # Job name
-#SBATCH --array=0-5             # the array iterates through the parameter sets for one city
+#SBATCH --job-name=bikenwgrowth        # Job name
+#SBATCH --array=32-58              # the array iterates through the cities, running all parameter sets
 #SBATCH --output=../outs/job.%j.out      # Name of output file (%j expands to jobId)
 #SBATCH --error=../outs/job.%j.err
-#SBATCH --mem=80000
+#SBATCH --mem=40000
 #SBATCH --cpus-per-task=1        # Schedule one core
 #SBATCH --time=71:59:00          # Run time (hh:mm:ss)
 #SBATCH --partition=red    # Run on the Red queue
@@ -14,6 +14,4 @@ module load Anaconda3
 . $(conda info --base)/etc/profile.d/conda.sh
 conda activate OSMNX
 
-if [ $# > 0 ]; then
-    ~/.conda/envs/OSMNX/bin/python exportloop.py $1 $SLURM_ARRAY_TASK_ID
-fi
+~/.conda/envs/OSMNX/bin/python analysissupploop.py $SLURM_ARRAY_TASK_ID

@@ -35,6 +35,7 @@ For multiple, esp. large, cities, running the code on a high performance computi
 4. Run: `./mastersbatch_analysis.sh`
 5. Run, if needed: `./mastersbatch_export.sh`
 6. After all is finished, run: `./cleanup.sh`
+7. Recommended, run: `./fixresults.sh` (to clean up results in case of amended data from repeated runs)
 
 ## Running the code locally
 Single (or few/small) cities could be run locally but require manual, step-by-step execution of Jupyter notebooks:

@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=bikeexport        # Job name
 #SBATCH --array=0-58             # the array iterates through the cities, running all parameter sets
-#SBATCH --output=outs/job.%j.out      # Name of output file (%j expands to jobId)
-#SBATCH --error=outs/job.%j.err
+#SBATCH --output=../outs/job.%j.out      # Name of output file (%j expands to jobId)
+#SBATCH --error=../outs/job.%j.err
 #SBATCH --mem=24000
 #SBATCH --cpus-per-task=1        # Schedule one core
 #SBATCH --time=47:59:00          # Run time (hh:mm:ss)
