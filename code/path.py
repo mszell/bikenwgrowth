@@ -1,7 +1,7 @@
 PATH = {}
 PATH["parameters"] = "../parameters/"
-PATH["data"] = "../data/"
-PATH["plots"] = "../plots/"
+PATH["data"] = "../../bikenwgrowth_external/data/"
+PATH["plots"] = "../../bikenwgrowth_external/plots/"
 PATH["plots_networks"] = "../../bikenwgrowth_external/plotsnetworks/"
 PATH["results"] = "../../bikenwgrowth_external/results/"
 PATH["results_constricted"] = "../../bikenwgrowth_external/results_constricted/"
