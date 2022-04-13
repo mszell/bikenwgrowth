@@ -15,6 +15,10 @@ The main folder/repo is `bikenwgrowth`, containing Jupyter notebooks (`code/`), 
 Other data files (network plots, videos, results, exports, logs) make up many GBs and are stored in the separate external folder `bikenwgrowth_external` due to Github's space limitations.
 
 ## Setting up code environment
+### Conda yml
+[Download `.yml`](env.yml)
+
+### Manual procedure
 ```
 conda create --override-channels -c conda-forge -n OSMNX python=3 osmnx=0.16.2 python-igraph watermark haversine rasterio tqdm geojson
 conda activate OSMNX
