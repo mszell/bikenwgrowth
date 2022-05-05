@@ -1,0 +1,40 @@
+cff-version: 1.0.0
+message: "If you use this source code, please cite it as below."
+authors:
+- family-names: "Szell"
+  given-names: "Michael"
+  orcid: "https://orcid.org/0000-0003-3022-2483"
+- family-names: "Mimar"
+  given-names: "Sayat"
+- family-names: "Perlman"
+  given-names: "Tyler"
+- family-names: "Ghoshal"
+  given-names: "Gourab"
+- family-names: "Sinatra"
+  given-names: "Roberta"
+title: "Growing urban bicycle networks"
+version: 1.0.0
+date-released: 2021-07-08
+url: "https://github.com/mszell/bikenwgrowth"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Szell"
+    given-names: "Michael"
+    orcid: "https://orcid.org/0000-0003-3022-2483"
+  - family-names: "Mimar"
+    given-names: "Sayat"
+  - family-names: "Perlman"
+    given-names: "Tyler"
+  - family-names: "Ghoshal"
+    given-names: "Gourab"
+  - family-names: "Sinatra"
+    given-names: "Roberta"
+  doi: "10.1038/s41598-022-10783-y"
+  journal: "Scientific Reports"
+  start: 1
+  end: 14 
+  title: "Growing urban bicycle networks"
+  issue: 6765
+  volume: 12
+  year: 2022

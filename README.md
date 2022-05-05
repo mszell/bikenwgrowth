@@ -1,8 +1,8 @@
 # Growing Urban Bicycle Networks
 
-This is the source code for the scientific paper [*Growing Urban Bicycle Networks*](https://arxiv.org/abs/2107.02185) by [M. Szell](http://michael.szell.net/), S. Mimar, T. Perlman, [G. Ghoshal](http://gghoshal.pas.rochester.edu/), and [R. Sinatra](http://www.robertasinatra.com/). The code downloads and pre-processes data from OpenStreetMap, prepares points of interest, runs simulations, measures and saves the results, creates videos and plots. 
+This is the source code for the scientific paper [*Growing urban bicycle networks*](https://www.nature.com/articles/s41598-022-10783-y) by [M. Szell](http://michael.szell.net/), S. Mimar, T. Perlman, [G. Ghoshal](http://gghoshal.pas.rochester.edu/), and [R. Sinatra](http://www.robertasinatra.com/). The code downloads and pre-processes data from OpenStreetMap, prepares points of interest, runs simulations, measures and saves the results, creates videos and plots. 
 
-**Preprint**: [arXiv:2107.02185](https://arxiv.org/abs/2107.02185)  
+**Paper**: [https://www.nature.com/articles/s41598-022-10783-y](https://www.nature.com/articles/s41598-022-10783-y)  
 **Data repository**: [zenodo.5083049](https://zenodo.org/record/5083049)  
 **Visualization**: [GrowBike.Net](https://growbike.net)  
 **Videos & Plots**: [https://growbike.net/download](https://growbike.net/download)
@@ -20,7 +20,7 @@ Other data files (network plots, videos, results, exports, logs) make up many GB
 
 ### Manual procedure
 ```
-conda create --override-channels -c conda-forge -n OSMNX python=3 osmnx=0.16.2 python-igraph watermark haversine rasterio tqdm geojson
+conda create --override-channels -c conda-forge -n OSMNX python=3.8.2 osmnx=0.16.2 python-igraph watermark haversine rasterio tqdm geojson
 conda activate OSMNX
 conda install -c conda-forge ipywidgets
 pip install opencv-python
