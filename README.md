@@ -20,11 +20,11 @@ Other data files (network plots, videos, results, exports, logs) make up many GB
 
 ### Manual procedure
 ```
-conda create --override-channels -c conda-forge -n OSMNX python=3.8.2 osmnx=0.16.2 python-igraph watermark haversine rasterio tqdm geojson
-conda activate OSMNX
-conda install -c conda-forge ipywidgets
+mamba create --override-channels -c conda-forge -n OSMNX python=3.12 osmnx=1.9.4 python-igraph watermark haversine rasterio tqdm geojson
+mamba activate OSMNX
+mamba install -c conda-forge ipywidgets
 pip install opencv-python
-conda install -c anaconda gdal
+mamba install -c anaconda gdal
 pip install --user ipykernel
 python -m ipykernel install --user --name=OSMNX
 ```

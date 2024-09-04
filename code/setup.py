@@ -33,7 +33,9 @@ from matplotlib.ticker import MaxNLocator
 
 # Geo
 import osmnx as ox
-ox.utils.config(timeout = 300, logs_folder = PATH["logs"], log_file = True)
+ox.settings.log_file = True
+ox.settings.requests_timeout = 300
+ox.settings.logs_folder = PATH["logs"]
 import fiona
 import shapely
 from osgeo import gdal, osr
