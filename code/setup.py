@@ -36,8 +36,7 @@ import osmnx as ox
 ox.utils.config(timeout = 300, logs_folder = PATH["logs"], log_file = True)
 import fiona
 import shapely
-import gdal
-import osr
+from osgeo import gdal, osr
 from haversine import haversine, haversine_vector
 import pyproj
 from shapely.geometry import Point, MultiPoint, LineString, Polygon, MultiLineString, MultiPolygon
