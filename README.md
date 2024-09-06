@@ -14,17 +14,21 @@ The main folder/repo is `bikenwgrowth`, containing Jupyter notebooks (`code/`), 
 
 Other data files (network plots, videos, results, exports, logs) make up many GBs and are stored in the separate external folder `bikenwgrowth_external` due to Github's space limitations.
 
+> [!WARNING]  
+> The project history is 11 GB large, most of it is deleted files. When cloning the project, consider cloning without the full history: `git clone -b master --single-branch https://github.com/mszell/bikenwgrowth --depth 1`
+
+
 ## Setting up code environment
 ### Conda yml
 [Download `.yml`](env.yml)
 
 ### Manual procedure
 ```
-conda create --override-channels -c conda-forge -n OSMNX python=3.8.2 osmnx=0.16.2 python-igraph watermark haversine rasterio tqdm geojson
-conda activate OSMNX
-conda install -c conda-forge ipywidgets
+mamba create --override-channels -c conda-forge -n OSMNX python=3.12 osmnx=1.9.4 python-igraph watermark haversine rasterio tqdm geojson
+mamba activate OSMNX
+mamba install -c conda-forge ipywidgets
 pip install opencv-python
-conda install -c anaconda gdal
+mamba install -c anaconda gdal
 pip install --user ipykernel
 python -m ipykernel install --user --name=OSMNX
 ```

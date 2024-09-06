@@ -43,7 +43,7 @@ def get_holes(cov):
     """
     holes = []
     if isinstance(cov, shapely.geometry.multipolygon.MultiPolygon):
-        for pol in cov: # cov is generally a MultiPolygon, so we iterate through its Polygons
+        for pol in cov.geoms: # cov is generally a MultiPolygon, so we iterate through its Polygons
             holes.append(pol.interiors)
     elif isinstance(cov, shapely.geometry.polygon.Polygon) and not cov.is_empty:
         holes.append(cov.interiors)
@@ -54,7 +54,7 @@ def cov_to_patchlist(cov, map_center, return_holes = True):
     """
     p = []
     if isinstance(cov, shapely.geometry.multipolygon.MultiPolygon):
-        for pol in cov: # cov is generally a MultiPolygon, so we iterate through its Polygons
+        for pol in cov.geoms: # cov is generally a MultiPolygon, so we iterate through its Polygons
             p.append(pol_to_patch(pol, map_center))
     elif isinstance(cov, shapely.geometry.polygon.Polygon) and not cov.is_empty:
         p.append(pol_to_patch(cov, map_center))
@@ -95,7 +95,7 @@ def initplot():
     plt.axes().set_aspect('equal')
     plt.axes().set_xmargin(0.01)
     plt.axes().set_ymargin(0.01)
-    plt.axes().set_axis_off()
+    plt.axes().set_axis_off() # Does not work anymore - unnown why not.
     return fig
 
 def nodesize_from_pois(nnids):
@@ -264,10 +264,10 @@ def ox_to_csv(G, p, placeid, parameterid, postfix = "", compress = True, verbose
         node, edge = gpd.GeoDataFrame(), gpd.GeoDataFrame()
     prefix = placeid + '_' + parameterid + postfix
 
-    node.to_csv(p + prefix + '_nodes.csv', index = False)
+    node.to_csv(p + prefix + '_nodes.csv', index = True)
     if compress: compress_file(p, prefix + '_nodes')
  
-    edge.to_csv(p + prefix + '_edges.csv', index = False)
+    edge.to_csv(p + prefix + '_edges.csv', index = True)
     if compress: compress_file(p, prefix + '_edges')
 
     if verbose: print(placeid + ": Successfully wrote graph " + parameterid + postfix)
@@ -840,8 +840,10 @@ def calculate_directness(G, numnodepairs = 500):
     for c, v in enumerate(indices):
         poi_edges.append(G.get_shortest_paths(v, indices[c:], weights = "weight", output = "epath"))
         temp = G.get_shortest_paths(v, indices[c:], weights = "weight", output = "vpath")
-        total_distance_direct += sum(dist_vector([(G.vs[t[0]]["y"], G.vs[t[0]]["x"]) for t in temp], [(G.vs[t[-1]]["y"], G.vs[t[-1]]["x"]) for t in temp])) # must be in format lat,lon = y, x
-    
+        try:
+            total_distance_direct += sum(dist_vector([(G.vs[t[0]]["y"], G.vs[t[0]]["x"]) for t in temp], [(G.vs[t[-1]]["y"], G.vs[t[-1]]["x"]) for t in temp])) # must be in format lat,lon = y, x
+        except: # Rarely, routing does not work. Unclear why.
+            pass
     total_distance_network = 0
     for paths_e in poi_edges:
         for path_e in paths_e:
@@ -1064,9 +1066,15 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, calcmetrics = {"length":0,
             # OVERLAP WITH EXISTING NETS
             if Gexisting:
                 if "overlap_biketrack" in calcmetrics:
-                    output["overlap_biketrack"] = edge_lengths(intersect_igraphs(Gexisting["biketrack"], G))
+                    try:
+                        output["overlap_biketrack"] = edge_lengths(intersect_igraphs(Gexisting["biketrack"], G))
+                    except: # If there is not bike infrastructure, set to zero
+                        output["overlap_biketrack"] = 0
                 if "overlap_bikeable" in calcmetrics:
-                    output["overlap_bikeable"] = edge_lengths(intersect_igraphs(Gexisting["bikeable"], G))
+                    try:
+                        output["overlap_bikeable"] = edge_lengths(intersect_igraphs(Gexisting["bikeable"], G))
+                    except: # If there is not bikeable infrastructure, set to zero
+                        output["overlap_bikeable"] = 0
 
         # POI COVERAGE
         if "poi_coverage" in calcmetrics:
