@@ -264,10 +264,10 @@ def ox_to_csv(G, p, placeid, parameterid, postfix = "", compress = True, verbose
         node, edge = gpd.GeoDataFrame(), gpd.GeoDataFrame()
     prefix = placeid + '_' + parameterid + postfix
 
-    node.to_csv(p + prefix + '_nodes.csv', index = False)
+    node.to_csv(p + prefix + '_nodes.csv', index = True)
     if compress: compress_file(p, prefix + '_nodes')
  
-    edge.to_csv(p + prefix + '_edges.csv', index = False)
+    edge.to_csv(p + prefix + '_edges.csv', index = True)
     if compress: compress_file(p, prefix + '_edges')
 
     if verbose: print(placeid + ": Successfully wrote graph " + parameterid + postfix)
