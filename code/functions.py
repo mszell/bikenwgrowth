@@ -43,7 +43,7 @@ def get_holes(cov):
     """
     holes = []
     if isinstance(cov, shapely.geometry.multipolygon.MultiPolygon):
-        for pol in cov: # cov is generally a MultiPolygon, so we iterate through its Polygons
+        for pol in cov.geoms: # cov is generally a MultiPolygon, so we iterate through its Polygons
             holes.append(pol.interiors)
     elif isinstance(cov, shapely.geometry.polygon.Polygon) and not cov.is_empty:
         holes.append(cov.interiors)
@@ -54,7 +54,7 @@ def cov_to_patchlist(cov, map_center, return_holes = True):
     """
     p = []
     if isinstance(cov, shapely.geometry.multipolygon.MultiPolygon):
-        for pol in cov: # cov is generally a MultiPolygon, so we iterate through its Polygons
+        for pol in cov.geoms: # cov is generally a MultiPolygon, so we iterate through its Polygons
             p.append(pol_to_patch(pol, map_center))
     elif isinstance(cov, shapely.geometry.polygon.Polygon) and not cov.is_empty:
         p.append(pol_to_patch(cov, map_center))
@@ -95,7 +95,7 @@ def initplot():
     plt.axes().set_aspect('equal')
     plt.axes().set_xmargin(0.01)
     plt.axes().set_ymargin(0.01)
-    plt.axes().set_axis_off()
+    plt.axes().set_axis_off() # Does not work anymore - unnown why not.
     return fig
 
 def nodesize_from_pois(nnids):
@@ -840,8 +840,10 @@ def calculate_directness(G, numnodepairs = 500):
     for c, v in enumerate(indices):
         poi_edges.append(G.get_shortest_paths(v, indices[c:], weights = "weight", output = "epath"))
         temp = G.get_shortest_paths(v, indices[c:], weights = "weight", output = "vpath")
-        total_distance_direct += sum(dist_vector([(G.vs[t[0]]["y"], G.vs[t[0]]["x"]) for t in temp], [(G.vs[t[-1]]["y"], G.vs[t[-1]]["x"]) for t in temp])) # must be in format lat,lon = y, x
-    
+        try:
+            total_distance_direct += sum(dist_vector([(G.vs[t[0]]["y"], G.vs[t[0]]["x"]) for t in temp], [(G.vs[t[-1]]["y"], G.vs[t[-1]]["x"]) for t in temp])) # must be in format lat,lon = y, x
+        except: # Rarely, routing does not work. Unclear why.
+            pass
     total_distance_network = 0
     for paths_e in poi_edges:
         for path_e in paths_e:
