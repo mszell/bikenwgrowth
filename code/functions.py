@@ -1064,9 +1064,15 @@ def calculate_metrics(G, GT_abstract, G_big, nnids, calcmetrics = {"length":0,
             # OVERLAP WITH EXISTING NETS
             if Gexisting:
                 if "overlap_biketrack" in calcmetrics:
-                    output["overlap_biketrack"] = edge_lengths(intersect_igraphs(Gexisting["biketrack"], G))
+                    try:
+                        output["overlap_biketrack"] = edge_lengths(intersect_igraphs(Gexisting["biketrack"], G))
+                    except: # If there is not bike infrastructure, set to zero
+                        output["overlap_biketrack"] = 0
                 if "overlap_bikeable" in calcmetrics:
-                    output["overlap_bikeable"] = edge_lengths(intersect_igraphs(Gexisting["bikeable"], G))
+                    try:
+                        output["overlap_bikeable"] = edge_lengths(intersect_igraphs(Gexisting["bikeable"], G))
+                    except: # If there is not bikeable infrastructure, set to zero
+                        output["overlap_bikeable"] = 0
 
         # POI COVERAGE
         if "poi_coverage" in calcmetrics:
