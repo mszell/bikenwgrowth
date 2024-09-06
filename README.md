@@ -15,7 +15,7 @@ The main folder/repo is `bikenwgrowth`, containing Jupyter notebooks (`code/`), 
 Other data files (network plots, videos, results, exports, logs) make up many GBs and are stored in the separate external folder `bikenwgrowth_external` due to Github's space limitations.
 
 > [!WARNING]  
-> The project history is 11 GB large, most of it is deleted files. When cloning the project, consider cloning without the full history: `git clone -b master --single-branch https://github.com/mszell/bikenwgrowth --depth 1`
+> The project history is 11 GB large, most of it is deleted files. When cloning the project, consider cloning without the full history: `git clone -b main --single-branch https://github.com/mszell/bikenwgrowth --depth 1`
 
 
 ## Setting up code environment
