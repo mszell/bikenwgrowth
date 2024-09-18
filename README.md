@@ -9,32 +9,52 @@ This is the source code for the scientific paper [*Growing urban bicycle network
 
 [![Growing Urban Bicycle Networks](readmevideo.gif)](https://growbike.net/city/paris)
 
-## Folder structure
-The main folder/repo is `bikenwgrowth`, containing Jupyter notebooks (`code/`), preprocessed data (`data/`), parameters (`parameters/`), result plots (`plots/`), HPC server scripts and jobs (`scripts/`).
+## Instructions
 
-Other data files (network plots, videos, results, exports, logs) make up many GBs and are stored in the separate external folder `bikenwgrowth_external` due to Github's space limitations.
+### 1. Git clone the project _without_ the full history 
 
-> [!WARNING]  
-> The project history is 11 GB large, most of it is deleted files. When cloning the project, consider cloning without the full history: `git clone -b main --single-branch https://github.com/mszell/bikenwgrowth --depth 1`
+Run from your terminal:
 
-
-## Setting up code environment
-### Conda yml
-[Download `.yml`](env.yml)
-
-### Manual procedure
 ```
-mamba create --override-channels -c conda-forge -n OSMNX python=3.12 osmnx=1.9.4 python-igraph watermark haversine rasterio tqdm geojson
+git clone -b main --single-branch https://github.com/mszell/bikenwgrowth --depth 1
+```
+
+### 2. Install the conda environment `growbikenet`
+
+In your terminal, navigate to the project folder `bikenwgrowth` and run:
+
+```
+conda env create -f environment.yml
+conda activate growbikenet
+```
+
+**Environment creation from command line**
+
+If the above doesn't work, you can manually create the environment from your command line (not recommended):
+
+```
+mamba create --override-channels -c conda-forge -n growbikenet python=3.12 osmnx=1.9.4 python-igraph watermark haversine rasterio tqdm geojson
 mamba activate OSMNX
 mamba install -c conda-forge ipywidgets
 pip install opencv-python
-mamba install -c anaconda gdal
 pip install --user ipykernel
-python -m ipykernel install --user --name=OSMNX
+python -m ipykernel install --user --name=growbikenet
 ```
-Run Jupyter Notebook with kernel OSMNX (Kernel > Change Kernel > OSMNX)
 
-## Running the code on an HPC cluster with SLURM
+Run the Jupyter notebooks with kernel `growbikenet` (Kernel > Change Kernel > growbikenet)
+
+### 3a. Run the code locally
+
+Single (or few/small) cities can be run locally by a manual, step-by-step execution of Jupyter notebooks:
+
+1. Populate `parameters/cities.csv`, see below.
+2. Navigate to the `code` folder.
+3. Run notebooks 01 and 02 once to download and prepare all networks and POIs  
+4. Run notebooks 03, 04, 05 for each parameter set (see below), set in `parameters/parameters.py`  
+5. Run 06 or other steps as needed.
+
+### 3b. Run the code on an HPC cluster with SLURM
+
 For multiple, esp. large, cities, running the code on a high performance computing cluster is strongly suggested as the tasks are easy to paralellize. The shell scripts are written for [SLURM](https://slurm.schedmd.com/overview.html).  
 
 1. Populate `parameters/cities.csv`, see below.
@@ -45,15 +65,7 @@ For multiple, esp. large, cities, running the code on a high performance computi
 6. After all is finished, run: `./cleanup.sh`
 7. Recommended, run: `./fixresults.sh` (to clean up results in case of amended data from repeated runs)
 
-## Running the code locally
-Single (or few/small) cities could be run locally but require manual, step-by-step execution of Jupyter notebooks:
-
-1. Populate `parameters/cities.csv`, see below.
-2. Run 01 and 02 once to download and prepare all networks and POIs  
-3. Run 03,04,05 for each parameter set (see below), set in `parameters/parameters.py`  
-4. Run 06 or other steps as needed.
-
-### Parameter sets 
+## Parameter sets 
 1. `prune_measure = "betweenness"`, `poi_source =  "railwaystation"`  
 2. `prune_measure = "betweenness"`, `poi_source =  "grid"`  
 3. `prune_measure = "closeness"`, `poi_source =  "railwaystation"`  
@@ -62,6 +74,7 @@ Single (or few/small) cities could be run locally but require manual, step-by-st
 6. `prune_measure = "random"`, `poi_source =  "grid"` 
 
 ## Populating cities.csv
+
 ### Checking nominatimstring  
 * Go to e.g. [https://nominatim.openstreetmap.org/search.php?q=paris%2C+france&polygon_geojson=1&viewbox=](https://nominatim.openstreetmap.org/search.php?q=paris%2C+france&polygon_geojson=1&viewbox=) and enter the search string. If a correct polygon (or multipolygon) pops up it should be fine. If not leave the field empty and acquire a shape file, see below.
 
@@ -70,3 +83,8 @@ Single (or few/small) cities could be run locally but require manual, step-by-st
     `relation["boundary"="administrative"]["name:en"="Copenhagen Municipality"]({{bbox}});(._;>;);out skel;`
 * Export: Download as GPX
 * Use QGIS to create a polygon, with Vector > Join Multiple Lines, and Processing Toolbox > Polygonize (see [Stackexchange answer 1](https://gis.stackexchange.com/questions/98320/connecting-two-line-ends-in-qgis-without-resorting-to-other-software) and [Stackexchange answer 2](https://gis.stackexchange.com/questions/207463/convert-a-line-to-polygon))
+
+## Folder structure
+The main folder/repo is `bikenwgrowth`, containing Jupyter notebooks (`code/`), preprocessed data (`data/`), parameters (`parameters/`), result plots (`plots/`), HPC server scripts and jobs (`scripts/`).
+
+Other data files (network plots, videos, results, exports, logs) make up many GBs and are stored in the separate external folder `bikenwgrowth_external`.
