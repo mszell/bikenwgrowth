@@ -33,7 +33,7 @@ conda activate growbikenet
 If the above doesn't work, you can manually create the environment from your command line (not recommended):
 
 ```
-mamba create --override-channels -c conda-forge -n growbikenet python=3.11 osmnx=1.9.4 python-igraph watermark haversine rasterio tqdm geojson
+mamba create --override-channels -c conda-forge -n growbikenet python=3.12 osmnx=1.9.4 python-igraph watermark haversine rasterio tqdm geojson
 mamba activate OSMNX
 mamba install -c conda-forge ipywidgets
 pip install opencv-python
