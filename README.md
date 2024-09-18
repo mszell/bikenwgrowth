@@ -34,7 +34,7 @@ If the above doesn't work, you can manually create the environment from your com
 
 ```
 mamba create --override-channels -c conda-forge -n growbikenet python=3.12 osmnx=1.9.4 python-igraph watermark haversine rasterio tqdm geojson
-mamba activate OSMNX
+mamba activate growbikenet
 mamba install -c conda-forge ipywidgets
 pip install opencv-python
 pip install --user ipykernel
