@@ -21,14 +21,16 @@ git clone -b main --single-branch https://github.com/mszell/bikenwgrowth --depth
 
 ### 2. Install the conda environment `growbikenet`
 
-In your terminal, navigate to the project folder `bikenwgrowth` and run:
+In your terminal, navigate to the project folder `bikenwgrowth` and use [`conda`](https://docs.conda.io/projects/conda/en/latest/index.html)
+or [`mamba`](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html)
+or [`micromamba`](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html) to run:
 
 ```
-conda env create -f environment.yml
-conda activate growbikenet
+mamba env create -f environment.yml
+mamba activate growbikenet
 ```
 
-**Environment creation from command line**
+#### Environment creation from command line
 
 If the above doesn't work, you can manually create the environment from your command line (not recommended):
 
@@ -38,32 +40,45 @@ mamba activate growbikenet
 mamba install -c conda-forge ipywidgets
 pip install opencv-python
 pip install --user ipykernel
+```
+
+#### Set up Jupyter kernel
+
+If you want to use the environment `growbikenet` in Jupyter, run:
+
+```bash
 python -m ipykernel install --user --name=growbikenet
 ```
 
-Run the Jupyter notebooks with kernel `growbikenet` (Kernel > Change Kernel > growbikenet)
+This allows you to run Jupyter with the kernel `growbikenet ` (Kernel > Change Kernel > growbikenet)
+
 
 ### 3a. Run the code locally
 
 Single (or few/small) cities can be run locally by a manual, step-by-step execution of Jupyter notebooks:
 
-1. Populate `parameters/cities.csv`, see below.
-2. Navigate to the `code` folder.
+1. Populate [`parameters/cities.csv`](parameters/cities.csv), see below.
+2. Navigate to the [`code`](code/) folder.
 3. Run notebooks 01 and 02 once to download and prepare all networks and POIs  
-4. Run notebooks 03, 04, 05 for each parameter set (see below), set in `parameters/parameters.py`  
+4. Run notebooks 03, 04, 05 for each parameter set (see below), set in [`parameters/parameters.py`](parameters/parameters.py)
 5. Run 06 or other steps as needed.
 
 ### 3b. Run the code on an HPC cluster with SLURM
 
 For multiple, esp. large, cities, running the code on a high performance computing cluster is strongly suggested as the tasks are easy to paralellize. The shell scripts are written for [SLURM](https://slurm.schedmd.com/overview.html).  
 
-1. Populate `parameters/cities.csv`, see below.
+1. Populate [`parameters/cities.csv`](parameters/cities.csv), see below.
 2. Run 01 and 02 once locally to download and prepare all networks and POIs (The alternative is server-side `sbatch scripts/download.job`, but OSMNX throws too many connection issues, so manual supervision is needed)
 3. Upload `code/*.py`, `parameters/*`, `scripts/*`
 4. Run: `./mastersbatch_analysis.sh`
 5. Run, if needed: `./mastersbatch_export.sh`
 6. After all is finished, run: `./cleanup.sh`
 7. Recommended, run: `./fixresults.sh` (to clean up results in case of amended data from repeated runs)
+
+## Folder structure and output
+The main folder/repo is `bikenwgrowth`, containing Jupyter notebooks (`code/`), preprocessed data (`data/`), parameters (`parameters/`), result plots (`plots/`), HPC server scripts and jobs (`scripts/`).
+
+Most of the generated data output (network plots, videos, results, exports, logs) makes up many GBs and is stored in the separate external folder `bikenwgrowth_external`. To set up different paths, edit [`code/path.py`](code/path.py)
 
 ## Parameter sets 
 1. `prune_measure = "betweenness"`, `poi_source =  "railwaystation"`  
@@ -83,8 +98,3 @@ For multiple, esp. large, cities, running the code on a high performance computi
     `relation["boundary"="administrative"]["name:en"="Copenhagen Municipality"]({{bbox}});(._;>;);out skel;`
 * Export: Download as GPX
 * Use QGIS to create a polygon, with Vector > Join Multiple Lines, and Processing Toolbox > Polygonize (see [Stackexchange answer 1](https://gis.stackexchange.com/questions/98320/connecting-two-line-ends-in-qgis-without-resorting-to-other-software) and [Stackexchange answer 2](https://gis.stackexchange.com/questions/207463/convert-a-line-to-polygon))
-
-## Folder structure
-The main folder/repo is `bikenwgrowth`, containing Jupyter notebooks (`code/`), preprocessed data (`data/`), parameters (`parameters/`), result plots (`plots/`), HPC server scripts and jobs (`scripts/`).
-
-Other data files (network plots, videos, results, exports, logs) make up many GBs and are stored in the separate external folder `bikenwgrowth_external`.
