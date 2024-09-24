@@ -7,7 +7,8 @@ This is the source code for the scientific paper [*Growing urban bicycle network
 **Visualization**: [GrowBike.Net](https://growbike.net)  
 **Videos & Plots**: [https://growbike.net/download](https://growbike.net/download)
 
-[![Growing Urban Bicycle Networks](readmevideo.gif)](https://growbike.net/city/paris)
+[![Video output from running the code on Paris, showing the growth of a bicycle network on a grid of seed points](readmevideo.gif)](https://growbike.net/city/paris)
+*Video output from running the code on Paris, showing the growth of a bicycle network on a grid of seed points*
 
 ## Instructions
 
