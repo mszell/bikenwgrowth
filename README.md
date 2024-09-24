@@ -58,9 +58,9 @@ This allows you to run Jupyter with the kernel `growbikenet ` (Kernel > Change K
 
 Single (or few/small) cities can be run locally by a manual, step-by-step execution of Jupyter notebooks:
 
-1. Populate [`parameters/cities.csv`](parameters/cities.csv), see below.
+1. Populate [`parameters/cities.csv`](parameters/cities.csv), see below. Leave default values to run the code on two small cities.
 2. Navigate to the [`code`](code/) folder.
-3. Run notebooks 01 and 02 once to download and prepare all networks and POIs  
+3. Run notebooks 01 and 02 once to download and prepare all networks and POIs.  
 4. Run notebooks 03, 04, 05 for each parameter set (see below), set in [`parameters/parameters.py`](parameters/parameters.py)
 5. Optional: Run 06 to create videos.
 6. Optional: Further notebooks named with `X_` can be run if needed to generate extra results or data.
