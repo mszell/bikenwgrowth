@@ -51,7 +51,7 @@ If you want to use the environment `growbikenet` in Jupyter, run:
 python -m ipykernel install --user --name=growbikenet
 ```
 
-This allows you to run Jupyter with the kernel `growbikenet ` (Kernel > Change Kernel > growbikenet)
+This allows you to run Jupyter with the kernel `growbikenet` (Kernel > Change Kernel > growbikenet)
 
 
 ### 3a. Run the code locally
@@ -93,7 +93,7 @@ Most of the generated data output (network plots, videos, results, exports, logs
 ## Populating cities.csv
 
 ### Checking nominatimstring  
-* Go to e.g. [https://nominatim.openstreetmap.org/search.php?q=paris%2C+france&polygon_geojson=1&viewbox=](https://nominatim.openstreetmap.org/search.php?q=paris%2C+france&polygon_geojson=1&viewbox=) and enter the search string. If a correct polygon (or multipolygon) pops up it should be fine. If not leave the field empty and acquire a shape file, see below.
+* Go to e.g. [https://nominatim.openstreetmap.org/ui/search.html?q=paris%2C+france](https://nominatim.openstreetmap.org/ui/search.html?q=paris%2C+france) and enter the search string. If a correct polygon (or multipolygon) pops up it should be fine. If not leave the field empty and acquire a shape file, see below.
 
 ### Acquiring shape file  
 * Go to [Overpass](https://overpass-turbo.eu/), to the city, and run:
