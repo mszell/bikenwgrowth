@@ -61,7 +61,8 @@ Single (or few/small) cities can be run locally by a manual, step-by-step execut
 2. Navigate to the [`code`](code/) folder.
 3. Run notebooks 01 and 02 once to download and prepare all networks and POIs  
 4. Run notebooks 03, 04, 05 for each parameter set (see below), set in [`parameters/parameters.py`](parameters/parameters.py)
-5. Run 06 or other steps as needed.
+5. Optional: Run 06 to create videos.
+6. Optional: Further notebooks, (07 or named with `X_`) can be run if needed to generate extra results or data.
 
 ### 3b. Run the code on an HPC cluster with SLURM
 
