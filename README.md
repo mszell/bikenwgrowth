@@ -50,7 +50,7 @@ If you want to use the environment `growbikenet` in Jupyter, run:
 ipython kernel install --user --name=growbikenet
 ```
 
-You can now run `jupyter lab -kernel growbikenet`.
+You can now run Jupyter `jupyter lab` with the kernel `growbikenet ` (Kernel > Change Kernel > growbikenet).
 
 
 ### 3a. Run the code locally
