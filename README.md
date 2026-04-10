@@ -2,6 +2,9 @@
 
 This is the source code for the scientific paper [*Growing urban bicycle networks*](https://www.nature.com/articles/s41598-022-10783-y) by [M. Szell](http://michael.szell.net/), S. Mimar, T. Perlman, [G. Ghoshal](http://gghoshal.pas.rochester.edu/), and [R. Sinatra](http://www.robertasinatra.com/). The code downloads and pre-processes data from OpenStreetMap, prepares points of interest, runs simulations, measures and saves the results, creates videos and plots. 
 
+> [!TIP]
+> This repository contains not user-friendly research code. We are currently developing a user-friendly, packaged, efficient version of the code in our [BikeNetKit](https://github.com/BikeNetKit) project: [GrowBikeNet](https://github.com/BikeNetKit/GrowBikeNet)
+
 **Paper**: [https://www.nature.com/articles/s41598-022-10783-y](https://www.nature.com/articles/s41598-022-10783-y)  
 **Data repository**: [zenodo.5083049](https://zenodo.org/record/5083049)  
 **Visualization**: [GrowBike.Net](https://growbike.net)  
