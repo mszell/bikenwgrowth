@@ -33,31 +33,34 @@ for placeid, placeinfo in tqdm(cities.items(), desc = "Cities"):
     G_carall = G_caralls_simplified[placeid]
     
     for poiid, poitag in poiparameters.items():
-        gdf = ox.geometries.geometries_from_polygon(location, poitag)
-        gdf = gdf[gdf['geometry'].type == "Point"] # only consider points, no polygons etc
-        # Now snap to closest nodes in street network, save the nearest node ids
-        nnids = set()
-        for g in gdf['geometry']:
-            n = ox.distance.get_nearest_node(G_carall, [g.y, g.x])
-            if not n in nnids and haversine((g.y, g.x), (G_carall.nodes[n]["y"], G_carall.nodes[n]["x"]), unit="m") <= snapthreshold:
-                nnids.add(n)
-#         nnids = ox.distance.get_nearest_nodes(G_carall, gdf['geometry'].x, gdf['geometry'].y) # This could be faster but does not seem to work correctly
-        with open(PATH["data"] + placeid + "/" + placeid + '_' + 'poi_' + poiid + '_nnidscarall.csv', 'w') as f:
-            for item in nnids:
-                f.write("%s\n" % item)
-        
-        gdf = gdf.apply(lambda c: c.astype(str) if c.name != 'geometry' else c, axis=0)
-        try: # For some cities writing the gdf does not work (i.e. London, Manhattan)
-            gdf.to_file(PATH["data"] + placeid + "/" + placeid + '_' + 'poi_' + poiid + '.gpkg', driver = 'GPKG')
+        try:
+            gdf = ox.geometries.geometries_from_polygon(location, poitag)
+            gdf = gdf[gdf['geometry'].type == "Point"] # only consider points, no polygons etc
+            # Now snap to closest nodes in street network, save the nearest node ids
+            nnids = set()
+            for g in gdf['geometry']:
+                n = ox.distance.nearest_nodes(G_carall, g.x, g.y) # !! get_nearest_node() had [y(lat),x(lon)], now nearest_nodes() has x(lon),y(lat)
+                if not n in nnids and haversine((g.y, g.x), (G_carall.nodes[n]["y"], G_carall.nodes[n]["x"]), unit="m") <= snapthreshold:
+                    nnids.add(n)
+            with open(PATH["data"] + placeid + "/" + placeid + '_' + 'poi_' + poiid + '_nnidscarall.csv', 'w') as f:
+                for item in nnids:
+                    f.write("%s\n" % item)
+    
+            gdf = gdf.apply(lambda c: c.astype(str) if c.name != 'geometry' else c, axis=0)
+            try: # For some cities writing the gdf does not work (i.e. London, Manhattan)
+                gdf.to_file(PATH["data"] + placeid + "/" + placeid + '_' + 'poi_' + poiid + '.gpkg', driver = 'GPKG')
+            except:
+                print("Notice: Writing the gdf did not work for " + placeid)
+            if debug: gdf.plot(color = 'red')
         except:
-            print("Notice: Writing the gdf did not work for " + placeid)
-        if debug: gdf.plot(color = 'red')
+            print("No stations in " + placeinfo["name"] + ". No POIs created.")
 
 
 for placeid, placeinfo in tqdm(cities.items(), desc  = "Cities"):
     print(placeid + ": Creating grid")
     
     location = locations[placeid]
+    
     
     
     # FIRST, determine the most common bearing, for the best grid orientation
@@ -148,7 +151,7 @@ for placeid, placeinfo in tqdm(cities.items(), desc  = "Cities"):
     # 3) Snap grid points to map
     nnids = set()
     for g in gridpoints_cut:
-        n = ox.distance.get_nearest_node(G, [g[1], g[0]])
+        n = ox.distance.nearest_nodes(G, g[0], g[1]) # !! get_nearest_node() had [y(lat),x(lon)], now nearest_nodes() has x(lon),y(lat)
         if n not in nnids and haversine((g[1], g[0]), (G.nodes[n]["y"], G.nodes[n]["x"]), unit="m") <= snapthreshold:
             nnids.add(n)
     with open(PATH["data"] + placeid + "/" + placeid + '_poi_grid_nnidscarall.csv', 'w') as f:
